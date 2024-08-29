@@ -5,7 +5,7 @@ import * as demo from "@/sanity/lib/demo";
 
 export default defineType({
   name: "settings",
-  title: "Settings",
+  title: "Website",
   type: "document",
   icon: CogIcon,
   fields: [
