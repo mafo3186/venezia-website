@@ -15,7 +15,7 @@ import type {
 } from "@/sanity.types";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { postQuery, settingsQuery } from "@/sanity/lib/queries";
+import { settingsQuery } from "@/sanity/lib/queries";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 
 type Props = {
@@ -24,7 +24,7 @@ type Props = {
 
 const projectSlugs = groq`*[_type == "project"]{slug}`;
 
-export const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug] [0] {
+const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug] [0] {
   content,
   _id,
   "status": select(_originalId in path("drafts.**") => "draft", "published"),
@@ -52,12 +52,12 @@ export async function generateMetadata(
     stega: false,
   });
   const previousImages = (await parent).openGraph?.images || [];
-  const ogImage = resolveOpenGraphImage(post?.coverImage);
+  const ogImage = undefined; // resolveOpenGraphImage(post?.coverImage);
 
   return {
-    authors: post?.author?.name ? [{ name: post?.author?.name }] : [],
+    authors: post?.author ? [{ name: post?.author }] : [],
     title: post?.title,
-    description: post?.excerpt,
+    description: undefined, // post?.excerpt,
     openGraph: {
       images: ogImage ? [ogImage, ...previousImages] : previousImages,
     },
@@ -76,8 +76,7 @@ export default async function PostPage({ params }: Props) {
   ]);
 
   if (!project?._id) {
-    console.log("not found", project)
-    // return notFound();
+    return notFound();
   }
 
   return (
