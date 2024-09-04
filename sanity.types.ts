@@ -441,6 +441,17 @@ export type ProjectsQueryResult = Array<{
   author: string | null;
 }>;
 
+// Source: ./app/list/page.tsx
+// Variable: projectsListQuery
+// Query: *[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, excerpt, "slug": slug.current}
+export type ProjectsListQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  _updatedAt: string;
+  excerpt: string | null;
+  slug: string | null;
+}>;
+
 // Source: ./sanity/lib/queries.ts
 // Variable: settingsQuery
 // Query: *[_type == "settings"][0]
@@ -649,13 +660,6 @@ export type PostQueryResult = {
   } | null;
 } | null;
 
-// Source: ./app/(blog)/posts/[slug]/page.tsx
-// Variable: postSlugs
-// Query: *[_type == "post"]{slug}
-export type PostSlugsResult = Array<{
-  slug: Slug | null;
-}>;
-
 // Source: ./app/(blog)/projects/[slug]/page.tsx
 // Variable: projectSlugs
 // Query: *[_type == "project"]{slug}
@@ -689,4 +693,11 @@ export type ProjectBySlugQueryResult = {
   slug: string | null;
   author: string | null;
 } | null;
+
+// Source: ./app/(blog)/posts/[slug]/page.tsx
+// Variable: postSlugs
+// Query: *[_type == "post"]{slug}
+export type PostSlugsResult = Array<{
+  slug: Slug | null;
+}>;
 

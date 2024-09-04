@@ -1,59 +1,65 @@
 /* eslint-disable @next/next/no-img-element */
+
+import { sanityFetch } from "@/sanity/lib/fetch";
+import { groq } from "next-sanity";
+import type { ProjectsListQueryResult } from "@/sanity.types";
+import Head from "next/head";
+import Link from "next/link";
+
+const projectsListQuery = groq`*[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, excerpt, "slug": slug.current}`
+
 /// Reference: https://www.apache.org/icons/
-export default function ListProjectsPage() {
-  const projects = [
-    {
-      name: "ASDF",
-      lastModified: "yesterday",
-      size: "2kb",
-      description: "N/A",
-    },
-    {
-      name: "DFGH",
-      lastModified: "2023-04-01 20:13",
-      size: "10kb",
-      description: "N/A",
-    },
-  ];
+export default async function ListProjectsPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+  const projects = await sanityFetch<ProjectsListQueryResult>({ query: projectsListQuery, params: { orderBy: searchParams["q"] ?? "title" } })
 
   return (
     <>
+      <Head>
+        <style>{`
+          :root {
+            color-scheme: light dark;
+            background-color: lightgray;
+          }
+
+          @media (prefers-color-scheme: dark) {
+            :root {
+              background-color: darkgray;
+            }
+          }
+        `}
+        </style>
+      </Head>
       <h1>Index of /~venice/projects</h1>
 
       <table>
         <thead>
           <tr>
-            <th></th> {/* Icon */}
-            <th>Name</th>
-            <th>Last modified</th>
+            <th></th>
+            <th><Link href="?q=title">Name</Link></th>
+            <th><Link href="?q=_updatedAt">Last modified</Link></th>
             <th>Size</th>
             <th>Description</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td valign="top">
-              <img src="https://www.apache.org/icons/back.png" />
-            </td>
+          <tr><td valign="top">
+            <img src="https://www.apache.org/icons/back.png" alt="" />
+          </td>
             <td>
-              <a href="/">Parent Directory</a>
-            </td>
-          </tr>
-          {projects.map((project) => {
-            return (
-              <tr key={project.name}>
+              <Link href="/">Parent Directory</Link>
+            </td></tr>{projects.map((project) => {
+              return (<tr key={project._id}>
                 <td valign="top">
-                  <img src="https://www.apache.org/icons/image2.gif" />
+                  <img src="https://www.apache.org/icons/image2.gif" alt="" />
                 </td>
-                <td>{project.name}</td>
-                <td align="right">{project.lastModified}</td>
-                <td align="right">{project.size}</td>
-                <td>{project.description}</td>
-              </tr>
-            );
-          })}
+                <td><Link href={'/projects/' + project.slug}>{project.title}</Link></td>
+                <td align="right">{project._updatedAt.replace(/T|Z/g, " ")}</td>
+                <td align="right">N/A</td>
+                <td>{project.excerpt}</td>
+              </tr>)
+            })}
         </tbody>
       </table>
     </>
-  );
+  )
 }
