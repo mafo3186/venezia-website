@@ -18,6 +18,7 @@ import { pageStructure, singletonPlugin } from "@/sanity/plugins/settings";
 import { assistWithPresets } from "@/sanity/plugins/assist";
 import author from "@/sanity/schemas/documents/author";
 import post from "@/sanity/schemas/documents/post";
+import project from "@/sanity/schemas/documents/project";
 import settings from "@/sanity/schemas/singletons/settings";
 import { resolveHref } from "@/sanity/lib/utils";
 
@@ -36,6 +37,7 @@ export default defineConfig({
       settings,
       // Documents
       post,
+      project,
       author,
     ],
   },
