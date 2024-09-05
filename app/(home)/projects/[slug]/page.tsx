@@ -4,7 +4,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-import Avatar from "../../avatar";
 import CoverImage from "../../cover-image";
 import PortableText from "../../portable-text";
 
