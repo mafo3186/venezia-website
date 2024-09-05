@@ -6,7 +6,7 @@ import type { ProjectsListQueryResult } from "@/sanity.types";
 import Head from "next/head";
 import Link from "next/link";
 
-const projectsListQuery = groq`*[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, excerpt, "slug": slug.current}`
+const projectsListQuery = groq`*[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}`
 
 /// Reference: https://www.apache.org/icons/
 export default async function ListProjectsPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
@@ -40,7 +40,7 @@ export default async function ListProjectsPage({ searchParams }: { searchParams:
                 <td><Link href={'/projects/' + project.slug}>{project.title}</Link></td>
                 <td align="right">{project._updatedAt.replace(/T|Z/g, " ")}</td>
                 <td align="right">N/A</td>
-                <td>{project.excerpt}</td>
+                <td>{project.description}</td>
               </tr>)
             })}
         </tbody>
