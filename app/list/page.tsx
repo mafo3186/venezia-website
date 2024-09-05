@@ -14,21 +14,6 @@ export default async function ListProjectsPage({ searchParams }: { searchParams:
 
   return (
     <>
-      <Head>
-        <style>{`
-          :root {
-            color-scheme: light dark;
-            background-color: lightgray;
-          }
-
-          @media (prefers-color-scheme: dark) {
-            :root {
-              background-color: darkgray;
-            }
-          }
-        `}
-        </style>
-      </Head>
       <h1>Index of /~venice/projects</h1>
 
       <table>
