@@ -24,7 +24,8 @@ type Props = {
 const projectSlugs = groq`*[_type == "project"]{slug}`;
 
 const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug] [0] {
-  content,
+  documentation,
+  description,
   _id,
   "status": select(_originalId in path("drafts.**") => "draft", "published"),
   "title": coalesce(title, "Untitled"),
@@ -45,7 +46,7 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const post = await sanityFetch<ProjectBySlugQueryResult>({
+  const project = await sanityFetch<ProjectBySlugQueryResult>({
     query: projectBySlugQuery,
     params,
     stega: false,
@@ -54,9 +55,9 @@ export async function generateMetadata(
   const ogImage = undefined; // resolveOpenGraphImage(post?.coverImage);
 
   return {
-    authors: post?.author ? [{ name: post?.author }] : [],
-    title: post?.title,
-    description: undefined, // post?.excerpt,
+    authors: project?.author ? [{ name: project?.author }] : [],
+    title: project?.title,
+    description: project?.description,
     openGraph: {
       images: ogImage ? [ogImage, ...previousImages] : previousImages,
     },
@@ -92,10 +93,10 @@ export default async function PostPage({ params }: Props) {
         <div className="hidden md:mb-12 md:block">
           {project.author}
         </div>
-        {project.content?.length && (
+        {project.documentation?.length && (
           <PortableText
             className="mx-auto max-w-2xl"
-            value={project.content as PortableTextBlock[]}
+            value={project.documentation as PortableTextBlock[]}
           />
         )}
       </article>

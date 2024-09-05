@@ -18,6 +18,7 @@ import { pageStructure, singletonPlugin } from "@/sanity/plugins/settings";
 import project from "@/sanity/schemas/documents/project";
 import settings from "@/sanity/schemas/singletons/settings";
 import { resolveHref } from "@/sanity/lib/utils";
+import {deDELocale} from '@sanity/locale-de-de'
 
 const homeLocation = {
   title: "Home",
@@ -40,12 +41,13 @@ export default defineConfig({
     enabled: false,
   },
   plugins: [
+    deDELocale(),
     presentationTool({
       resolve: {
         mainDocuments: defineDocuments([
           {
-            route: "/posts/:slug",
-            filter: `_type == "post" && slug.current == $slug`,
+            route: "/projects/:slug",
+            filter: `_type == "project" && slug.current == $slug`,
           },
         ]),
         locations: {
@@ -54,7 +56,7 @@ export default defineConfig({
             message: "This document is used on all pages",
             tone: "caution",
           }),
-          post: defineLocations({
+          project: defineLocations({
             select: {
               title: "title",
               slug: "slug.current",
@@ -63,7 +65,7 @@ export default defineConfig({
               locations: [
                 {
                   title: doc?.title || "Untitled",
-                  href: resolveHref("post", doc?.slug)!,
+                  href: resolveHref("project", doc?.slug)!,
                 },
                 homeLocation,
               ],

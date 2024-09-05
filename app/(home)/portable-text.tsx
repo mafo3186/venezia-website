@@ -13,6 +13,10 @@ import {
   type PortableTextComponents,
   type PortableTextBlock,
 } from "next-sanity";
+import Image from "next/image";
+import { urlFor } from '@/sanity/lib/image'
+
+
 
 export default function CustomPortableText({
   className,
@@ -39,6 +43,12 @@ export default function CustomPortableText({
         );
       },
     },
+    types: {
+      // https://www.sanity.io/docs/presenting-images
+      // eslint-disable-next-line @next/next/no-img-element
+      image: ({ value }) => <img src={urlFor(value).width(500).url()} alt="" />,
+      // file: ({ value }) => <a href={value.asset.url}>{value.asset.originalFilename}</a>,
+    }
   };
 
   return (
