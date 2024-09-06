@@ -1,3 +1,4 @@
+import '@/app/global.css'
 
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
@@ -54,13 +55,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <body>
-      <section>
-        {draftMode().isEnabled && <AlertBanner />}
-        <main>{children}</main>
-      </section>
-      {draftMode().isEnabled && <VisualEditing />}
-      <SpeedInsights />
-    </body>
+    <html lang="de">
+      <body>
+        <section>
+          {draftMode().isEnabled && <AlertBanner />}
+          <main>{children}</main>
+        </section>
+        {draftMode().isEnabled && <VisualEditing />}
+        <SpeedInsights />
+      </body>
+    </html>
   );
 }

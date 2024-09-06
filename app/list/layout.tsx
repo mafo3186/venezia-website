@@ -1,3 +1,5 @@
+import '@/app/global.css'
+
 import styles from "./styles.module.css";
 import { draftMode } from "next/headers";
 import AlertBanner from "../(home)/alert-banner";
@@ -15,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <>
+    <html lang="de">
       <meta name="color-scheme" content="dark light"></meta>
       <body className={styles.body} >
         <section>
@@ -27,6 +29,6 @@ export default function RootLayout({
         {draftMode().isEnabled && <VisualEditing />}
         <SpeedInsights />
       </body>
-    </>
+    </html>
   )
 }
