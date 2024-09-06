@@ -7,4 +7,7 @@ module.exports = {
   logging: {
     fetches: { fullUrl: false },
   },
+  images: {
+		domains: ['cdn.sanity.io']
+	}
 };

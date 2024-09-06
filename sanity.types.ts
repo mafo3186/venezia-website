@@ -365,7 +365,7 @@ export type ProjectSlugsResult = Array<{
   slug: Slug | null;
 }>;
 // Variable: projectBySlugQuery
-// Query: *[_type == "project" && slug.current == $slug] [0] {  documentation,  description,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  author,}
+// Query: *[_type == "project" && slug.current == $slug] [0] {  documentation,  description,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  author,  type,  showcaseImage,  showcaseVideo {    asset-> {      ...    },  },  showcaseAudio {    asset-> {      ...    },  },  showcaseText,  showcaseWebsite,}
 export type ProjectBySlugQueryResult = {
   documentation: Array<{
     children?: Array<{
@@ -411,5 +411,65 @@ export type ProjectBySlugQueryResult = {
   title: string | "Untitled";
   slug: string | null;
   author: string | null;
+  type: "audio" | "image" | "text" | "video" | "website" | null;
+  showcaseImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  showcaseVideo: {
+    asset: {
+      _id: string;
+      _type: "sanity.fileAsset";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      originalFilename?: string;
+      label?: string;
+      title?: string;
+      description?: string;
+      altText?: string;
+      sha1hash?: string;
+      extension?: string;
+      mimeType?: string;
+      size?: number;
+      assetId?: string;
+      uploadId?: string;
+      path?: string;
+      url?: string;
+      source?: SanityAssetSourceData;
+    } | null;
+  } | null;
+  showcaseAudio: {
+    asset: {
+      _id: string;
+      _type: "sanity.fileAsset";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      originalFilename?: string;
+      label?: string;
+      title?: string;
+      description?: string;
+      altText?: string;
+      sha1hash?: string;
+      extension?: string;
+      mimeType?: string;
+      size?: number;
+      assetId?: string;
+      uploadId?: string;
+      path?: string;
+      url?: string;
+      source?: SanityAssetSourceData;
+    } | null;
+  } | null;
+  showcaseText: string | null;
+  showcaseWebsite: string | null;
 } | null;
 

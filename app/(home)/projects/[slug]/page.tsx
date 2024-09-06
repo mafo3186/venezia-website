@@ -31,6 +31,20 @@ const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug] [
   "title": coalesce(title, "Untitled"),
   "slug": slug.current,
   author,
+  type,
+  showcaseImage,
+  showcaseVideo {
+    asset-> {
+      ...
+    },
+  },
+  showcaseAudio {
+    asset-> {
+      ...
+    },
+  },
+  showcaseText,
+  showcaseWebsite,
 }`;
 
 export async function generateStaticParams() {
@@ -74,10 +88,13 @@ export default async function PostPage({ params }: Props) {
       query: settingsQuery,
     }),
   ]);
-
+  
   if (!project?._id) {
     return notFound();
   }
+
+  const showcaseVideo = project.showcaseVideo?.asset;
+  const showcaseAudio = project.showcaseAudio?.asset;
 
   return (
     <div className="container mx-auto px-5">
@@ -90,6 +107,23 @@ export default async function PostPage({ params }: Props) {
         <h1 className="text-balance mb-12 text-6xl font-bold leading-tight tracking-tighter md:text-7xl md:leading-none lg:text-8xl">
           {project.title}
         </h1>
+        <div className="mb-8 sm:mx-0 md:mb-16">
+          {project.type === "image" && <CoverImage image={project.showcaseImage} priority />}
+          {project.type === "video" && showcaseVideo?.url && <video controls autoPlay muted loop>
+            <source
+              src={showcaseVideo.url}
+              type={showcaseVideo.mimeType}
+            />
+          </video>}
+          {project.type === "audio" && showcaseAudio?.url && <audio controls>
+            <source
+              src={showcaseAudio.url}
+              type={showcaseAudio.mimeType}
+            />
+          </audio>}
+          {project.type === "text" && <pre className="text-2xl">{project.showcaseText}</pre>}
+          {project.type === "website" && project.showcaseWebsite && <a href={project.showcaseWebsite} target="_blank"><iframe className="shadow-md transition-shadow duration-200 group-hover:shadow-lg sm:mx-0" style={{ width: "100%", aspectRatio: "16/9", pointerEvents: "none" }} src={project.showcaseWebsite}></iframe></a>}
+        </div>
         <div className="hidden md:mb-12 md:block">
           {project.author}
         </div>
