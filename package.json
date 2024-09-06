@@ -13,6 +13,8 @@
     "typegen": "sanity schema extract && sanity typegen generate"
   },
   "dependencies": {
+    "@react-three/fiber": "^8.17.6",
+    "@react-three/postprocessing": "^2.16.2",
     "@sanity/assist": "^3.0.5",
     "@sanity/icons": "^3.3.1",
     "@sanity/image-url": "^1.0.2",
@@ -23,6 +25,7 @@
     "@types/node": "^20.14.13",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@types/three": "^0.168.0",
     "@vercel/speed-insights": "^1.0.12",
     "autoprefixer": "^10.4.19",
     "date-fns": "^3.6.0",
@@ -36,6 +39,7 @@
     "server-only": "^0.0.1",
     "styled-components": "^6.1.12",
     "tailwindcss": "^3.4.7",
+    "three": "^0.168.0",
     "typescript": "5.5.4"
   },
   "devDependencies": {

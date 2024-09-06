@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { groq } from "next-sanity";
 
 import PortableText from "./portable-text";
@@ -7,6 +6,7 @@ import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
+import { Scene } from "./scene";
 
 function Intro(props: { title: string | null | undefined; description: any }) {
   const title = props.title || demo.title;
@@ -47,19 +47,6 @@ export default async function Page() {
   ]);
 
   return (
-    <div className="container mx-auto px-5">
-      <Intro title={settings?.title} description={settings?.description} />
-      {projects?.map((project) => (<>
-        <div className="mb-4">
-          <div>
-            <h3 className="text-pretty text-lg leading-tight">
-              <Link href={`/projects/${project.slug}`} className="hover:underline">
-                {project.title}
-              </Link>
-            </h3>
-          </div>
-        </div>
-      </>))}
-    </div>
+    <Scene projects={projects} />
   );
 }

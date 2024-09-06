@@ -9,5 +9,12 @@ module.exports = {
   },
   images: {
 		domains: ['cdn.sanity.io']
-	}
+  },
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    config.module.rules.push({
+      test: /\.gltf$/,
+      type: "asset/resource"
+    });
+    return config;
+  }
 };
