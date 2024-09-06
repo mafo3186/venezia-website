@@ -40,6 +40,51 @@ export default defineType({
       type: "text",
     }),
     defineField({
+      name: "type",
+      title: "Showcase-Typ",
+      description: "Wähle den Typ deines Showcase-Pieces.",
+      type: "string",
+      options: {
+        list: [
+          { title: 'Bild', value: 'image' },
+          { title: 'Video', value: 'video' },
+          { title: 'Audio', value: 'audio' },
+          { title: 'Text', value: 'text' },
+          { title: 'Website', value: 'website' },
+        ],
+      },
+    }),
+    defineField({
+      name: "showcaseImage",
+      title: "Showcase-Bild",
+      type: "image",
+      hidden: ({ document }) => document?.type !== "image",
+    }),
+    defineField({
+      name: "showcaseVideo",
+      title: "Showcase-Video",
+      type: "file",
+      hidden: ({ document }) => document?.type !== "video",
+    }),
+    defineField({
+      name: "showcaseAudio",
+      title: "Showcase-Audio",
+      type: "file",
+      hidden: ({ document }) => document?.type !== "audio",
+    }),
+    defineField({
+      name: "showcaseText",
+      title: "Showcase-Text",
+      type: "text",
+      hidden: ({ document }) => document?.type !== "text",
+    }),
+    defineField({
+      name: "showcaseWebsite",
+      title: "Showcase-Website",
+      type: "url",
+      hidden: ({ document }) => document?.type !== "website",
+    }),
+    defineField({
       name: "documentation",
       title: "Projektdokumentation",
       description: "Hier kommt deine Projektdokumentation / -beschreibung hin.",
@@ -51,15 +96,14 @@ export default defineType({
     select: {
       title: "title",
       author: "author",
-      date: "date",
-      media: "coverImage",
+      type: "type",
+      showcaseImage: "showcaseImage",
     },
-    prepare({ title, media, author, date }) {
+    prepare({ title, author, type, showcaseImage }) { 
       const subtitles = [
-        author && `by ${author}`,
-        date && `on ${format(parseISO(date), "LLL d, yyyy")}`,
+        author && `von ${author}`,
       ].filter(Boolean);
-
+      const media = type === "image" ? showcaseImage : undefined;
       return { title, media, subtitle: subtitles.join(" ") };
     },
   },
