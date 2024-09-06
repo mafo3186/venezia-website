@@ -56,6 +56,38 @@ export type Project = {
   slug?: Slug;
   author?: string;
   description?: string;
+  type?: "image" | "video" | "audio" | "text" | "website";
+  showcaseImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  showcaseVideo?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+    };
+    _type: "file";
+  };
+  showcaseAudio?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+    };
+    _type: "file";
+  };
+  showcaseText?: string;
+  showcaseWebsite?: string;
   documentation?: Array<{
     children?: Array<{
       marks?: Array<string>;
