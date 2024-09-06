@@ -473,3 +473,14 @@ export type ProjectBySlugQueryResult = {
   showcaseWebsite: string | null;
 } | null;
 
+// Query TypeMap
+import "@sanity/client";
+declare module "@sanity/client" {
+  interface SanityQueries {
+    "*[_type == \"project\" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n  content,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  author,\n}": ProjectsQueryResult;
+    "*[_type == \"project\"] | order(select($orderBy == \"title\" => title, $orderBy == \"_updatedAt\" => _updatedAt)) {_id, title, _updatedAt, description, \"slug\": slug.current}": ProjectsListQueryResult;
+    "*[_type == \"settings\"][0]": SettingsQueryResult;
+    "*[_type == \"project\"]{slug}": ProjectSlugsResult;
+    "*[_type == \"project\" && slug.current == $slug] [0] {\n  documentation,\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  showcaseImage,\n  showcaseVideo {\n    asset-> {\n      ...\n    },\n  },\n  showcaseAudio {\n    asset-> {\n      ...\n    },\n  },\n  showcaseText,\n  showcaseWebsite,\n}": ProjectBySlugQueryResult;
+  }
+}
