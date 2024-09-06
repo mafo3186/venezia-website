@@ -16,6 +16,8 @@ import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
+import styles from "./styles.module.css";
+import { title } from "process";
 
 type Props = {
   params: { slug: string };
@@ -88,7 +90,7 @@ export default async function PostPage({ params }: Props) {
       query: settingsQuery,
     }),
   ]);
-  
+
   if (!project?._id) {
     return notFound();
   }
@@ -97,17 +99,24 @@ export default async function PostPage({ params }: Props) {
   const showcaseAudio = project.showcaseAudio?.asset;
 
   return (
-    <div className="container mx-auto px-5">
-      <h2 className="mb-16 mt-10 text-2xl font-bold leading-tight tracking-tight md:text-4xl md:tracking-tighter">
-        <Link href="/" className="hover:underline">
-          {settings?.title || demo.title}
-        </Link>
-      </h2>
-      <article>
-        <h1 className="text-balance mb-12 text-6xl font-bold leading-tight tracking-tighter md:text-7xl md:leading-none lg:text-8xl">
-          {project.title}
-        </h1>
-        <div className="mb-8 sm:mx-0 md:mb-16">
+    <>
+      <nav>
+        <h2>
+          <Link href="/" className="hover:underline">
+            {settings?.title || demo.title}
+          </Link>
+        </h2>
+      </nav>
+      <article className={styles.article}>
+        <hgroup className={styles.projectTitle}>
+          <h1>
+            {project.title}
+          </h1>
+          <p>
+            von {project.author}
+          </p>
+        </hgroup>
+        <figure>
           {project.type === "image" && <CoverImage image={project.showcaseImage} priority />}
           {project.type === "video" && showcaseVideo?.url && <video controls autoPlay muted loop>
             <source
@@ -121,19 +130,19 @@ export default async function PostPage({ params }: Props) {
               type={showcaseAudio.mimeType}
             />
           </audio>}
-          {project.type === "text" && <pre className="text-2xl">{project.showcaseText}</pre>}
-          {project.type === "website" && project.showcaseWebsite && <a href={project.showcaseWebsite} target="_blank"><iframe className="shadow-md transition-shadow duration-200 group-hover:shadow-lg sm:mx-0" style={{ width: "100%", aspectRatio: "16/9", pointerEvents: "none" }} src={project.showcaseWebsite}></iframe></a>}
-        </div>
-        <div className="hidden md:mb-12 md:block">
-          {project.author}
-        </div>
-        {project.documentation?.length && (
-          <PortableText
-            className="mx-auto max-w-2xl"
-            value={project.documentation as PortableTextBlock[]}
-          />
-        )}
+          {project.type === "text" && <pre>{project.showcaseText}</pre>}
+          {project.type === "website" && project.showcaseWebsite && <a href={project.showcaseWebsite} target="_blank"><iframe className={styles.website} src={project.showcaseWebsite}></iframe></a>}
+          <figcaption>{project.author}</figcaption>
+        </figure>
+        <aside>
+          {project.documentation?.length && (
+            <PortableText
+              className={styles.documentation}
+              value={project.documentation as PortableTextBlock[]}
+            />
+          )}
+        </aside>
       </article>
-    </div>
+    </>
   );
 }
