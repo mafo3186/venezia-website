@@ -59,6 +59,9 @@ export default async function Page() {
           </li>
         ))}
       </ul>
+      <h3>
+        <Link href={"/kaleidoscope"} >Kaleidoskop</Link>
+      </h3>
     </>
   );
 }
