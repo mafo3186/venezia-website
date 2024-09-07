@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import styles from './kaleidoscopeCanvas.module.css';
 
 export default function Kaleidoscope() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -17,7 +18,7 @@ export default function Kaleidoscope() {
         renderer.setSize(window.innerWidth, window.innerHeight);
 
         const geometry = new THREE.PlaneGeometry(5, 5, 32);
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide });
+        const material = new THREE.MeshBasicMaterial({ color: 0x00e5e5, side: THREE.DoubleSide });
         const plane = new THREE.Mesh(geometry, material);
 
         scene.add(plane);
@@ -37,5 +38,5 @@ export default function Kaleidoscope() {
         };
     }, []);
 
-    return <canvas ref={canvasRef} />;
+    return <canvas ref={canvasRef} className={styles.kaleidoscopeCanvas} />;
 };
