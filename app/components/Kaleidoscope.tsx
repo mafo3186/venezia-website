@@ -17,17 +17,35 @@ export default function Kaleidoscope() {
         const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current });
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        const geometry = new THREE.PlaneGeometry(5, 5, 32);
-        const material = new THREE.MeshBasicMaterial({ color: 0x00e5e5, side: THREE.DoubleSide });
-        const plane = new THREE.Mesh(geometry, material);
+        // Kaleidoskop-Material
 
-        scene.add(plane);
-        camera.position.z = 5;
+        const material = new THREE.MeshBasicMaterial({ color: 0x00e5e5, side: THREE.DoubleSide });
+
+        // Erstelle mehrere Flächen für das Kaleidoskop
+        const numPlanes = 6;
+        const angleStep = (2 * Math.PI) / numPlanes;
+        for (let i = 0; i < numPlanes; i++) {
+            const geometry = new THREE.PlaneGeometry(5, 5, 32);
+            const plane = new THREE.Mesh(geometry, material);
+            plane.rotation.z = i * angleStep;
+            plane.position.x = Math.cos(i * angleStep) * 5;
+            plane.position.y = Math.sin(i * angleStep) * 5;
+            scene.add(plane);
+        }
+
+        camera.position.z = 10;
 
         const animate = () => {
             requestAnimationFrame(animate);
-            plane.rotation.x += 0.01;
-            plane.rotation.y += 0.01;
+
+            // Animation der Flächen
+            scene.children.forEach((child) => {
+                if (child instanceof THREE.Mesh) {
+                    child.rotation.x += 0.01;
+                    child.rotation.y += 0.01;
+                }
+            });
+
             renderer.render(scene, camera);
         };
 
