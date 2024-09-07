@@ -10,6 +10,7 @@ export default function KaleidoscopePage() {
         <div>
             <h1 className={styles.title}>Kaleidoskop ohne Projekte</h1>
             <p>test</p>
+            <Kaleidoscope />
         </div>
     );
 }
