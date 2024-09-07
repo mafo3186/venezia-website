@@ -10,7 +10,12 @@ export default function KaleidoscopePage() {
         <div>
             <h1 className={styles.title}>Kaleidoskop ohne Projekte</h1>
             <p>test</p>
-            <Kaleidoscope />
-        </div>
+            <div className={styles.container}>
+                <Kaleidoscope />
+                <div className={styles.menu}>
+                    <button className={styles.menuButton}>Alle Projekte anzeigen</button>
+                </div>
+            </div>
+        </div >
     );
 }

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-const Kaleidoscope = () => {
+export default function Kaleidoscope() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -39,5 +39,3 @@ const Kaleidoscope = () => {
 
     return <canvas ref={canvasRef} />;
 };
-
-export default Kaleidoscope;
