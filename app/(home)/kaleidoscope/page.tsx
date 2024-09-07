@@ -1,7 +1,6 @@
 // kaleidoscope/page.tsx
 import styles from './kaleidoscopeStyles.module.css';
 
-import { NextPage } from "next";
 import Kaleidoscope from "@/app/components/Kaleidoscope";
 
 
