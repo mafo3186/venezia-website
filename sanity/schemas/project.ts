@@ -1,5 +1,6 @@
-import { DocumentTextIcon } from "@sanity/icons";
+import { DocumentTextIcon, DocumentVideoIcon } from "@sanity/icons";
 import { format, parseISO } from "date-fns";
+import { metadata } from "next-sanity/studio";
 import { defineField, defineType } from "sanity";
 
 export default defineType({
@@ -14,6 +15,7 @@ export default defineType({
       title: "Title",
       description: "Der Name deines Projekts. Wird als Überschrift und in der Liste aller Projekte verwendet.",
       type: "string",
+      initialValue: "Mein Projekt",
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -32,64 +34,56 @@ export default defineType({
       name: "author",
       title: "Autor",
       type: "string",
+      initialValue: "Karla Kolumna",
+      description: "Dein (Künstler-)Name",
     }),
     defineField({
       name: "description",
       title: "Kurzbeschreibung",
       description: "Beschreibe dein Projekt in einem Satz. Kann als Metatag, für Accessibility oder als Vorschau verwendet werden.",
       type: "text",
+      initialValue: "Mein Projekt behandelt die Intersektion von Venn-Diagrammen und Kuchen.",
     }),
     defineField({
-      name: "type",
-      title: "Showcase-Typ",
-      description: "Wähle den Typ deines Showcase-Pieces.",
-      type: "string",
-      options: {
-        list: [
-          { title: 'Bild', value: 'image' },
-          { title: 'Video', value: 'video' },
-          { title: 'Audio', value: 'audio' },
-          { title: 'Text', value: 'text' },
-          { title: 'Website', value: 'website' },
-        ],
-      },
-    }),
-    defineField({
-      name: "showcaseImage",
-      title: "Showcase-Bild",
-      type: "image",
-      hidden: ({ document }) => document?.type !== "image",
-    }),
-    defineField({
-      name: "showcaseVideo",
-      title: "Showcase-Video",
-      type: "file",
-      hidden: ({ document }) => document?.type !== "video",
-    }),
-    defineField({
-      name: "showcaseAudio",
-      title: "Showcase-Audio",
-      type: "file",
-      hidden: ({ document }) => document?.type !== "audio",
-    }),
-    defineField({
-      name: "showcaseText",
-      title: "Showcase-Text",
-      type: "text",
-      hidden: ({ document }) => document?.type !== "text",
-    }),
-    defineField({
-      name: "showcaseWebsite",
-      title: "Showcase-Website",
-      type: "url",
-      hidden: ({ document }) => document?.type !== "website",
+      type: "array",
+      name: "showcase",
+      title: "Showcase-Pieces",
+      description: "Das / die Projektergebnis(se), die du präsentieren möchtest.",
+      of: [{ type: "showcase" }],
     }),
     defineField({
       name: "documentation",
       title: "Projektdokumentation",
       description: "Hier kommt deine Projektdokumentation / -beschreibung hin.",
       type: "array",
-      of: [{ type: "block" }, { type: "image" }, { type: "file" }],
+      of: [{ type: "block" },
+      {
+        type: "image",
+        title: "Bild",
+        fields: [
+          {
+            name: 'caption',
+            type: 'string',
+            title: 'Caption',
+            description: "Eine kurze Bildunterschrift / Bildbeschreibung"
+          },
+          {
+            name: 'attribution',
+            type: 'string',
+            title: 'Attribution',
+            description: "Wer hat das Bild erstellt?"
+          }
+        ],
+        options: { metadata: ["blurhash"], }
+      },
+      {
+        type: "file", title: "Video & Audio", icon: DocumentVideoIcon, options: { accept: "video/*,audio/*" },
+        fields: [
+          { name: "caption", type: "string", title: "Caption", description: "Eine kurze Beschreibung des Inhalts" },
+          { name: 'attribution', type: 'string', title: 'Attribution', description: "Wer hat das Video / Audio erstellt?" }
+        ]
+      },
+      ],
     }),
   ],
   preview: {
@@ -99,7 +93,7 @@ export default defineType({
       type: "type",
       showcaseImage: "showcaseImage",
     },
-    prepare({ title, author, type, showcaseImage }) { 
+    prepare({ title, author, type, showcaseImage }) {
       const subtitles = [
         author && `von ${author}`,
       ].filter(Boolean);

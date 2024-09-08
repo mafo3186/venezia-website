@@ -46,16 +46,8 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type Project = {
-  _id: string;
-  _type: "project";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  slug?: Slug;
-  author?: string;
-  description?: string;
+export type Showcase = {
+  _type: "showcase";
   type?: "image" | "video" | "audio" | "text" | "website";
   showcaseImage?: {
     asset?: {
@@ -88,6 +80,22 @@ export type Project = {
   };
   showcaseText?: string;
   showcaseWebsite?: string;
+  description?: string;
+};
+
+export type Project = {
+  _id: string;
+  _type: "project";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  author?: string;
+  description?: string;
+  showcase?: Array<{
+    _key: string;
+  } & Showcase>;
   documentation?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -114,6 +122,8 @@ export type Project = {
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
+    caption?: string;
+    attribution?: string;
     _type: "image";
     _key: string;
   } | {
@@ -123,6 +133,8 @@ export type Project = {
       _weak?: boolean;
       [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
     };
+    caption?: string;
+    attribution?: string;
     _type: "file";
     _key: string;
   }>;
@@ -271,8 +283,32 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | Geopoint | Project | SanityFileAsset | Slug | Settings | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | Geopoint | Showcase | Project | SanityFileAsset | Slug | Settings | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ./app/(home)/page.tsx
+// Variable: projectsQuery
+// Query: *[_type == "project" && defined(slug.current)] | order(date desc, _updatedAt desc) {  content,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  author,}
+export type ProjectsQueryResult = Array<{
+  content: null;
+  _id: string;
+  status: "draft" | "published";
+  title: string | "Untitled";
+  slug: string | null;
+  excerpt: null;
+  author: string | null;
+}>;
+
+// Source: ./app/list/page.tsx
+// Variable: projectsListQuery
+// Query: *[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}
+export type ProjectsListQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  _updatedAt: string;
+  description: string | null;
+  slug: string | null;
+}>;
+
 // Source: ./sanity/lib/queries.ts
 // Variable: settingsQuery
 // Query: *[_type == "settings"][0]
@@ -334,30 +370,6 @@ export type SettingsQueryResult = {
   };
 } | null;
 
-// Source: ./app/(home)/page.tsx
-// Variable: projectsQuery
-// Query: *[_type == "project" && defined(slug.current)] | order(date desc, _updatedAt desc) {  content,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  author,}
-export type ProjectsQueryResult = Array<{
-  content: null;
-  _id: string;
-  status: "draft" | "published";
-  title: string | "Untitled";
-  slug: string | null;
-  excerpt: null;
-  author: string | null;
-}>;
-
-// Source: ./app/list/page.tsx
-// Variable: projectsListQuery
-// Query: *[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}
-export type ProjectsListQueryResult = Array<{
-  _id: string;
-  title: string | null;
-  _updatedAt: string;
-  description: string | null;
-  slug: string | null;
-}>;
-
 // Source: ./app/(home)/projects/[slug]/page.tsx
 // Variable: projectSlugs
 // Query: *[_type == "project"]{slug}
@@ -391,6 +403,8 @@ export type ProjectBySlugQueryResult = {
       _weak?: boolean;
       [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
     };
+    caption?: string;
+    attribution?: string;
     _type: "file";
     _key: string;
   } | {
@@ -402,6 +416,8 @@ export type ProjectBySlugQueryResult = {
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
+    caption?: string;
+    attribution?: string;
     _type: "image";
     _key: string;
   }> | null;
@@ -411,75 +427,21 @@ export type ProjectBySlugQueryResult = {
   title: string | "Untitled";
   slug: string | null;
   author: string | null;
-  type: "audio" | "image" | "text" | "video" | "website" | null;
-  showcaseImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  } | null;
-  showcaseVideo: {
-    asset: {
-      _id: string;
-      _type: "sanity.fileAsset";
-      _createdAt: string;
-      _updatedAt: string;
-      _rev: string;
-      originalFilename?: string;
-      label?: string;
-      title?: string;
-      description?: string;
-      altText?: string;
-      sha1hash?: string;
-      extension?: string;
-      mimeType?: string;
-      size?: number;
-      assetId?: string;
-      uploadId?: string;
-      path?: string;
-      url?: string;
-      source?: SanityAssetSourceData;
-    } | null;
-  } | null;
-  showcaseAudio: {
-    asset: {
-      _id: string;
-      _type: "sanity.fileAsset";
-      _createdAt: string;
-      _updatedAt: string;
-      _rev: string;
-      originalFilename?: string;
-      label?: string;
-      title?: string;
-      description?: string;
-      altText?: string;
-      sha1hash?: string;
-      extension?: string;
-      mimeType?: string;
-      size?: number;
-      assetId?: string;
-      uploadId?: string;
-      path?: string;
-      url?: string;
-      source?: SanityAssetSourceData;
-    } | null;
-  } | null;
-  showcaseText: string | null;
-  showcaseWebsite: string | null;
+  type: null;
+  showcaseImage: null;
+  showcaseVideo: null;
+  showcaseAudio: null;
+  showcaseText: null;
+  showcaseWebsite: null;
 } | null;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"settings\"][0]": SettingsQueryResult;
     "*[_type == \"project\" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n  content,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  author,\n}": ProjectsQueryResult;
     "*[_type == \"project\"] | order(select($orderBy == \"title\" => title, $orderBy == \"_updatedAt\" => _updatedAt)) {_id, title, _updatedAt, description, \"slug\": slug.current}": ProjectsListQueryResult;
+    "*[_type == \"settings\"][0]": SettingsQueryResult;
     "*[_type == \"project\"]{slug}": ProjectSlugsResult;
     "*[_type == \"project\" && slug.current == $slug] [0] {\n  documentation,\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  showcaseImage,\n  showcaseVideo {\n    asset-> {\n      ...\n    },\n  },\n  showcaseAudio {\n    asset-> {\n      ...\n    },\n  },\n  showcaseText,\n  showcaseWebsite,\n}": ProjectBySlugQueryResult;
   }

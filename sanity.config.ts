@@ -15,8 +15,9 @@ import { structureTool } from "sanity/structure";
 
 import { apiVersion, dataset, projectId, studioUrl } from "@/sanity/lib/api";
 import { pageStructure, singletonPlugin } from "@/sanity/plugins/settings";
-import project from "@/sanity/schemas/documents/project";
-import settings from "@/sanity/schemas/singletons/settings";
+import project from "@/sanity/schemas/project";
+import settings from "@/sanity/schemas/settings";
+import showcase from "@/sanity/schemas/showcase";
 import { resolveHref } from "@/sanity/lib/utils";
 import {deDELocale} from '@sanity/locale-de-de'
 
@@ -35,6 +36,8 @@ export default defineConfig({
       settings,
       // Documents
       project,
+      // Objects
+      showcase,
     ],
   },
   scheduledPublishing: {

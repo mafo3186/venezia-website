@@ -4,23 +4,20 @@ import { groq } from "next-sanity";
 import PortableText from "./portable-text";
 
 import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
-import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
 
 function Intro(props: { title: string | null | undefined; description: any }) {
-  const title = props.title || demo.title;
-  const description = props.description?.length
-    ? props.description
-    : demo.description;
+  const title = props.title!;
+  const description = props.description!;
   return (
     <section>
       <h1>
-        {title || demo.title}
+        {title!}
       </h1>
       <h2>
         <PortableText
-          value={description?.length ? description : demo.description}
+          value={description}
         />
       </h2>
     </section>

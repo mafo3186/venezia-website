@@ -13,7 +13,6 @@ import AlertBanner from "./alert-banner";
 import PortableText from "./portable-text";
 
 import type { SettingsQueryResult } from "@/sanity.types";
-import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { settingsQuery } from "@/sanity/lib/queries";
@@ -24,8 +23,8 @@ export async function generateMetadata(): Promise<Metadata> {
     // Metadata should never contain stega
     stega: false,
   });
-  const title = settings?.title || demo.title;
-  const description = settings?.description || demo.description;
+  const title = settings?.title;
+  const description = settings?.description;
 
   const ogImage = resolveOpenGraphImage(settings?.ogImage);
   let metadataBase: URL | undefined = undefined;
@@ -40,9 +39,9 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase,
     title: {
       template: `%s | ${title}`,
-      default: title,
+      default: title!,
     },
-    description: toPlainText(description),
+    description: toPlainText(description!),
     openGraph: {
       images: ogImage ? [ogImage] : [],
     },
