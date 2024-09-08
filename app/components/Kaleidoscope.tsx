@@ -1,7 +1,6 @@
 // component/Kaleidoscope.tsx
 'use client';
 
-
 import React, { useEffect, useRef } from 'react';
 
 type KaleidoscopeProps = {
@@ -16,7 +15,7 @@ type KaleidoscopeProps = {
     canvasHeight?: number;
 };
 
-const Kaleidoscope: React.FC<KaleidoscopeProps> = ({
+export default function Kaleidoscope({
     edge = 8, // Default: 8 sections for mirror
     shapes = ['circle', 'square', 'triangle'], // Default shapes
     minSize = 20, // Minimum size
@@ -26,8 +25,9 @@ const Kaleidoscope: React.FC<KaleidoscopeProps> = ({
     speed = 0.1, // Default speed
     canvasWidth = window.innerWidth,
     canvasHeight = window.innerHeight,
-}) => {
+}: KaleidoscopeProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const animationRef = useRef<number | null>(null);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -55,30 +55,39 @@ const Kaleidoscope: React.FC<KaleidoscopeProps> = ({
             ctx.fill();
         };
 
-        const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let lastTime = 0;
+        const fps = 1; // Ziel-FPS (Beispiel: 10 FPS)
+        const frameDuration = 2000 / fps;
 
-            for (let i = 0; i < quantity; i++) {
-                const x = Math.random() * canvas.width;
-                const y = Math.random() * canvas.height;
-                const size = minSize + Math.random() * (maxSize - minSize);
-                const shape = shapes[Math.floor(Math.random() * shapes.length)];
-                const color = colors[Math.floor(Math.random() * colors.length)];
+        let yPos = 0;
 
-                // Draw shape and mirrored versions
-                for (let section = 0; section < edge; section++) {
-                    const angle = (section * 2 * Math.PI) / edge;
-                    ctx.save();
-                    ctx.translate(canvas.width / 2, canvas.height / 2);
-                    ctx.rotate(angle);
-                    drawShape(x - canvas.width / 2, y - canvas.height / 2, size, shape, color);
-                    ctx.restore();
+        const animate = (time: number) => {
+            if (time - lastTime >= frameDuration) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < quantity; i++) {
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    const size = minSize + Math.random() * (maxSize - minSize);
+                    const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+
+                    // Draw shape and mirrored versions
+                    for (let section = 0; section < edge; section++) {
+                        const angle = (section * 2 * Math.PI) / edge;
+                        ctx.save();
+                        ctx.translate(canvas.width / 2, canvas.height / 2);
+                        ctx.rotate(angle);
+                        drawShape(x - canvas.width / 2, y - canvas.height / 2, size, shape, color);
+                        ctx.restore();
+                    }
                 }
+                lastTime = time;
             }
-            requestAnimationFrame(animate);
+            animationRef.current = requestAnimationFrame(animate);
         };
 
-        animate();
+        animationRef.current = requestAnimationFrame(animate);
 
         return () => {
             // Cleanup on component unmount
@@ -90,6 +99,4 @@ const Kaleidoscope: React.FC<KaleidoscopeProps> = ({
     }, [edge, shapes, minSize, maxSize, colors, quantity, speed, canvasWidth, canvasHeight]);
 
     return <canvas ref={canvasRef} />;
-};
-
-export default Kaleidoscope;
+}
