@@ -11,14 +11,13 @@ export default function KaleidoscopePage() {
             <div className={styles.container}>
                 <div style={{ height: '100vh', width: '100vw', overflow: 'hidden' }}>
                     <Kaleidoscope
-                        edge={16}
+                        edge={10}
                         shapes={['circle', 'square', 'triangle']}
                         minSize={20}
                         maxSize={60}
                         colors={['#f133ff', '#a792f8', '#3357FF']}
-                        //colors={['#FF5733', '#33FF57', '#3357FF']}
-                        quantity={5}
-                        speed={0.1}
+                        quantity={14}
+                        speed={0.5}
                     />
                 </div>
                 <div className={styles.menu}>

@@ -1,7 +1,7 @@
 // component/Kaleidoscope.tsx
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 type KaleidoscopeProps = {
     edge?: number; // Number of mirror sections
@@ -15,6 +15,17 @@ type KaleidoscopeProps = {
     canvasHeight?: number;
 };
 
+type Shape = {
+    x: number;
+    y: number;
+    size: number;
+    shape: string;
+    color: string;
+    dx: number;
+    dy: number;
+};
+
+
 export default function Kaleidoscope({
     edge = 8, // Default: 8 sections for mirror
     shapes = ['circle', 'square', 'triangle'], // Default shapes
@@ -27,7 +38,9 @@ export default function Kaleidoscope({
     canvasHeight = window.innerHeight,
 }: KaleidoscopeProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const animationRef = useRef<number | null>(null);
+    //const animationRef = useRef<number | null>(null);
+    const [mouse, setMouse] = useState({ x: canvasWidth / 2, y: canvasHeight / 2 });
+
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -38,6 +51,20 @@ export default function Kaleidoscope({
 
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
+
+        // Generate random shapes
+        const shapesArray: Shape[] = [];
+        for (let i = 0; i < quantity; i++) {
+            const size = minSize + Math.random() * (maxSize - minSize);
+            const shape = shapes[Math.floor(Math.random() * shapes.length)];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const dx = (Math.random() - 0.5) * speed * 2;
+            const dy = (Math.random() - 0.5) * speed * 2;
+
+            shapesArray.push({ x, y, size, shape, color, dx, dy });
+        }
 
         const drawShape = (x: number, y: number, size: number, shape: string, color: string) => {
             ctx.fillStyle = color;
@@ -55,39 +82,59 @@ export default function Kaleidoscope({
             ctx.fill();
         };
 
-        let lastTime = 0;
-        const fps = 1; // Ziel-FPS (Beispiel: 10 FPS)
-        const frameDuration = 2000 / fps;
+        const updateShapes = () => {
+            shapesArray.forEach((shape) => {
+                // Update shape positions based on velocity (dx, dy) and mouse position influence
+                shape.x += shape.dx + (mouse.x - canvas.width / 2) * 0.00001 * speed; //
+                shape.y += shape.dy + (mouse.y - canvas.height / 2) * 0.00001 * speed;
 
-        let yPos = 0;
-
-        const animate = (time: number) => {
-            if (time - lastTime >= frameDuration) {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                for (let i = 0; i < quantity; i++) {
-                    const x = Math.random() * canvas.width;
-                    const y = Math.random() * canvas.height;
-                    const size = minSize + Math.random() * (maxSize - minSize);
-                    const shape = shapes[Math.floor(Math.random() * shapes.length)];
-                    const color = colors[Math.floor(Math.random() * colors.length)];
-
-                    // Draw shape and mirrored versions
-                    for (let section = 0; section < edge; section++) {
-                        const angle = (section * 2 * Math.PI) / edge;
-                        ctx.save();
-                        ctx.translate(canvas.width / 2, canvas.height / 2);
-                        ctx.rotate(angle);
-                        drawShape(x - canvas.width / 2, y - canvas.height / 2, size, shape, color);
-                        ctx.restore();
-                    }
+                // Bounce off edges
+                if (shape.x - shape.size / 2 < 0 || shape.x + shape.size / 2 > canvas.width) {
+                    shape.dx = -shape.dx;
                 }
-                lastTime = time;
-            }
-            animationRef.current = requestAnimationFrame(animate);
+                if (shape.y - shape.size / 2 < 0 || shape.y + shape.size / 2 > canvas.height) {
+                    shape.dy = -shape.dy;
+                }
+            });
         };
 
-        animationRef.current = requestAnimationFrame(animate);
+
+        //let lastTime = 0;
+        //const fps = 1; // Ziel-FPS (Beispiel: 10 FPS)
+        //const frameDuration = 2000 / fps;
+
+        //let yPos = 0;
+
+
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            updateShapes();
+
+            shapesArray.forEach((shape) => {
+                // Draw shape and mirrored versions
+                for (let section = 0; section < edge; section++) {
+                    const angle = (section * 2 * Math.PI) / edge;
+                    ctx.save();
+                    ctx.translate(canvas.width / 2, canvas.height / 2);
+                    ctx.rotate(angle);
+                    drawShape(shape.x - canvas.width / 2, shape.y - canvas.height / 2, shape.size, shape.shape, shape.color);
+                    ctx.restore();
+                }
+            });
+
+            requestAnimationFrame(animate);
+        };
+
+        // Handle mouse movement
+        const handleMouseMove = (e: MouseEvent) => {
+            setMouse({ x: e.clientX, y: e.clientY });
+        };
+
+        // Add event listener for mouse movement
+        window.addEventListener('mousemove', handleMouseMove);
+
+        animate();
 
         return () => {
             // Cleanup on component unmount
@@ -96,7 +143,7 @@ export default function Kaleidoscope({
                 canvas.height = 0;
             }
         };
-    }, [edge, shapes, minSize, maxSize, colors, quantity, speed, canvasWidth, canvasHeight]);
+    }, [edge, shapes, minSize, maxSize, colors, quantity, speed, canvasWidth, canvasHeight, mouse]);
 
     return <canvas ref={canvasRef} />;
 }
