@@ -17,7 +17,7 @@ export default function KaleidoscopePage() {
                         maxSize={60}
                         colors={['#f133ff', '#a792f8', '#3357FF']}
                         quantity={14}
-                        speed={0.5}
+                        speed={0.7}
                     />
                 </div>
                 <div className={styles.menu}>
