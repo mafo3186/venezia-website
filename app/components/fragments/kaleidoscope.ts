@@ -66,7 +66,7 @@ const Kaleidoscope = (() => {
       this.context = context;
       this.options = options;
 
-      this.radianAOB = (2 * Math.PI) / options.edge;
+      this.radianAOB = (2 * Math.PI) / options.edge; // bedeutet
       this.calculateBorder();
 
       this.initializeEvents();
@@ -77,7 +77,7 @@ const Kaleidoscope = (() => {
       return this.pointO;
     }
 
-    // Get the random point in the pipe.
+    // Get the random point in the pipe to place the particle.
     public getRandomCoordinates() {
       const x =
         getRandomInt(Math.max(this.pointO.x, this.pointB.x) - this.pointA.x) +
@@ -140,14 +140,14 @@ const Kaleidoscope = (() => {
 
       context.save();
 
-      context.translate(this.pointO.x, this.pointO.y);
-      context.rotate(this.radianAOB * index);
-      context.translate(-this.pointO.x, -this.pointO.y);
+      context.translate(this.pointO.x, this.pointO.y); // move to the center
+      context.rotate(this.radianAOB * index); // rotate
+      context.translate(-this.pointO.x, -this.pointO.y); // move to the original position
 
       context.beginPath();
-      context.moveTo(this.pointO.x, this.pointO.y);
-      context.lineTo(this.pointA.x, this.pointA.y);
-      context.lineTo(this.pointB.x, this.pointB.y);
+      context.moveTo(this.pointO.x, this.pointO.y); // move to the center
+      context.lineTo(this.pointA.x, this.pointA.y); // draw the line from the center to the point A
+      context.lineTo(this.pointB.x, this.pointB.y); // draw the line from the center to the point B
       context.closePath();
       context.clip();
 
@@ -260,8 +260,8 @@ const Kaleidoscope = (() => {
       this.x = p.x;
       this.y = p.y;
       this.v = (Math.random() + 0.5) * options.speed;
-      this.directionX = pipe.directionX;
-      this.directionY = pipe.directionY;
+      this.directionX = pipe.directionX; // Initial direction for mousemove used to change the direction of the particles
+      this.directionY = pipe.directionY; // Initial direction
 
       this.initializeEvents();
     }
@@ -518,7 +518,7 @@ const Kaleidoscope = (() => {
       }
     }
 
-    // This updates the particles coordinates.
+    // This updates the particles coordinates depending on the direction.
     public updateCoordinates() {
       if (this.opacity < 1) {
         this.opacity += 0.1;
