@@ -62,6 +62,19 @@ export default async function Page() {
       <h3>
         <Link href={"/kaleidoscope"} >Kaleidoskop</Link>
       </h3>
+      <h3>Kaleidoskop-Startseiten für Projekte</h3>
+      <Intro title={settings?.title} description={settings?.description} />
+      <ul>
+        {projects?.map((project) => (
+          <li key={project._id}>
+            <h3>
+              <Link href={`/kaleidoscope/${project.slug}`} >
+                {project.title}
+              </Link>
+            </h3>
+          </li>
+        ))}
+      </ul>
     </>
   );
 }
