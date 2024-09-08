@@ -1,218 +1,95 @@
-//Kaleidoscope_v3.tsx: Kaleidoskop-Achtel oben links mit bewegten Teilen, ohne Spiegelung in andere Teile
-
+// component/Kaleidoscope.tsx
 'use client';
 
-import { useEffect, useRef } from "react";
-import * as THREE from "three";
-import styles from './kaleidoscopeCanvas.module.css';
 
-interface KaleidoscopeProps {
-    // Hier können weitere Props hinzugefügt werden, falls nötig
-}
+import React, { useEffect, useRef } from 'react';
 
-interface IOptions {
-    selector: string;
-    edge?: number;
-    shapes?: string[];
-    minSize?: number;
-    maxSize?: number;
-    color?: string[];
-    globalCompositeOperation?: string;
-    quantity?: number;
-    speed?: number;
-}
+type KaleidoscopeProps = {
+    edge?: number; // Number of mirror sections
+    shapes?: string[]; // Shapes to render
+    minSize?: number; // Minimum size of shapes
+    maxSize?: number; // Maximum size of shapes
+    colors?: string[]; // Colors of shapes
+    quantity?: number; // Number of shapes
+    speed?: number; // Movement speed of shapes
+    canvasWidth?: number;
+    canvasHeight?: number;
+};
 
-export default function Kaleidoscope({ }: KaleidoscopeProps) {
+const Kaleidoscope: React.FC<KaleidoscopeProps> = ({
+    edge = 8, // Default: 8 sections for mirror
+    shapes = ['circle', 'square', 'triangle'], // Default shapes
+    minSize = 20, // Minimum size
+    maxSize = 50, // Maximum size
+    colors = ['#f133ff', '#a792f8', '#3357FF'], // Default colors
+    quantity = 30, // Number of shapes
+    speed = 0.1, // Default speed
+    canvasWidth = window.innerWidth,
+    canvasHeight = window.innerHeight,
+}) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const context = canvas.getContext('2d');
-        if (!context) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-        // Kaleidoscope-Parameter
-        const options: IOptions = {
-            selector: 'canvas',
-            edge: 10,  // Anzahl der Spiegelungen
-            shapes: ['circle', 'square'],  // Formen, die gespiegelt werden sollen
-            minSize: 20,
-            maxSize: 50,
-            color: ['#00E5E5', '#A792F8FF', '#0000FF', '#000000'],  // Farben der Formen
-            globalCompositeOperation: 'overlay',
-            quantity: 50,
-            speed: 0.3,
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+
+        const drawShape = (x: number, y: number, size: number, shape: string, color: string) => {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            if (shape === 'circle') {
+                ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+            } else if (shape === 'square') {
+                ctx.rect(x - size / 2, y - size / 2, size, size);
+            } else if (shape === 'triangle') {
+                ctx.moveTo(x, y - size / 2);
+                ctx.lineTo(x + size / 2, y + size / 2);
+                ctx.lineTo(x - size / 2, y + size / 2);
+            }
+            ctx.closePath();
+            ctx.fill();
         };
 
-        // Definition der Pipe und Particle Klassen aus dem Beispielcode
-        class Pipe {
-            public directionX: number = 0;
-            public directionY: number = 0;
-            private context: CanvasRenderingContext2D;
-            private pointO: { x: number; y: number } = { x: 0, y: 0 };
-            private radianAOB: number = 0;
-            private pointA: { x: number; y: number } = { x: 0, y: 0 };
-            private pointB: { x: number; y: number } = { x: 0, y: 0 };
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            constructor(context: CanvasRenderingContext2D, options: IOptions) {
-                this.context = context;
-                const edge = options.edge ?? 6;
-                this.radianAOB = (2 * Math.PI) / edge;
-                this.calculateBorder();
-            }
+            for (let i = 0; i < quantity; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const size = minSize + Math.random() * (maxSize - minSize);
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                const color = colors[Math.floor(Math.random() * colors.length)];
 
-            public mirror(index: number, drawFunc: () => void) {
-                const context = this.context;
-                context.save();
-                context.translate(this.pointO.x, this.pointO.y);
-                context.rotate(this.radianAOB * index);
-                context.translate(-this.pointO.x, -this.pointO.y);
-                context.beginPath();
-                context.moveTo(this.pointO.x, this.pointO.y);
-                context.lineTo(this.pointA.x, this.pointA.y);
-                context.lineTo(this.pointB.x, this.pointB.y);
-                context.closePath();
-                context.clip();
-                drawFunc();
-                context.restore();
-            }
-
-            private calculateBorder() {
-                const canvas = this.context.canvas;
-                this.pointO.x = canvas.width / 2;
-                this.pointO.y = canvas.height / 2;
-                // Berechnung der Punkte A und B für die Spiegelung
-                const diagonal = Math.sqrt(this.pointO.x ** 2 + this.pointO.y ** 2);
-                const radius = diagonal / Math.cos(this.radianAOB / 2);
-                this.pointA = {
-                    x: (1 - radius / diagonal) * this.pointO.x,
-                    y: (1 - radius / diagonal) * this.pointO.y,
-                };
-                this.pointB = this.rotate(this.pointA.x, this.pointA.y, this.pointO.x, this.pointO.y, this.radianAOB);
-            }
-
-            private rotate(x: number, y: number, centerX: number, centerY: number, rad: number) {
-                const X = Math.cos(rad) * (x - centerX) - Math.sin(rad) * (y - centerY) + centerX;
-                const Y = Math.sin(rad) * (x - centerX) + Math.cos(rad) * (y - centerY) + centerY;
-                return { x: X, y: Y };
-            }
-        }
-
-        class Particle {
-            public size: number = 0;
-            public x: number = 0;
-            public y: number = 0;
-            public vx: number = 0;
-            public vy: number = 0;
-            public color: string = '';
-            public shape: string = '';
-
-            private context: CanvasRenderingContext2D;
-            private options: IOptions;
-            private radian: number = 0;
-
-
-            constructor(context: CanvasRenderingContext2D, options: IOptions) {
-                this.context = context;
-                this.options = options;
-
-                const minSize = options.minSize ?? 20;
-                const maxSize = options.maxSize ?? 50;
-                this.size = Math.random() * (maxSize - minSize) + minSize;
-                this.shape = this.options.shapes[Math.floor(Math.random() * (options.shapes?.length ?? 0)) ?? 0];
-                this.color = options.color[Math.floor(Math.random() * (options.color?.length ?? 0)) ?? 0];
-                this.x = Math.random() * context.canvas.width;
-                this.y = Math.random() * context.canvas.height;
-
-                // Initialisieren von Geschwindigkeiten
-                const speed = options.speed ?? 0.3;
-                this.vx = (Math.random() - 0.5) * speed;
-                this.vy = (Math.random() - 0.5) * speed;
-            }
-
-
-
-            public update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.radian += 0.01; // Rotation speed
-                this.checkBounds();
-            }
-
-            // Check if the particle is out of bounds and reset position if necessary
-            private checkBounds() {
-                const canvas = this.context.canvas;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.y < 0) this.y = canvas.height;
-                if (this.y > canvas.height) this.y = 0;
-            }
-
-            // Draw the particle
-            public draw() {
-                const context = this.context;
-                context.save();
-                context.translate(this.x, this.y);
-                context.rotate(this.radian);
-                context.fillStyle = this.color;
-
-                switch (this.shape) {
-                    case 'circle':
-                        context.beginPath();
-                        context.arc(0, 0, this.size / 2, 0, 2 * Math.PI);
-                        context.fill();
-                        break;
-                    case 'square':
-                        context.beginPath();
-                        context.rect(-this.size / 2, -this.size / 2, this.size, this.size);
-                        context.fill();
-                        break;
-                    // Add more shapes if needed
+                // Draw shape and mirrored versions
+                for (let section = 0; section < edge; section++) {
+                    const angle = (section * 2 * Math.PI) / edge;
+                    ctx.save();
+                    ctx.translate(canvas.width / 2, canvas.height / 2);
+                    ctx.rotate(angle);
+                    drawShape(x - canvas.width / 2, y - canvas.height / 2, size, shape, color);
+                    ctx.restore();
                 }
-                context.restore();
             }
-        }
+            requestAnimationFrame(animate);
+        };
 
+        animate();
 
-        class Plugin {
-            private context: CanvasRenderingContext2D;
-            private pipe: Pipe;
-            private particles: Particle[];
-
-            constructor(context: CanvasRenderingContext2D, options: IOptions) {
-                this.context = context;
-                this.pipe = new Pipe(context, options);
-                this.particles = Array.from({ length: options.quantity ?? 100 }, () => new Particle(context, options));
-                this.animate();
+        return () => {
+            // Cleanup on component unmount
+            if (canvas) {
+                canvas.width = 0;
+                canvas.height = 0;
             }
+        };
+    }, [edge, shapes, minSize, maxSize, colors, quantity, speed, canvasWidth, canvasHeight]);
 
-            private animate() {
-                // Clear the canvas before updating and drawing
-                this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
+    return <canvas ref={canvasRef} />;
+};
 
-                // Update and draw particles
-                this.pipe.mirror(0, () => {
-                    this.particles.forEach(particle => {
-                        particle.update(); // Update particle position and state
-                    });
-                    this.particles.forEach(particle => {
-                        particle.draw(); // Draw particle after updating
-                    });
-                });
-
-                // Request the next frame
-                requestAnimationFrame(() => this.animate());
-            }
-        }
-
-
-        new Plugin(context, options);
-
-    }, []);
-
-
-    return (
-        <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />
-    );
-}
+export default Kaleidoscope;
