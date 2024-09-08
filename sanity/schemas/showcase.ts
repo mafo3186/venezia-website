@@ -58,7 +58,7 @@ export default defineType({
       }),
       options: {
         accept: "audio/*",
-      }
+      },
     }),
     defineField({
       name: "showcaseText",
