@@ -1,3 +1,4 @@
+// component/Kaleidoscope.tsx
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -36,10 +37,8 @@ export default function Kaleidoscope({
     canvasHeight = window.innerHeight,
 }: KaleidoscopeProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const [mouseDirection, setMouseDirection] = useState({ x: 0, y: 0 }); // Mausrichtung
+    const [mouseDirection, setMouseDirection] = useState({ x: 0, y: 0 }); // Mausrichtung als State
     const center = { x: canvasWidth / 2, y: canvasHeight / 2 };
-    let directionX = 0;
-    let directionY = 0;
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -66,7 +65,6 @@ export default function Kaleidoscope({
         }
 
         // Draw shape in CanvasRenderingContext2D
-        // toDo: Add more shapes
         const drawShape = (x: number, y: number, size: number, shape: string, color: string) => {
             ctx.fillStyle = color;
             ctx.beginPath();
@@ -86,7 +84,7 @@ export default function Kaleidoscope({
         const updateShapes = () => {
             shapesArray.forEach((shape) => {
                 // Update shape directions based on velocity (dx, dy) and mouse position influence
-                shape.x += shape.dx += mouseDirection.x * 0.01 * speed; //
+                shape.x += shape.dx += mouseDirection.x * 0.01 * speed;
                 shape.y += shape.dy += mouseDirection.y * 0.01 * speed;
 
                 // Bounce off edges
@@ -98,7 +96,6 @@ export default function Kaleidoscope({
                 }
             });
         };
-
 
         // Animation function
         const animate = () => {
@@ -123,16 +120,11 @@ export default function Kaleidoscope({
 
         // Function to handle mouse movement
         const handleMouseMove = (e: MouseEvent) => {
-            //setMouse({ x: e.clientX, y: e.clientY });
-            const distanceFromCenter = Math.sqrt((e.clientX - center.x) ** 2 + (e.clientY - center.y) ** 2); // Pythagoras für Berechnung von Werten, die von der Mausposition in Abhängigkeit zum Mittelpunkt abhängen
-            if (distanceFromCenter != 0) {
-
-                directionX = (e.clientX - center.x) / distanceFromCenter; // Mausrichtung x
-                directionY = (e.clientY - center.y) / distanceFromCenter; // Mausrichtung y
-                setMouseDirection({
-                    x: directionX,
-                    y: directionY
-                });
+            const distanceFromCenter = Math.sqrt((e.clientX - center.x) ** 2 + (e.clientY - center.y) ** 2);
+            if (distanceFromCenter !== 0) {
+                const directionX = (e.clientX - center.x) / distanceFromCenter;
+                const directionY = (e.clientY - center.y) / distanceFromCenter;
+                setMouseDirection({ x: directionX, y: directionY });
             }
         };
 
