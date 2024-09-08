@@ -1,7 +1,5 @@
-// component/Kaleidoscope.tsx
 'use client';
 
-import { dir } from 'console';
 import React, { useEffect, useRef, useState } from 'react';
 
 type KaleidoscopeProps = {
@@ -25,7 +23,6 @@ type Shape = {
     dx: number;
     dy: number;
 };
-
 
 export default function Kaleidoscope({
     edge = 8, // Default: 8 sections for mirror
@@ -62,8 +59,8 @@ export default function Kaleidoscope({
             const color = colors[Math.floor(Math.random() * colors.length)];
             const x = Math.random() * canvas.width;
             const y = Math.random() * canvas.height;
-            const dx = (Math.random() - 0.5) * speed * 4; // Random velocity
-            const dy = (Math.random() - 0.5) * speed * 4; // Random velocity
+            const dx = (Math.random() - 0.5) * speed * 4; // Initial random velocity
+            const dy = (Math.random() - 0.5) * speed * 4; // Initial random velocity
 
             shapesArray.push({ x, y, size, shape, color, dx, dy });
         }
@@ -103,6 +100,7 @@ export default function Kaleidoscope({
         };
 
 
+        // Animation function
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -123,7 +121,7 @@ export default function Kaleidoscope({
             requestAnimationFrame(animate);
         };
 
-        // Handle mouse movement
+        // Function to handle mouse movement
         const handleMouseMove = (e: MouseEvent) => {
             //setMouse({ x: e.clientX, y: e.clientY });
             const distanceFromCenter = Math.sqrt((e.clientX - center.x) ** 2 + (e.clientY - center.y) ** 2); // Pythagoras für Berechnung von Werten, die von der Mausposition in Abhängigkeit zum Mittelpunkt abhängen
@@ -138,10 +136,10 @@ export default function Kaleidoscope({
             }
         };
 
-
-        // Add event listener for mouse movement
+        // Add mouse movement event listener
         window.addEventListener('mousemove', handleMouseMove);
 
+        // Start animation
         animate();
 
         return () => {
