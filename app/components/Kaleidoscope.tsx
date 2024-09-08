@@ -1,6 +1,7 @@
 // component/Kaleidoscope.tsx
 'use client';
 
+import { dir } from 'console';
 import React, { useEffect, useRef, useState } from 'react';
 
 type KaleidoscopeProps = {
@@ -38,9 +39,10 @@ export default function Kaleidoscope({
     canvasHeight = window.innerHeight,
 }: KaleidoscopeProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    //const animationRef = useRef<number | null>(null);
-    const [mouse, setMouse] = useState({ x: canvasWidth / 2, y: canvasHeight / 2 });
-
+    const [mouseDirection, setMouseDirection] = useState({ x: 0, y: 0 }); // Mausrichtung
+    const center = { x: canvasWidth / 2, y: canvasHeight / 2 };
+    let directionX = 0;
+    let directionY = 0;
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -60,12 +62,14 @@ export default function Kaleidoscope({
             const color = colors[Math.floor(Math.random() * colors.length)];
             const x = Math.random() * canvas.width;
             const y = Math.random() * canvas.height;
-            const dx = (Math.random() - 0.5) * speed * 2;
-            const dy = (Math.random() - 0.5) * speed * 2;
+            const dx = (Math.random() - 0.5) * speed * 4; // Random velocity
+            const dy = (Math.random() - 0.5) * speed * 4; // Random velocity
 
             shapesArray.push({ x, y, size, shape, color, dx, dy });
         }
 
+        // Draw shape in CanvasRenderingContext2D
+        // toDo: Add more shapes
         const drawShape = (x: number, y: number, size: number, shape: string, color: string) => {
             ctx.fillStyle = color;
             ctx.beginPath();
@@ -84,9 +88,9 @@ export default function Kaleidoscope({
 
         const updateShapes = () => {
             shapesArray.forEach((shape) => {
-                // Update shape positions based on velocity (dx, dy) and mouse position influence
-                shape.x += shape.dx + (mouse.x - canvas.width / 2) * 0.00001 * speed; //
-                shape.y += shape.dy + (mouse.y - canvas.height / 2) * 0.00001 * speed;
+                // Update shape directions based on velocity (dx, dy) and mouse position influence
+                shape.x += shape.dx += mouseDirection.x * 0.01 * speed; //
+                shape.y += shape.dy += mouseDirection.y * 0.01 * speed;
 
                 // Bounce off edges
                 if (shape.x - shape.size / 2 < 0 || shape.x + shape.size / 2 > canvas.width) {
@@ -97,13 +101,6 @@ export default function Kaleidoscope({
                 }
             });
         };
-
-
-        //let lastTime = 0;
-        //const fps = 1; // Ziel-FPS (Beispiel: 10 FPS)
-        //const frameDuration = 2000 / fps;
-
-        //let yPos = 0;
 
 
         const animate = () => {
@@ -128,8 +125,19 @@ export default function Kaleidoscope({
 
         // Handle mouse movement
         const handleMouseMove = (e: MouseEvent) => {
-            setMouse({ x: e.clientX, y: e.clientY });
+            //setMouse({ x: e.clientX, y: e.clientY });
+            const distanceFromCenter = Math.sqrt((e.clientX - center.x) ** 2 + (e.clientY - center.y) ** 2); // Pythagoras für Berechnung von Werten, die von der Mausposition in Abhängigkeit zum Mittelpunkt abhängen
+            if (distanceFromCenter != 0) {
+
+                directionX = (e.clientX - center.x) / distanceFromCenter; // Mausrichtung x
+                directionY = (e.clientY - center.y) / distanceFromCenter; // Mausrichtung y
+                setMouseDirection({
+                    x: directionX,
+                    y: directionY
+                });
+            }
         };
+
 
         // Add event listener for mouse movement
         window.addEventListener('mousemove', handleMouseMove);
@@ -142,8 +150,9 @@ export default function Kaleidoscope({
                 canvas.width = 0;
                 canvas.height = 0;
             }
+            window.removeEventListener('mousemove', handleMouseMove);
         };
-    }, [edge, shapes, minSize, maxSize, colors, quantity, speed, canvasWidth, canvasHeight, mouse]);
+    }, [edge, shapes, minSize, maxSize, colors, quantity, speed, canvasWidth, canvasHeight, mouseDirection]);
 
     return <canvas ref={canvasRef} />;
 }
