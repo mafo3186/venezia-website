@@ -273,6 +273,17 @@ export type SanityImageMetadata = {
 
 export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | Geopoint | Project | SanityFileAsset | Slug | Settings | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ./app/list/page.tsx
+// Variable: projectsListQuery
+// Query: *[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}
+export type ProjectsListQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  _updatedAt: string;
+  description: string | null;
+  slug: string | null;
+}>;
+
 // Source: ./sanity/lib/queries.ts
 // Variable: settingsQuery
 // Query: *[_type == "settings"][0]
@@ -333,8 +344,6 @@ export type SettingsQueryResult = {
     _type: "image";
   };
 } | null;
-
-// Source: ./app/(home)/page.tsx
 // Variable: projectsQuery
 // Query: *[_type == "project" && defined(slug.current)] | order(date desc, _updatedAt desc) {  content,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  author,}
 export type ProjectsQueryResult = Array<{
@@ -345,17 +354,6 @@ export type ProjectsQueryResult = Array<{
   slug: string | null;
   excerpt: null;
   author: string | null;
-}>;
-
-// Source: ./app/list/page.tsx
-// Variable: projectsListQuery
-// Query: *[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}
-export type ProjectsListQueryResult = Array<{
-  _id: string;
-  title: string | null;
-  _updatedAt: string;
-  description: string | null;
-  slug: string | null;
 }>;
 
 // Source: ./app/(home)/projects/[slug]/page.tsx

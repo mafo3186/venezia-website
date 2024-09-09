@@ -3,91 +3,143 @@
 import { ProjectsQueryResult } from '@/sanity.types';
 import { Canvas, MeshProps, useFrame, useThree } from '@react-three/fiber'
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { DepthOfField, EffectComposer, Vignette } from '@react-three/postprocessing'
+import { AdaptiveDpr, Environment, FirstPersonControls, useGLTF } from '@react-three/drei';
+import { FirstPersonControls as FirstPersonControlImpl } from 'three-stdlib';
+import styles from "./home.module.css";
+import { Mesh } from 'three';
+import { usePathname } from "next/navigation";
+import { PropsWithChildren } from "react";
 
+function Content({ onChildPage, children }: PropsWithChildren<{ onChildPage: boolean }>) {
+  return <main className={onChildPage ? styles.mainVisible : styles.mainHidden}>
+    <div className={styles.outerWrapper}>
+      <div className={styles.innerWrapper}>
+        {children}
+      </div>
+    </div>
+  </main>;
+}
 
-import styles from "./scene.module.css";
-import { Mesh, Object3D } from 'three';
-
-function Box({ href, ...props }: { href: string } & MeshProps) {
+function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
   const router = useRouter()
   // This reference gives us direct access to the THREE.Mesh object
   const ref = useRef<Mesh | null>(null)
   // Hold state for hovered and clicked events
   const [hovered, hover] = useState(false)
   // Subscribe this component to the render-loop, rotate the mesh every frame
-  useFrame((state, delta) => (ref.current && (ref.current.rotation.y += delta)))
+  useFrame((state, delta) => {
+    if (ref.current) {
+      ref.current.rotation.y += delta
+      ref.current.rotation.x += 0.5 * delta
+      ref.current.rotation.z += 0.25 * delta
+    }
+  })
   // Return the view, these are regular Threejs elements expressed in JSX
   return (
     <mesh
       {...props}
       ref={ref}
       scale={hovered ? 1.5 : 1}
+      castShadow
+      receiveShadow
       onClick={(event) => router.push(href)}
       onPointerOver={(event) => hover(true)}
       onPointerOut={(event) => hover(false)}>
-      <boxGeometry args={[0.125, 0.125, 0.125]} />
-      <meshStandardMaterial color='hotpink' />
+      <icosahedronGeometry args={[0.1]} />
+      <meshPhysicalMaterial
+        attach="material"
+        color="white"
+        transmission={1}
+        thickness={0.5}
+        roughness={0.2} />
     </mesh>
   )
 }
 
-export function Cam({ onLoaded, position }: { onLoaded: () => void, position: number }) {
-  const [model, setModel] = useState<Object3D>();
-  useEffect(() => {
-    const loader = new GLTFLoader();
-    loader.load("/assets/scene.gltf", function (gltf) {
-      gltf.scene.receiveShadow = true
-      gltf.scene.castShadow = true
-      setModel(gltf.scene);
-      onLoaded();
-    }, undefined, function (error) {
-      console.error(error);
-    });
-  }, [onLoaded])
+function Globals() {
   useThree(({ camera }) => {
     camera.position.x = 0
     camera.position.y = 2.5
     camera.position.z = 0
   })
-  useFrame(({ camera }, delta) => {
-    let move = 0
-    if (position < 0.33) {
-      move = 1
-    } else if (position > 0.67) {
-      move = -1
-    }
-    camera.rotation.y += delta * move * 1.25
-  })
-  return <>{model && <primitive object={model} position={[0, 0, 0]} />}</>
+  return <></>;
 }
 
-export function Scene({ projects }: { projects: ProjectsQueryResult }) {
-  const [positionX, setPositionX] = useState(0)
-  const [visible, setVisible] = useState(false);
+function Model() {
+  const model = useGLTF("/assets/scene.gltf");
+  const scene = useMemo(() => {
+    model.scene.castShadow = true
+    model.scene.receiveShadow = true
+    model.scene.traverse((node) => {
+      if (node.type === 'Mesh') {
+        node.castShadow = true;
+        node.receiveShadow = true;
+      }
+    });
+    return model.scene
+  }, [model]);
+  return <>
+    {scene && <primitive object={scene} position={[-0.67, 0, 0]} />}
+  </>;
+}
+
+function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
+  const controls = useRef<FirstPersonControlImpl | null>(null);
+  useEffect(() => {
+    if (controls.current) {
+      controls.current.activeLook = !inBackground;
+    }
+  }, [controls, inBackground])
   return (
     <Canvas
       style={{ width: "100%", height: "100vh" }}
       shadows
-      className={visible ? styles.scene + " " + styles.visible : styles.scene}
-      onPointerMove={(event) => {
-        setPositionX(event.clientX / event.currentTarget.clientWidth)
-      }}>
-      <color attach="background" args={[0xdd, 0xbb, 0xff]} />
-      <Cam onLoaded={() => setVisible(true)} position={positionX} />
-      <ambientLight intensity={Math.PI / 2} />
-      <directionalLight castShadow position={[0, 8, 0]} shadow-mapSize={[1024, 1024]}>
-        <orthographicCamera attach="shadow-camera" args={[-10, 10, 10, -10]} />
-      </directionalLight>
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
-      <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
-      {projects.map((project, index) => (<Box key={project._id} href={`/projects/${project.slug}`} position={[Math.cos(index / projects.length * 2 * Math.PI) * 0.75, 2.6, Math.sin(index / projects.length * 2 * Math.PI) * 0.75]} />))}
+      className={styles.scene}
+    >
+      <color attach="background" args={["#96b0e4"]} />
+      <Environment preset="sunset" />
+      <fogExp2 attach="fog" color="#96b0e4" density={0.18} />
+      <FirstPersonControls ref={controls} lookSpeed={0.1} movementSpeed={0} />
+      {/* <Sky sunPosition={[2, 5, 1]} /> */}
+      <Globals />
+      <Model />
+      <ambientLight intensity={0.1} />
+      <directionalLight
+        intensity={0.9}
+        castShadow
+        position={[2, 5, 1]}
+        shadow-mapSize-height={512}
+        shadow-mapSize-width={512}
+        shadow-bias={-0.0001}
+      />
+      {projects.map((project, index) => (
+        <ProjectBox
+          key={project._id}
+          href={`/projects/${project.slug}`}
+          position={[
+            Math.cos((index / projects.length + 0.125) * 2 * Math.PI) * 0.75, 2.6,
+            Math.sin((index / projects.length + 0.125) * 2 * Math.PI) * 0.75
+          ]}
+        />
+      ))}
       <EffectComposer>
-        <DepthOfField focusDistance={0} focalLength={0.01} bokehScale={2} />
+        <DepthOfField focusDistance={0} focalLength={0.01} bokehScale={4} />
         <Vignette eskil={false} offset={0.1} darkness={0.75} />
       </EffectComposer>
+      <AdaptiveDpr pixelated />
     </Canvas>
   );
+}
+
+export function Layout({ projects, children }: PropsWithChildren<{ projects: ProjectsQueryResult }>) {
+  const pathname = usePathname();
+  const onChildPage = pathname !== "/";
+  return (<>
+    <div className={styles.home}>
+      <Scene projects={projects} inBackground={onChildPage} />
+    </div>
+    <Content onChildPage={onChildPage}>{children}</Content>
+  </>);
 }
