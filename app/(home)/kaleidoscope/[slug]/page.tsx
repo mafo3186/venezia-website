@@ -51,8 +51,8 @@ export default async function PostPage({ params }: Props) {
                 </div>
                 <div className={styles.menu}>
                     <button className={styles.menuButton}>
-                        <Link href={`/projects/${project.slug}`} >
-                            {project.title}
+                        <Link href={`/projects/${project?.slug}`} >
+                            {project?.title}
                         </Link>
                     </button>
                 </div>
