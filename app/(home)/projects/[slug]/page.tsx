@@ -12,12 +12,13 @@ import type {
   ProjectSlugsResult,
   SettingsQueryResult,
 } from "@/sanity.types";
-import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import styles from "./styles.module.css";
 import { title } from "process";
+import { EmblaCarousel } from "./carousel";
+import ShowcasePiece from "./showcase-piece";
 
 type Props = {
   params: { slug: string };
@@ -34,19 +35,7 @@ const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug] [
   "slug": slug.current,
   author,
   type,
-  showcaseImage,
-  showcaseVideo {
-    asset-> {
-      ...
-    },
-  },
-  showcaseAudio {
-    asset-> {
-      ...
-    },
-  },
-  showcaseText,
-  showcaseWebsite,
+  showcase
 }`;
 
 export async function generateStaticParams() {
@@ -95,15 +84,12 @@ export default async function PostPage({ params }: Props) {
     return notFound();
   }
 
-  const showcaseVideo = project.showcaseVideo?.asset;
-  const showcaseAudio = project.showcaseAudio?.asset;
-
   return (
     <>
       <nav>
         <h2>
           <Link href="/" className="hover:underline">
-            {settings?.title || demo.title}
+            {settings?.title}
           </Link>
         </h2>
       </nav>
@@ -116,24 +102,15 @@ export default async function PostPage({ params }: Props) {
             von {project.author}
           </p>
         </hgroup>
-        <figure>
-          {project.type === "image" && <CoverImage image={project.showcaseImage} priority />}
-          {project.type === "video" && showcaseVideo?.url && <video controls autoPlay muted loop>
-            <source
-              src={showcaseVideo.url}
-              type={showcaseVideo.mimeType}
-            />
-          </video>}
-          {project.type === "audio" && showcaseAudio?.url && <audio controls>
-            <source
-              src={showcaseAudio.url}
-              type={showcaseAudio.mimeType}
-            />
-          </audio>}
-          {project.type === "text" && <pre>{project.showcaseText}</pre>}
-          {project.type === "website" && project.showcaseWebsite && <a href={project.showcaseWebsite} target="_blank"><iframe className={styles.website} src={project.showcaseWebsite}></iframe></a>}
-          <figcaption>{project.author}</figcaption>
-        </figure>
+        <section className={styles.showcase}>
+          <EmblaCarousel>
+            {project.showcase && project.showcase.map((showcase, index) => (
+              <Suspense key={index} fallback={<div>Loading...</div>}>
+                <ShowcasePiece showcase={showcase} width={2000} height={1000} />
+              </Suspense>
+            ))}
+          </EmblaCarousel>
+        </section>
         <aside>
           {project.documentation?.length && (
             <PortableText

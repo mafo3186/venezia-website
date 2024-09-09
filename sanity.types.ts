@@ -384,7 +384,7 @@ export type ProjectSlugsResult = Array<{
   slug: Slug | null;
 }>;
 // Variable: projectBySlugQuery
-// Query: *[_type == "project" && slug.current == $slug] [0] {  documentation,  description,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  author,  type,  showcaseImage,  showcaseVideo {    asset-> {      ...    },  },  showcaseAudio {    asset-> {      ...    },  },  showcaseText,  showcaseWebsite,}
+// Query: *[_type == "project" && slug.current == $slug] [0] {  documentation,  description,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  author,  type,  showcase}
 export type ProjectBySlugQueryResult = {
   documentation: Array<{
     children?: Array<{
@@ -435,11 +435,9 @@ export type ProjectBySlugQueryResult = {
   slug: string | null;
   author: string | null;
   type: null;
-  showcaseImage: null;
-  showcaseVideo: null;
-  showcaseAudio: null;
-  showcaseText: null;
-  showcaseWebsite: null;
+  showcase: Array<{
+    _key: string;
+  } & Showcase> | null;
 } | null;
 
 // Query TypeMap
@@ -450,6 +448,6 @@ declare module "@sanity/client" {
     "*[_type == \"project\" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n  content,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  author,\n}": ProjectsQueryResult;
     "*[_type == \"project\"] | order(select($orderBy == \"title\" => title, $orderBy == \"_updatedAt\" => _updatedAt)) {_id, title, _updatedAt, description, \"slug\": slug.current}": ProjectsListQueryResult;
     "*[_type == \"project\"]{slug}": ProjectSlugsResult;
-    "*[_type == \"project\" && slug.current == $slug] [0] {\n  documentation,\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  showcaseImage,\n  showcaseVideo {\n    asset-> {\n      ...\n    },\n  },\n  showcaseAudio {\n    asset-> {\n      ...\n    },\n  },\n  showcaseText,\n  showcaseWebsite,\n}": ProjectBySlugQueryResult;
+    "*[_type == \"project\" && slug.current == $slug] [0] {\n  documentation,\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  showcase\n}": ProjectBySlugQueryResult;
   }
 }
