@@ -1,0 +1,47 @@
+.home {
+  position: fixed;
+  width: 100vw;
+  top: 0;
+  left: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+}
+
+.mainHidden,
+.mainVisible {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  transition: all 200ms ease;
+  box-sizing: border-box;
+}
+
+.mainHidden {
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mainVisible {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.outerWrapper {
+  padding: 80px;
+  box-sizing: border-box;
+}
+
+.innerWrapper {
+  background-color: white;
+  display: inline-block;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.scene {
+  background-color: #7a635b;
+}

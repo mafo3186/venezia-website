@@ -306,7 +306,6 @@ export type ProjectsQueryResult = Array<{
   excerpt: null;
   author: string | null;
 }>;
-
 // Source: ./app/list/page.tsx
 // Variable: projectsListQuery
 // Query: *[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}
@@ -378,6 +377,17 @@ export type SettingsQueryResult = {
     _type: "image";
   };
 } | null;
+// Variable: projectsQuery
+// Query: *[_type == "project" && defined(slug.current)] | order(date desc, _updatedAt desc) {  content,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  author,}
+export type ProjectsQueryResult = Array<{
+  content: null;
+  _id: string;
+  status: "draft" | "published";
+  title: string | "Untitled";
+  slug: string | null;
+  excerpt: null;
+  author: string | null;
+}>;
 
 // Source: ./app/(home)/projects/[slug]/page.tsx
 // Variable: projectSlugs

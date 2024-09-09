@@ -5,17 +5,16 @@ import type { Metadata } from "next";
 import {
   VisualEditing,
   toPlainText,
-  type PortableTextBlock,
 } from "next-sanity";
 import { draftMode } from "next/headers";
 
 import AlertBanner from "./alert-banner";
 import PortableText from "./portable-text";
-
-import type { SettingsQueryResult } from "@/sanity.types";
+import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
-import { settingsQuery } from "@/sanity/lib/queries";
+import { projectsQuery, settingsQuery } from "@/sanity/lib/queries";
+import { Layout } from "./scene";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch<SettingsQueryResult>({
@@ -48,18 +47,22 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [settings, projects] = await Promise.all([
+    sanityFetch<SettingsQueryResult>({
+      query: settingsQuery,
+    }),
+    sanityFetch<ProjectsQueryResult>({ query: projectsQuery }),
+  ]);
   return (
     <html lang="de">
       <body>
-        <section>
-          {draftMode().isEnabled && <AlertBanner />}
-          <main>{children}</main>
-        </section>
+        {draftMode().isEnabled && <AlertBanner />}
+        <Layout projects={projects}>{children}</Layout>
         {draftMode().isEnabled && <VisualEditing />}
         <SpeedInsights />
       </body>
