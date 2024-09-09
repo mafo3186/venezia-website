@@ -154,7 +154,7 @@ export default function Kaleidoscope({
         animationRef.current = requestAnimationFrame(animate);
     };
 
-
+    /*
     const stopAnimation = () => {
         shapesArray.forEach((shape) => {
             shape.velocity.x = 0;
@@ -171,6 +171,8 @@ export default function Kaleidoscope({
     const removeShapes = () => {
         setShapesArray([]);
     };
+    */
+
 
 
     // Function to handle mouse movement
@@ -199,7 +201,7 @@ export default function Kaleidoscope({
         animate();
 
         return () => {
-            stopAnimation();
+
             // Cleanup on component unmount
             if (canvas) {
                 canvas.width = 0;
@@ -208,7 +210,6 @@ export default function Kaleidoscope({
             window.removeEventListener('mousemove', handleMouseMove);
         };
     }, [edge, shapes, minSize, maxSize, colors, quantity, speed, canvasWidth, canvasHeight, mouseDirection]);
-
 
     return <canvas ref={canvasRef} width={dimensions.width} height={dimensions.height} />;
 }
