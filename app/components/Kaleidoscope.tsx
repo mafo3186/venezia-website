@@ -21,9 +21,11 @@ type Shape = {
     size: number;
     shape: string;
     color: string;
-    dx: number;
-    dy: number;
+    velocity: number;
 };
+
+
+
 
 export default function Kaleidoscope({
     edge = 8, // Default: 8 sections for mirror
@@ -38,9 +40,13 @@ export default function Kaleidoscope({
 }: KaleidoscopeProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [mouseDirection, setMouseDirection] = useState({ x: 0, y: 0 }); // Mausrichtung als State
-    const center = { x: canvasWidth / 2, y: canvasHeight / 2 };
 
     useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        const center = { x: width / 2, y: height / 2 };
+
         const canvas = canvasRef.current;
         if (!canvas) return;
 
@@ -58,10 +64,8 @@ export default function Kaleidoscope({
             const color = colors[Math.floor(Math.random() * colors.length)];
             const x = Math.random() * canvas.width;
             const y = Math.random() * canvas.height;
-            const dx = (Math.random() - 0.5) * speed * 4; // Initial random velocity
-            const dy = (Math.random() - 0.5) * speed * 4; // Initial random velocity
-
-            shapesArray.push({ x, y, size, shape, color, dx, dy });
+            const velocity = (Math.random() + 0.5) * speed; // Initial random velocity
+            shapesArray.push({ x, y, size, shape, color, velocity });
         }
 
         // Draw shape in CanvasRenderingContext2D
@@ -84,15 +88,15 @@ export default function Kaleidoscope({
         const updateShapes = () => {
             shapesArray.forEach((shape) => {
                 // Update shape directions based on velocity (dx, dy) and mouse position influence
-                shape.x += shape.dx += mouseDirection.x * 0.01 * speed;
-                shape.y += shape.dy += mouseDirection.y * 0.01 * speed;
+                shape.x += shape.velocity += mouseDirection.x * 0.01 * speed;
+                shape.y += shape.velocity += mouseDirection.y * 0.01 * speed;
 
                 // Bounce off edges
                 if (shape.x - shape.size / 2 < 0 || shape.x + shape.size / 2 > canvas.width) {
-                    shape.dx = -shape.dx;
+                    shape.velocity = -shape.velocity;
                 }
                 if (shape.y - shape.size / 2 < 0 || shape.y + shape.size / 2 > canvas.height) {
-                    shape.dy = -shape.dy;
+                    shape.velocity = -shape.velocity;
                 }
             });
         };
