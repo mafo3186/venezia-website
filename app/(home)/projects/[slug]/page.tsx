@@ -1,26 +1,23 @@
+
 import type { Metadata, ResolvingMetadata } from "next";
-import { type PortableTextBlock } from "next-sanity";
-import Link from "next/link";
+
 import { notFound } from "next/navigation";
 import { projectBySlugQuery, projectSlugs } from "@/sanity/lib/queries";
-
-import CoverImage from "../../cover-image";
-import PortableText from "../../portable-text";
 
 import type {
   ProjectBySlugQueryResult,
   ProjectSlugsResult,
   SettingsQueryResult,
 } from "@/sanity.types";
-import * as demo from "@/sanity/lib/demo";
+
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
-import styles from "./styles.module.css";
+
+import ProjectDetailPage from "./components/projectDetails";
 
 type Props = {
   params: { slug: string };
 };
-
 
 export async function generateStaticParams() {
   const params = await sanityFetch<ProjectSlugsResult>({
@@ -64,59 +61,14 @@ export default async function ProjectPage({ params }: Props) {
     }),
   ]);
 
-
   if (!project?._id) {
     return notFound();
   }
 
-  const showcaseVideo = project.showcaseVideo?.asset;
-  const showcaseAudio = project.showcaseAudio?.asset;
 
   return (
     <>
-      <nav>
-        <h2>
-          <Link href="/" className="hover:underline">
-            {settings?.title || demo.title}
-          </Link>
-        </h2>
-      </nav>
-      <article className={styles.article}>
-        <hgroup className={styles.projectTitle}>
-          <h1>
-            {project.title}
-          </h1>
-          <p>
-            von {project.author}
-          </p>
-        </hgroup>
-        <figure>
-          {project.type === "image" && <CoverImage image={project.showcaseImage} priority />}
-          {project.type === "video" && showcaseVideo?.url && <video controls autoPlay muted loop>
-            <source
-              src={showcaseVideo.url}
-              type={showcaseVideo.mimeType}
-            />
-          </video>}
-          {project.type === "audio" && showcaseAudio?.url && <audio controls>
-            <source
-              src={showcaseAudio.url}
-              type={showcaseAudio.mimeType}
-            />
-          </audio>}
-          {project.type === "text" && <pre>{project.showcaseText}</pre>}
-          {project.type === "website" && project.showcaseWebsite && <a href={project.showcaseWebsite} target="_blank"><iframe className={styles.website} src={project.showcaseWebsite}></iframe></a>}
-          <figcaption>{project.author}</figcaption>
-        </figure>
-        <aside>
-          {project.documentation?.length && (
-            <PortableText
-              className={styles.documentation}
-              value={project.documentation as PortableTextBlock[]}
-            />
-          )}
-        </aside>
-      </article>
+      <ProjectDetailPage project={project} />
     </>
   );
 }
