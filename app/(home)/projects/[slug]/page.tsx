@@ -2,7 +2,6 @@ import type { Metadata, ResolvingMetadata } from "next";
 import { groq, type PortableTextBlock } from "next-sanity";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 
 import CoverImage from "../../cover-image";
 import PortableText from "../../portable-text";
@@ -14,7 +13,6 @@ import type {
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
-import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import styles from "./styles.module.css";
 import { title } from "process";
 import { EmblaCarousel } from "./carousel";
@@ -27,7 +25,12 @@ type Props = {
 const projectSlugs = groq`*[_type == "project"]{slug}`;
 
 const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug] [0] {
-  documentation,
+  "documentation": documentation[] {
+    ...,
+    _type == "file" => {
+      asset->
+    }
+  },
   description,
   _id,
   "status": select(_originalId in path("drafts.**") => "draft", "published"),

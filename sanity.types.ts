@@ -384,7 +384,7 @@ export type ProjectSlugsResult = Array<{
   slug: Slug | null;
 }>;
 // Variable: projectBySlugQuery
-// Query: *[_type == "project" && slug.current == $slug] [0] {  documentation,  description,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  author,  type,  showcase}
+
 export type ProjectBySlugQueryResult = {
   documentation: Array<{
     children?: Array<{
@@ -404,14 +404,7 @@ export type ProjectBySlugQueryResult = {
     _type: "block";
     _key: string;
   } | {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
-    };
-    caption?: string;
-    attribution?: string;
+
     _type: "file";
     _key: string;
   } | {
@@ -448,6 +441,6 @@ declare module "@sanity/client" {
     "*[_type == \"project\" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n  content,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  author,\n}": ProjectsQueryResult;
     "*[_type == \"project\"] | order(select($orderBy == \"title\" => title, $orderBy == \"_updatedAt\" => _updatedAt)) {_id, title, _updatedAt, description, \"slug\": slug.current}": ProjectsListQueryResult;
     "*[_type == \"project\"]{slug}": ProjectSlugsResult;
-    "*[_type == \"project\" && slug.current == $slug] [0] {\n  documentation,\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  showcase\n}": ProjectBySlugQueryResult;
+
   }
 }
