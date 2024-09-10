@@ -1,19 +1,15 @@
 
 import type { Metadata, ResolvingMetadata } from "next";
-
-import { notFound } from "next/navigation";
-import { projectBySlugQuery, projectSlugs } from "@/sanity/lib/queries";
-
 import type {
   ProjectBySlugQueryResult,
   ProjectSlugsResult,
   SettingsQueryResult,
 } from "@/sanity.types";
-
+import { notFound } from "next/navigation";
+import { projectBySlugQuery, projectSlugs } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
-
-import ProjectDetailPage from "./components/projectDetails";
+import ProjectIntroKaleidoscope from "./components/projectIntroKaleidoscope";
 
 type Props = {
   params: { slug: string };
@@ -65,10 +61,9 @@ export default async function ProjectPage({ params }: Props) {
     return notFound();
   }
 
-
   return (
     <>
-      <ProjectDetailPage project={project} />
+      <ProjectIntroKaleidoscope project={project} />
     </>
   );
 }
