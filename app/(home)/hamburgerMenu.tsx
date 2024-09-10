@@ -12,7 +12,11 @@ const HamburgerMenu = ({ projects }: HamburgerMenuProps) => {
     const [menuOpen, setMenuOpen] = useState(false);
 
     const toggleMenu = () => {
-        setMenuOpen(!menuOpen);  // Menü öffnen/schließen
+        setMenuOpen(!menuOpen);
+    };
+
+    const closeMenu = () => {
+        setMenuOpen(false);
     };
 
     return (
@@ -27,13 +31,13 @@ const HamburgerMenu = ({ projects }: HamburgerMenuProps) => {
                 <nav className={styles.navMenu}>
                     <ul>
                         <li>
-                            <Link href="/">
+                            <Link href="/" onClick={closeMenu}>
                                 Home
                             </Link>
                         </li>
                         {projects.map((project) => (
                             <li key={project._id}>
-                                <Link href={`/kaleidoscope/${project.slug}`}>
+                                <Link href={`/kaleidoscope/${project.slug}`} onClick={closeMenu}>
                                     {project.title}
                                 </Link>
                             </li>
