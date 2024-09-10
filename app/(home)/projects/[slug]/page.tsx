@@ -3,8 +3,7 @@ import { groq, type PortableTextBlock } from "next-sanity";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import CoverImage from "../../cover-image";
-import PortableText from "../../portable-text";
+import PortableText from "@/app/(home)/portable-text";
 
 import type {
   ProjectBySlugQueryResult,
@@ -17,6 +16,8 @@ import styles from "./styles.module.css";
 import { title } from "process";
 import { EmblaCarousel } from "./carousel";
 import ShowcasePiece from "./showcase-piece";
+import { Suspense } from "react";
+import { assert } from "console";
 
 type Props = {
   params: { slug: string };
@@ -38,7 +39,15 @@ const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug] [
   "slug": slug.current,
   author,
   type,
-  showcase
+  "showcases": showcase[] {
+    type,
+    type == 'image' => showcaseImage.asset->{"content": url},
+    type == 'audio' => showcaseAudio.asset->{"content": url, mimeType},
+    type == 'video' => showcaseVideo.asset->{"content": url, mimeType},
+    type == 'text' => @{"content": showcaseText},
+    type == 'website' => @{"content": showcaseWebsite},
+    description
+  }
 }`;
 
 export async function generateStaticParams() {
@@ -107,11 +116,13 @@ export default async function PostPage({ params }: Props) {
         </hgroup>
         <section className={styles.showcase}>
           <EmblaCarousel>
-            {project.showcase && project.showcase.map((showcase, index) => (
-              <Suspense key={index} fallback={<div>Loading...</div>}>
-                <ShowcasePiece showcase={showcase} width={2000} height={1000} />
-              </Suspense>
-            ))}
+            {project.showcases && project.showcases.map((showcase, index) => {
+              return (
+                <Suspense key={index} fallback={<div>Loading...</div>}>
+                  <ShowcasePiece showcase={showcase as any} width={2000} height={1000} />
+                </Suspense>
+              );
+            })}
           </EmblaCarousel>
         </section>
         <aside>

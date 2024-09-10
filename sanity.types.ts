@@ -384,7 +384,7 @@ export type ProjectSlugsResult = Array<{
   slug: Slug | null;
 }>;
 // Variable: projectBySlugQuery
-
+// Query: *[_type == "project" && slug.current == $slug] [0] {  "documentation": documentation[] {    ...,    _type == "file" => {      asset->    }  },  description,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  author,  type,  "showcases": showcase[] {    type,    type == 'image' => showcaseImage.asset->{"content": url},    type == 'audio' => showcaseAudio.asset->{"content": url, mimeType},    type == 'video' => showcaseVideo.asset->{"content": url, mimeType},    type == 'text' => @{"content": showcaseText},    type == 'website' => @{"content": showcaseWebsite},    description  }}
 export type ProjectBySlugQueryResult = {
   documentation: Array<{
     children?: Array<{
@@ -404,7 +404,29 @@ export type ProjectBySlugQueryResult = {
     _type: "block";
     _key: string;
   } | {
-
+    asset: {
+      _id: string;
+      _type: "sanity.fileAsset";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      originalFilename?: string;
+      label?: string;
+      title?: string;
+      description?: string;
+      altText?: string;
+      sha1hash?: string;
+      extension?: string;
+      mimeType?: string;
+      size?: number;
+      assetId?: string;
+      uploadId?: string;
+      path?: string;
+      url?: string;
+      source?: SanityAssetSourceData;
+    } | null;
+    caption?: string;
+    attribution?: string;
     _type: "file";
     _key: string;
   } | {
@@ -428,9 +450,19 @@ export type ProjectBySlugQueryResult = {
   slug: string | null;
   author: string | null;
   type: null;
-  showcase: Array<{
-    _key: string;
-  } & Showcase> | null;
+  showcases: Array<{
+    type: "audio" | "image" | "text" | "video" | "website" | null;
+    content: string | null;
+    mimeType: string | null;
+    description: string | null;
+  } | {
+    type: "audio" | "image" | "text" | "video" | "website" | null;
+    content: string | null;
+    description: string | null;
+  } | {
+    type: "audio" | "image" | "text" | "video" | "website" | null;
+    description: string | null;
+  }> | null;
 } | null;
 
 // Query TypeMap
@@ -441,6 +473,6 @@ declare module "@sanity/client" {
     "*[_type == \"project\" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n  content,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  author,\n}": ProjectsQueryResult;
     "*[_type == \"project\"] | order(select($orderBy == \"title\" => title, $orderBy == \"_updatedAt\" => _updatedAt)) {_id, title, _updatedAt, description, \"slug\": slug.current}": ProjectsListQueryResult;
     "*[_type == \"project\"]{slug}": ProjectSlugsResult;
-
+    "*[_type == \"project\" && slug.current == $slug] [0] {\n  \"documentation\": documentation[] {\n    ...,\n    _type == \"file\" => {\n      asset->\n    }\n  },\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  \"showcases\": showcase[] {\n    type,\n    type == 'image' => showcaseImage.asset->{\"content\": url},\n    type == 'audio' => showcaseAudio.asset->{\"content\": url, mimeType},\n    type == 'video' => showcaseVideo.asset->{\"content\": url, mimeType},\n    type == 'text' => @{\"content\": showcaseText},\n    type == 'website' => @{\"content\": showcaseWebsite},\n    description\n  }\n}": ProjectBySlugQueryResult;
   }
 }

@@ -5,7 +5,12 @@ import { Image } from "next-sanity/image";
 import styles from "./styles.module.css";
 
 interface ShowcasePieceProps {
-  showcase: Showcase;
+  showcase: {
+    type: "image" | "video" | "audio" | "text" | "website" | null;
+    description: string | null;
+    content: string;
+    mimeType?: string;
+  };
   width: number;
   height: number;
 }
@@ -17,28 +22,28 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
       <Image
         width={width}
         height={height}
-        src={urlForImage(showcase.showcaseImage)?.width(width).height(height).url() as string} alt="" />
+        src={urlForImage(showcase.content)?.width(width).height(height).url() as string} alt="" />
     )}
     {showcase.type === "video" && (
       <video
         controls autoPlay muted loop>
         <source
-          src={showcase.videoUrl}
-          type={showcase.videoMimeType}
+          src={showcase.content}
+          type={showcase.mimeType}
         />
       </video>
     )}
     {showcase.type === "audio" && (
       <audio controls>
-        <source src={showcase.audioUrl} type={showcase.audioMimeType} />
+        <source src={showcase.content} type={showcase.mimeType} />
       </audio>
     )}
     {showcase.type === "text" &&
-      <pre>{showcase.showcaseText}</pre>
+      <pre>{showcase.content}</pre>
     }
     {showcase.type === "website" &&
-      <a href={showcase.showcaseWebsite} target="_blank">
-        <iframe className={styles.website} src={showcase.showcaseWebsite}></iframe>
+      <a href={showcase.content} target="_blank">
+        <iframe className={styles.website} src={showcase.content}></iframe>
       </a>
     }
     {showcase.description && <figcaption>{showcase.description}</figcaption>}
