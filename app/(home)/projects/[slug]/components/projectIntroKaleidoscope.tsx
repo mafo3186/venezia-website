@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Kaleidoscope from './kaleidoscope';
-import Link from 'next/link';
 import styles from './projectIntroKaleidoscope.module.css';
 import { ProjectBySlugQueryResult } from '@/sanity.types';
 import { notFound } from 'next/navigation';
@@ -14,10 +13,11 @@ type ProjectIntroKaleidoscopeProps = {
 
 
 export default function ProjectIntroKaleidoscope({ project }: ProjectIntroKaleidoscopeProps) {
+    const [showDetails, setShowDetails] = useState(false);
+
     if (!project?._id) {
         return notFound();
     }
-    const [showDetails, setShowDetails] = useState(false);
 
     //add switch case for different projects
     const projectSlug = project.slug;
