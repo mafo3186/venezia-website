@@ -41,8 +41,6 @@ export default function Kaleidoscope({
     const [shapesArray, setShapesArray] = useState<Shape[]>([]);
     const animationRef = useRef<number | null>(null);
 
-
-
     useEffect(() => {
         if (typeof window !== 'undefined') {
             updateDimensions();
@@ -100,6 +98,39 @@ export default function Kaleidoscope({
             ctx.moveTo(x, y - size / 2);
             ctx.lineTo(x + size / 2, y + size / 2);
             ctx.lineTo(x - size / 2, y + size / 2);
+        } else if (shape === 'pentagon') {
+            ctx.moveTo(x, y - size / 2);
+            ctx.lineTo(x + size / 2, y - size / 4);
+            ctx.lineTo(x + size / 4, y + size / 2);
+            ctx.lineTo(x - size / 4, y + size / 2);
+            ctx.lineTo(x - size / 2, y - size / 4);
+            ctx.lineTo(x, y - size / 2);
+        } else if (shape === 'butterfly') {
+            ctx.moveTo(x - size / 2, y - size / 2);
+            ctx.lineTo(x + size / 2, y + size / 2);
+            ctx.lineTo(x - size / 2, y + size / 2);
+            ctx.lineTo(x + size / 2, y - size / 2);
+            ctx.lineTo(x - size / 2, y - size / 2);
+        } else if (shape === 'heart') {
+            ctx.moveTo(x, y - size / 4);
+            ctx.quadraticCurveTo(x + size / 2, y - size / 2, x + size / 2, y);
+            ctx.quadraticCurveTo(x + size / 2, y + size / 2, x, y + size / 2);
+            ctx.quadraticCurveTo(x - size / 2, y + size / 2, x - size / 2, y);
+            ctx.quadraticCurveTo(x - size / 2, y - size / 2, x, y - size / 4);
+        } else if (shape === 'moon') {
+            ctx.arc(x, y, size / 2, 0, Math.PI, true);
+        } else if (shape === 'cloud') {
+            ctx.arc(x - size / 4, y, size / 4, 0, Math.PI * 2);
+            ctx.arc(x + size / 4, y, size / 4, 0, Math.PI * 2);
+            ctx.arc(x, y - size / 4, size / 4, 0, Math.PI * 2);
+        } else if (shape === 'drop') {
+            ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+            ctx.moveTo(x - size / 2, y);
+            ctx.quadraticCurveTo(x, y + size / 2, x + size / 2, y);
+        } else if (shape === 'amoeba') {
+            ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+            ctx.arc(x - size / 4, y - size / 4, size / 4, 0, Math.PI * 2);
+            ctx.arc(x + size / 4, y + size / 4, size / 4, 0, Math.PI * 2);
         }
         ctx.closePath();
         ctx.fill();
@@ -172,8 +203,6 @@ export default function Kaleidoscope({
         setShapesArray([]);
     };
     */
-
-
 
     // Function to handle mouse movement
     const handleMouseMove = (e: MouseEvent) => {
