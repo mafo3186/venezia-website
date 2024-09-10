@@ -26,16 +26,14 @@ const HamburgerMenu = ({ projects }: HamburgerMenuProps) => {
             {menuOpen && (
                 <nav className={styles.navMenu}>
                     <ul>
-                        {/* Home-Link */}
                         <li>
                             <Link href="/">
                                 Home
                             </Link>
                         </li>
-                        {/* Links zu Projekten */}
                         {projects.map((project) => (
                             <li key={project._id}>
-                                <Link href={`/projects/${project.slug}`}>
+                                <Link href={`/kaleidoscope/${project.slug}`}>
                                     {project.title}
                                 </Link>
                             </li>
