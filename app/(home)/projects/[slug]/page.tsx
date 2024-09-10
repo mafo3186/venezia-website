@@ -53,7 +53,7 @@ export async function generateMetadata(
   } satisfies Metadata;
 }
 
-export default async function PostPage({ params }: Props) {
+export default async function ProjectPage({ params }: Props) {
   const [project, settings] = await Promise.all([
     sanityFetch<ProjectBySlugQueryResult>({
       query: projectBySlugQuery,
@@ -63,6 +63,7 @@ export default async function PostPage({ params }: Props) {
       query: settingsQuery,
     }),
   ]);
+
 
   if (!project?._id) {
     return notFound();

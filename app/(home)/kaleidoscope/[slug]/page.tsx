@@ -4,7 +4,8 @@ import Link from "next/link";
 import type { ProjectBySlugQueryResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { projectBySlugQuery } from "@/sanity/lib/queries";
-import Kaleidoscope from '../../kaleidoscope';
+import Kaleidoscope from '../../projects/[slug]/components/kaleidoscope';
+
 
 type Props = {
     params: { slug: string };
