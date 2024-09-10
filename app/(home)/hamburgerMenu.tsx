@@ -37,11 +37,16 @@ const HamburgerMenu = ({ projects }: HamburgerMenuProps) => {
                         </li>
                         {projects.map((project) => (
                             <li key={project._id}>
-                                <Link href={`/kaleidoscope/${project.slug}`} onClick={closeMenu}>
+                                <Link href={`/projects/${project.slug}`} onClick={closeMenu}>
                                     {project.title}
                                 </Link>
                             </li>
                         ))}
+                        <li>
+                            <Link href={"/studio"} onClick={closeMenu}>
+                                Neues Projekt anlegen
+                            </Link>
+                        </li>
                     </ul>
                 </nav>
             )}
