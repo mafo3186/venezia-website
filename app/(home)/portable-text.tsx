@@ -47,7 +47,24 @@ export default function CustomPortableText({
       // https://www.sanity.io/docs/presenting-images
       // eslint-disable-next-line @next/next/no-img-element
       image: ({ value }) => <img src={urlFor(value).width(500).url()} alt="" />,
-      // file: ({ value }) => <a href={value.asset.url}>{value.asset.originalFilename}</a>,
+      file: ({ value }) => {
+        const [topMimeType] = value.asset?.mimeType?.split("/") ?? [];
+        if (topMimeType === "video") {
+          return (
+            <video controls>
+              <source src={value.asset.url} type={value.asset.mimeType} />
+            </video>
+          );
+        } else if (topMimeType === "audio") {
+          return (
+            <audio controls>
+              <source src={value.asset.url} type={value.asset.mimeType} />
+            </audio>
+          );
+        } else {
+          return <a href={value.asset.url}>{value.asset.originalFilename}</a>;
+        }
+      },
     }
   };
 

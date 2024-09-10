@@ -15,7 +15,12 @@ export const projectsQuery = groq`*[_type == "project" && defined(slug.current)]
 export const projectSlugs = groq`*[_type == "project"]{slug}`;
 
 export const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug] [0] {
-  documentation,
+  "documentation": documentation[] {
+    ...,
+    _type == "file" => {
+      asset->
+    }
+  },
   description,
   _id,
   "status": select(_originalId in path("drafts.**") => "draft", "published"),

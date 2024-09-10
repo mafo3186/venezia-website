@@ -273,17 +273,6 @@ export type SanityImageMetadata = {
 
 export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | Geopoint | Project | SanityFileAsset | Slug | Settings | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;
-// Source: ./app/list/page.tsx
-// Variable: projectsListQuery
-// Query: *[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}
-export type ProjectsListQueryResult = Array<{
-  _id: string;
-  title: string | null;
-  _updatedAt: string;
-  description: string | null;
-  slug: string | null;
-}>;
-
 // Source: ./sanity/lib/queries.ts
 // Variable: settingsQuery
 // Query: *[_type == "settings"][0]
@@ -361,7 +350,7 @@ export type ProjectSlugsResult = Array<{
   slug: Slug | null;
 }>;
 // Variable: projectBySlugQuery
-// Query: *[_type == "project" && slug.current == $slug] [0] {  documentation,  description,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  author,  type,  showcaseImage,  showcaseVideo {    asset-> {      ...    },  },  showcaseAudio {    asset-> {      ...    },  },  showcaseText,  showcaseWebsite,}
+// Query: *[_type == "project" && slug.current == $slug] [0] {  "documentation": documentation[] {    ...,    _type == "file" => {      asset->    }  },  description,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  author,  type,  showcaseImage,  showcaseVideo {    asset-> {      ...    },  },  showcaseAudio {    asset-> {      ...    },  },  showcaseText,  showcaseWebsite,}
 export type ProjectBySlugQueryResult = {
   documentation: Array<{
     children?: Array<{
@@ -381,12 +370,27 @@ export type ProjectBySlugQueryResult = {
     _type: "block";
     _key: string;
   } | {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
-    };
+    asset: {
+      _id: string;
+      _type: "sanity.fileAsset";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      originalFilename?: string;
+      label?: string;
+      title?: string;
+      description?: string;
+      altText?: string;
+      sha1hash?: string;
+      extension?: string;
+      mimeType?: string;
+      size?: number;
+      assetId?: string;
+      uploadId?: string;
+      path?: string;
+      url?: string;
+      source?: SanityAssetSourceData;
+    } | null;
     _type: "file";
     _key: string;
   } | {
@@ -469,14 +473,25 @@ export type ProjectBySlugQueryResult = {
   showcaseWebsite: string | null;
 } | null;
 
+// Source: ./app/list/page.tsx
+// Variable: projectsListQuery
+// Query: *[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}
+export type ProjectsListQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  _updatedAt: string;
+  description: string | null;
+  slug: string | null;
+}>;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"project\"] | order(select($orderBy == \"title\" => title, $orderBy == \"_updatedAt\" => _updatedAt)) {_id, title, _updatedAt, description, \"slug\": slug.current}": ProjectsListQueryResult;
     "*[_type == \"settings\"][0]": SettingsQueryResult;
     "*[_type == \"project\" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n  content,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  author,\n}": ProjectsQueryResult;
     "*[_type == \"project\"]{slug}": ProjectSlugsResult;
-    "*[_type == \"project\" && slug.current == $slug] [0] {\n  documentation,\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  showcaseImage,\n  showcaseVideo {\n    asset-> {\n      ...\n    },\n  },\n  showcaseAudio {\n    asset-> {\n      ...\n    },\n  },\n  showcaseText,\n  showcaseWebsite,\n}": ProjectBySlugQueryResult;
+    "*[_type == \"project\" && slug.current == $slug] [0] {\n  \"documentation\": documentation[] {\n    ...,\n    _type == \"file\" => {\n      asset->\n    }\n  },\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  showcaseImage,\n  showcaseVideo {\n    asset-> {\n      ...\n    },\n  },\n  showcaseAudio {\n    asset-> {\n      ...\n    },\n  },\n  showcaseText,\n  showcaseWebsite,\n}": ProjectBySlugQueryResult;
+    "*[_type == \"project\"] | order(select($orderBy == \"title\" => title, $orderBy == \"_updatedAt\" => _updatedAt)) {_id, title, _updatedAt, description, \"slug\": slug.current}": ProjectsListQueryResult;
   }
 }
