@@ -12,6 +12,7 @@ import { Mesh } from 'three';
 import Link from 'next/link';
 import { usePathname } from "next/navigation";
 import { PropsWithChildren } from "react";
+import HamburgerMenu from './hamburgerMenu';
 
 function Content({ onChildPage, children }: PropsWithChildren<{ onChildPage: boolean }>) {
   return <main className={onChildPage ? styles.mainVisible : styles.mainHidden}>
@@ -137,38 +138,11 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
 export function Layout({ projects, children }: PropsWithChildren<{ projects: ProjectsQueryResult }>) {
   const pathname = usePathname();
   const onChildPage = pathname !== "/";
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
 
   return (
     <>
-      {/* Wrapper für das Layout */}
       <div className={styles.home}>
-        {/* Die Venedig-Scene im Hintergrund */}
         <Scene projects={projects} inBackground={onChildPage} />
-        <header className={styles.header}>
-          <div className={styles.hamburger} onClick={toggleMenu}>
-            {/* Hamburger Icon */}
-            <div className={styles.hamburgerIcon}></div>
-          </div>
-          {/* Dropdown-Menü mit Projektnamen */}
-          {menuOpen && (
-            <nav className={styles.navMenu}>
-              <ul>
-                {projects.map((project) => (
-                  <li key={project._id}>
-                    <Link href={`/projects/${project.slug}`}>
-                      {project.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          )}
-        </header>
       </div>
       <Content onChildPage={onChildPage}>{children}</Content>
     </>);
