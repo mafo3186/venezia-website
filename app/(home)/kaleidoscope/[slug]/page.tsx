@@ -1,10 +1,10 @@
 // kaleidoscope/page.tsx
 import styles from './kaleidoscopeStyles.module.css';
 import Link from "next/link";
-import Kaleidoscope from "@/app/components/Kaleidoscope";
 import type { ProjectBySlugQueryResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { projectBySlugQuery } from "@/sanity/lib/queries";
+import Kaleidoscope from '../../kaleidoscope';
 
 type Props = {
     params: { slug: string };
