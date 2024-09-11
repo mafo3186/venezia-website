@@ -2,7 +2,6 @@ import { Showcase } from "@/sanity.types";
 import { urlForImage } from "@/sanity/lib/utils";
 import project from "@/sanity/schemas/project";
 import { Image } from "next-sanity/image";
-import styles from "./styles.module.css";
 import { blurhashToBase64 } from "blurhash-base64";
 
 interface ShowcasePieceProps {
@@ -54,7 +53,7 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
             pointerEvents: "none",
             overflow: "hidden",
           }
-        } className={styles.website} scrolling="no" src={showcase.content}></iframe>
+        } scrolling="no" src={showcase.content}></iframe>
       </a>
     }
     {showcase.description && <figcaption>{showcase.description}</figcaption>}

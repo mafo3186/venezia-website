@@ -73,12 +73,12 @@
 
   .showcaseAndTitle {
     min-width: 0px;
-    flex-shrink: 1;
+    width: 70%;
     border-radius: var(--border-radius-container) 0 0 var(--border-radius-container);
   }
 
   .documentation {
-    min-width: 400px;
+    width: 400px;
     border-radius: 0 var(--border-radius-container) var(--border-radius-container) 0;
   }
 }
