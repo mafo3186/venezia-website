@@ -384,7 +384,7 @@ export type ProjectSlugsResult = Array<{
   slug: Slug | null;
 }>;
 // Variable: projectBySlugQuery
-// Query: *[_type == "project" && slug.current == $slug] [0] {  "documentation": documentation[] {    ...,    _type == "file" => {      asset->    }  },  description,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  author,  type,  "showcases": showcase[] {    type,    type == 'image' => showcaseImage.asset->{"content": url},    type == 'audio' => showcaseAudio.asset->{"content": url, mimeType},    type == 'video' => showcaseVideo.asset->{"content": url, mimeType},    type == 'text' => @{"content": showcaseText},    type == 'website' => @{"content": showcaseWebsite},    description  }}
+// Query: *[_type == "project" && slug.current == $slug] [0] {  "documentation": documentation[] {    ...,    _type == "file" => {      asset->    }  },  description,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  author,  type,  "showcases": showcase[] {    type,    type == 'image' => showcaseImage.asset->{"content": url, "blurHash": metadata.blurHash, mimeType},    type == 'audio' => showcaseAudio.asset->{"content": url, mimeType},    type == 'video' => showcaseVideo.asset->{"content": url, mimeType},    type == 'text' => @{"content": showcaseText},    type == 'website' => @{"content": showcaseWebsite},    description  }}
 export type ProjectBySlugQueryResult = {
   documentation: Array<{
     children?: Array<{
@@ -453,6 +453,12 @@ export type ProjectBySlugQueryResult = {
   showcases: Array<{
     type: "audio" | "image" | "text" | "video" | "website" | null;
     content: string | null;
+    blurHash: string | null;
+    mimeType: string | null;
+    description: string | null;
+  } | {
+    type: "audio" | "image" | "text" | "video" | "website" | null;
+    content: string | null;
     mimeType: string | null;
     description: string | null;
   } | {
@@ -473,6 +479,6 @@ declare module "@sanity/client" {
     "*[_type == \"project\" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n  content,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  author,\n}": ProjectsQueryResult;
     "*[_type == \"project\"] | order(select($orderBy == \"title\" => title, $orderBy == \"_updatedAt\" => _updatedAt)) {_id, title, _updatedAt, description, \"slug\": slug.current}": ProjectsListQueryResult;
     "*[_type == \"project\"]{slug}": ProjectSlugsResult;
-    "*[_type == \"project\" && slug.current == $slug] [0] {\n  \"documentation\": documentation[] {\n    ...,\n    _type == \"file\" => {\n      asset->\n    }\n  },\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  \"showcases\": showcase[] {\n    type,\n    type == 'image' => showcaseImage.asset->{\"content\": url},\n    type == 'audio' => showcaseAudio.asset->{\"content\": url, mimeType},\n    type == 'video' => showcaseVideo.asset->{\"content\": url, mimeType},\n    type == 'text' => @{\"content\": showcaseText},\n    type == 'website' => @{\"content\": showcaseWebsite},\n    description\n  }\n}": ProjectBySlugQueryResult;
+    "*[_type == \"project\" && slug.current == $slug] [0] {\n  \"documentation\": documentation[] {\n    ...,\n    _type == \"file\" => {\n      asset->\n    }\n  },\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  \"showcases\": showcase[] {\n    type,\n    type == 'image' => showcaseImage.asset->{\"content\": url, \"blurHash\": metadata.blurHash, mimeType},\n    type == 'audio' => showcaseAudio.asset->{\"content\": url, mimeType},\n    type == 'video' => showcaseVideo.asset->{\"content\": url, mimeType},\n    type == 'text' => @{\"content\": showcaseText},\n    type == 'website' => @{\"content\": showcaseWebsite},\n    description\n  }\n}": ProjectBySlugQueryResult;
   }
 }

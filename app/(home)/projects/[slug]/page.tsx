@@ -41,7 +41,7 @@ const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug] [
   type,
   "showcases": showcase[] {
     type,
-    type == 'image' => showcaseImage.asset->{"content": url},
+    type == 'image' => showcaseImage.asset->{"content": url, "blurHash": metadata.blurHash, mimeType},
     type == 'audio' => showcaseAudio.asset->{"content": url, mimeType},
     type == 'video' => showcaseVideo.asset->{"content": url, mimeType},
     type == 'text' => @{"content": showcaseText},
@@ -119,7 +119,7 @@ export default async function PostPage({ params }: Props) {
             {project.showcases && project.showcases.map((showcase, index) => {
               return (
                 <Suspense key={index} fallback={<div>Loading...</div>}>
-                  <ShowcasePiece showcase={showcase as any} width={2000} height={1000} />
+                  <ShowcasePiece showcase={showcase as any} />
                 </Suspense>
               );
             })}

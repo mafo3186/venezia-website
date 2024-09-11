@@ -3,39 +3,43 @@ import { urlForImage } from "@/sanity/lib/utils";
 import project from "@/sanity/schemas/project";
 import { Image } from "next-sanity/image";
 import styles from "./styles.module.css";
+import { blurhashToBase64 } from "blurhash-base64";
 
 interface ShowcasePieceProps {
   showcase: {
     type: "image" | "video" | "audio" | "text" | "website" | null;
     description: string | null;
     content: string;
-    mimeType?: string;
+    mimeType: string | null;
+    blurHash?: string;
   };
-  width: number;
-  height: number;
 }
 
 export default function ShowcasePiece(props: ShowcasePieceProps) {
-  const { showcase, width, height } = props;
-  return <figure>
+  const { showcase } = props;
+
+  return <figure style={{position: "relative", height: "100%"}}>
     {showcase.type === "image" && (
       <Image
-        width={width}
-        height={height}
-        src={urlForImage(showcase.content)?.width(width).height(height).url() as string} alt="" />
+        fill
+        blurDataURL={blurhashToBase64(showcase.blurHash!)}
+        placeholder="blur"
+        style={{objectFit: "cover"}}
+        src={showcase.content} alt={showcase.description ?? ""}
+      />
     )}
     {showcase.type === "video" && (
       <video
         controls autoPlay muted loop>
         <source
           src={showcase.content}
-          type={showcase.mimeType}
+          type={showcase.mimeType!}
         />
       </video>
     )}
     {showcase.type === "audio" && (
       <audio controls>
-        <source src={showcase.content} type={showcase.mimeType} />
+        <source src={showcase.content} type={showcase.mimeType!} />
       </audio>
     )}
     {showcase.type === "text" &&
