@@ -1,8 +1,20 @@
+import PortableText from "./portable-text";
+
 function Intro(props: { title: string | null | undefined; description: any }) {
-    return (
-        <>
-        </>
-    );
+  const title = props.title!;
+  const description = props.description;
+  return (
+    <section>
+      <h1>
+        {title}
+      </h1>
+      <h2>
+        <PortableText
+          value={description}
+        />
+      </h2>
+    </section>
+  );
 }
 
 export default async function Page() {
