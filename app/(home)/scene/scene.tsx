@@ -9,7 +9,7 @@ import { FirstPersonControls as FirstPersonControlImpl } from 'three-stdlib';
 import ProjectBox from './projectBox';
 import Globals from './globals';
 import Model from './model';
-import styles from './Scene.module.css';
+import styles from './scene.module.css';
 
 export default function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
   const controls = useRef<FirstPersonControlImpl | null>(null);
