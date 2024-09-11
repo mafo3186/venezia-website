@@ -9,10 +9,8 @@ import { AdaptiveDpr, Environment, FirstPersonControls, useGLTF } from '@react-t
 import { FirstPersonControls as FirstPersonControlImpl } from 'three-stdlib';
 import styles from "./home.module.css";
 import { Mesh } from 'three';
-import Link from 'next/link';
 import { usePathname } from "next/navigation";
 import { PropsWithChildren } from "react";
-import HamburgerMenu from './hamburgerMenu';
 
 function Content({ onChildPage, children }: PropsWithChildren<{ onChildPage: boolean }>) {
   return <main className={onChildPage ? styles.mainVisible : styles.mainHidden}>

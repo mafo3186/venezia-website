@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 import { projectBySlugQuery, projectSlugs } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
-import ProjectIntroKaleidoscope from "./components/projectIntroKaleidoscope";
+import ProjectIntroKaleidoscope from "./projectIntroKaleidoscope";
 
 type Props = {
   params: { slug: string };
