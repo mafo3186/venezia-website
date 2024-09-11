@@ -4,7 +4,7 @@ import { groq, type PortableTextBlock } from "next-sanity";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import PortableText from "./documentation";
+import PortableText from "@/components/documentation";
 
 import type {
   ProjectBySlugQueryResult,
@@ -14,8 +14,8 @@ import type {
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
 import styles from "./styles.module.css";
-import { EmblaCarousel } from "./carousel";
-import ShowcasePiece from "./showcase-piece";
+import { EmblaCarousel } from "@/components/carousel";
+import ShowcasePiece from "@/components/showcase-piece";
 import { Suspense } from "react";
 
 type Props = {

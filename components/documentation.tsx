@@ -18,10 +18,8 @@ import { urlFor } from '@/sanity/lib/image'
 import styles from "./documentation.module.css";
 
 export default function Documentation({
-  className,
   value,
 }: {
-  className?: string;
   value: PortableTextBlock[];
 }) {
   const components: PortableTextComponents = {
@@ -61,8 +59,6 @@ export default function Documentation({
   };
 
   return (
-    <div className={["prose", className].filter(Boolean).join(" ")}>
-      <PortableText components={components} value={value} />
-    </div>
+    <PortableText components={components} value={value} />
   );
 }
