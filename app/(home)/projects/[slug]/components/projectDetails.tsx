@@ -1,8 +1,8 @@
 import type { PortableTextBlock } from 'next-sanity';
 import { notFound } from "next/navigation";
 import styles from "./projectDetails.module.css" //toDo: define Types
-import CoverImage from '@/app/(home)/cover-image';
-import PortableText from '@/app/(home)/portable-text';
+import CoverImage from '@/app/(home)/components/cover-image';
+import PortableText from '@/app/(home)/components/portable-text';
 import { ProjectBySlugQueryResult } from '@/sanity.types';
 import Link from 'next/link';
 

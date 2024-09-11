@@ -8,14 +8,14 @@ import {
 } from "next-sanity";
 import { draftMode } from "next/headers";
 
-import AlertBanner from "./alert-banner";
+import AlertBanner from "./components/alert-banner";
 import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
 import * as demo from "@/sanity/lib/demo";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { projectsQuery, settingsQuery } from "@/sanity/lib/queries";
-import { Layout } from "./scene";
-import HamburgerMenu from "./hamburgerMenu";
+import HamburgerMenu from "./components/hamburgerMenu";
+import Layout from './components/layout';
 
 
 export async function generateMetadata(): Promise<Metadata> {

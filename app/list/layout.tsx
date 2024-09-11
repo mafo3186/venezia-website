@@ -2,9 +2,9 @@ import '@/app/global.css'
 
 import styles from "./styles.module.css";
 import { draftMode } from "next/headers";
-import AlertBanner from "../(home)/alert-banner";
 import { VisualEditing } from "next-sanity";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import AlertBanner from '../(home)/components/alert-banner';
 
 export const metadata = {
   title: 'Index of /~venice/projects/',
