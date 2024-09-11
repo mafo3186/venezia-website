@@ -14,11 +14,9 @@ import type {
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
 import styles from "./styles.module.css";
-import { title } from "process";
 import { EmblaCarousel } from "./carousel";
 import ShowcasePiece from "./showcase-piece";
 import { Suspense } from "react";
-import { assert } from "console";
 
 type Props = {
   params: { slug: string };

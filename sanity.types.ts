@@ -366,6 +366,17 @@ export type ProjectsQueryResult = Array<{
   author: string | null;
 }>;
 
+// Source: ./app/list/page.tsx
+// Variable: projectsListQuery
+// Query: *[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}
+export type ProjectsListQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  _updatedAt: string;
+  description: string | null;
+  slug: string | null;
+}>;
+
 // Source: ./app/(home)/projects/[slug]/page.tsx
 // Variable: projectSlugs
 // Query: *[_type == "project"]{slug}
