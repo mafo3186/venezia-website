@@ -5,7 +5,6 @@ import Kaleidoscope from './kaleidoscope';
 import styles from './projectIntroKaleidoscope.module.css';
 import { ProjectBySlugQueryResult } from '@/sanity.types';
 import { notFound } from 'next/navigation';
-import ProjectDetailPage from './projectDetails';
 
 type ProjectIntroKaleidoscopeProps = {
     project: ProjectBySlugQueryResult;
@@ -71,7 +70,7 @@ export default function ProjectIntroKaleidoscope({ project }: ProjectIntroKaleid
     return (
         <>
             {showDetails && (
-                <ProjectDetailPage project={project} />
+                <></>
             )}
             <div className={styles.container}>
 
