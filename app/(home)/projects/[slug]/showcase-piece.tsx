@@ -18,13 +18,15 @@ interface ShowcasePieceProps {
 export default function ShowcasePiece(props: ShowcasePieceProps) {
   const { showcase } = props;
 
-  return <figure style={{position: "relative", height: "100%"}}>
+  return <figure style={
+    { position: "relative", width: "100%", aspectRatio: 16 / 9 }
+  }>
     {showcase.type === "image" && (
       <Image
         fill
         blurDataURL={blurhashToBase64(showcase.blurHash!)}
         placeholder="blur"
-        style={{objectFit: "cover"}}
+        style={{ objectFit: "cover" }}
         src={showcase.content} alt={showcase.description ?? ""}
       />
     )}
@@ -47,7 +49,14 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
     }
     {showcase.type === "website" &&
       <a href={showcase.content} target="_blank">
-        <iframe className={styles.website} src={showcase.content}></iframe>
+        <iframe style={
+          {
+            width: "100%",
+            height: "100%",
+            pointerEvents: "none",
+            border: "none",
+          }
+        } className={styles.website} src={showcase.content}></iframe>
       </a>
     }
     {showcase.description && <figcaption>{showcase.description}</figcaption>}

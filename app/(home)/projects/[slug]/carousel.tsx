@@ -2,12 +2,12 @@
 
 import React, { useEffect } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
-import styles from './styles.module.css'
+import { EmblaOptionsType } from 'embla-carousel';
 import { Children, PropsWithChildren } from 'react'
 
 
-export function EmblaCarousel(props: PropsWithChildren<{}>) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
+export function EmblaCarousel(props: PropsWithChildren<{ direction?: EmblaOptionsType["axis"] }>) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, axis: props.direction ?? "x" })
 
   useEffect(() => {
     if (emblaApi) {
@@ -16,10 +16,12 @@ export function EmblaCarousel(props: PropsWithChildren<{}>) {
   }, [emblaApi])
 
   return (
-    <div className={styles.embla} ref={emblaRef}>
-      <div className={styles.embla__container}>
+    <div style={{ overflow: "hidden" }} ref={emblaRef}>
+      <div style={
+        { display: "flex" }
+      }>
         {Children.map(props.children, child =>
-          <div className={styles.embla__slide}>{child}</div>
+          <div style={{ flex: "0 0 100%" }}>{child}</div>
         )}
       </div>
     </div>

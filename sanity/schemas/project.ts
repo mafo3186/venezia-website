@@ -56,33 +56,40 @@ export default defineType({
       title: "Projektdokumentation",
       description: "Hier kommt deine Projektdokumentation / -beschreibung hin.",
       type: "array",
-      of: [{ type: "block" },
-      {
-        type: "image",
-        title: "Bild",
-        fields: [
-          {
-            name: 'caption',
-            type: 'string',
-            title: 'Caption',
-            description: "Eine kurze Bildunterschrift / Bildbeschreibung"
-          },
-          {
-            name: 'attribution',
-            type: 'string',
-            title: 'Attribution',
-            description: "Wer hat das Bild erstellt?"
-          }
-        ],
-        options: { metadata: ["blurhash"], }
-      },
-      {
-        type: "file", title: "Video & Audio", icon: DocumentVideoIcon, options: { accept: "video/*,audio/*" },
-        fields: [
-          { name: "caption", type: "string", title: "Caption", description: "Eine kurze Beschreibung des Inhalts" },
-          { name: 'attribution', type: 'string', title: 'Attribution', description: "Wer hat das Video / Audio erstellt?" }
-        ]
-      },
+      of: [
+        {
+          type: "block",
+          styles: [
+            { title: "Abschnittsüberschrift", value: "h3" },
+            { title: "Zitat", value: "blockquote" },
+          ],
+        },
+        {
+          type: "image",
+          title: "Bild",
+          fields: [
+            {
+              name: 'caption',
+              type: 'string',
+              title: 'Caption',
+              description: "Eine kurze Bildunterschrift / Bildbeschreibung"
+            },
+            {
+              name: 'attribution',
+              type: 'string',
+              title: 'Attribution',
+              description: "Wer hat das Bild erstellt?"
+            }
+          ],
+          options: { metadata: ["blurhash"], }
+        },
+        {
+          type: "file", title: "Video & Audio", icon: DocumentVideoIcon, options: { accept: "video/*,audio/*" },
+          fields: [
+            { name: "caption", type: "string", title: "Caption", description: "Eine kurze Beschreibung des Inhalts" },
+            { name: 'attribution', type: 'string', title: 'Attribution', description: "Wer hat das Video / Audio erstellt?" }
+          ]
+        },
       ],
     }),
   ],
