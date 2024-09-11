@@ -4,7 +4,7 @@ import { groq, type PortableTextBlock } from "next-sanity";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import PortableText from "@/app/(home)/portable-text";
+import PortableText from "./documentation";
 
 import type {
   ProjectBySlugQueryResult,

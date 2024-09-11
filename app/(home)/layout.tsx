@@ -9,7 +9,7 @@ import {
 import { draftMode } from "next/headers";
 
 import AlertBanner from "./alert-banner";
-import PortableText from "./portable-text";
+import PortableText from "./projects/[slug]/documentation";
 import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
