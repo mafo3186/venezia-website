@@ -96,43 +96,37 @@ export default async function ProjectPage({ params }: Props) {
   }
 
   return (
-    <>
-      <nav>
-        <h2>
-          <Link href="/" className="hover:underline">
-            {settings?.title}
-          </Link>
-        </h2>
-      </nav>
-      <article className={styles.article}>
-        <hgroup className={styles.projectTitle}>
-          <h1>
-            {project.title}
-          </h1>
-          <p>
-            von {project.author}
-          </p>
-        </hgroup>
-        <section className={styles.showcase}>
-          <EmblaCarousel>
-            {project.showcases && project.showcases.map((showcase, index) => {
-              return (
-                <Suspense key={index} fallback={<div>Loading...</div>}>
-                  <ShowcasePiece showcase={showcase as any} />
-                </Suspense>
-              );
-            })}
-          </EmblaCarousel>
-        </section>
-        <aside>
+    <article className={styles.article}>
+      <div className={styles.content}>
+        <div className={styles.showcaseAndTitle}>
+          <hgroup className={styles.projectTitle}>
+            <h1>
+              {project.title}
+            </h1>
+            <p>
+              von {project.author}
+            </p>
+          </hgroup>
+          <main className={styles.showcase}>
+            <EmblaCarousel>
+              {project.showcases && project.showcases.map((showcase, index) => {
+                return (
+                  <Suspense key={index}>
+                    <ShowcasePiece showcase={showcase as any} />
+                  </Suspense>
+                );
+              })}
+            </EmblaCarousel>
+          </main>
+        </div>
+        <aside className={styles.documentation}>
           {project.documentation?.length && (
             <PortableText
-              className={styles.documentation}
               value={project.documentation as PortableTextBlock[]}
             />
           )}
         </aside>
-      </article>
-    </>
+      </div>
+    </article>
   );
 }

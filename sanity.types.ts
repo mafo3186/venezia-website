@@ -103,7 +103,7 @@ export type Project = {
       _type: "span";
       _key: string;
     }>;
-    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    style?: "normal" | "h3" | "blockquote";
     listItem?: "bullet" | "number";
     markDefs?: Array<{
       href?: string;
@@ -294,6 +294,17 @@ export type Slug = {
 
 export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | Geopoint | Showcase | Project | SanityFileAsset | Settings | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | MediaTag | Slug;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ./app/list/page.tsx
+// Variable: projectsListQuery
+// Query: *[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}
+export type ProjectsListQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  _updatedAt: string;
+  description: string | null;
+  slug: string | null;
+}>;
+
 // Source: ./sanity/lib/queries.ts
 // Variable: settingsQuery
 // Query: *[_type == "settings"][0]
@@ -366,17 +377,6 @@ export type ProjectsQueryResult = Array<{
   author: string | null;
 }>;
 
-// Source: ./app/list/page.tsx
-// Variable: projectsListQuery
-// Query: *[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}
-export type ProjectsListQueryResult = Array<{
-  _id: string;
-  title: string | null;
-  _updatedAt: string;
-  description: string | null;
-  slug: string | null;
-}>;
-
 // Source: ./app/(home)/projects/[slug]/page.tsx
 // Variable: projectSlugs
 // Query: *[_type == "project"]{slug}
@@ -393,7 +393,7 @@ export type ProjectBySlugQueryResult = {
       _type: "span";
       _key: string;
     }>;
-    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    style?: "blockquote" | "h3" | "normal";
     listItem?: "bullet" | "number";
     markDefs?: Array<{
       href?: string;
@@ -475,9 +475,9 @@ export type ProjectBySlugQueryResult = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
+    "*[_type == \"project\"] | order(select($orderBy == \"title\" => title, $orderBy == \"_updatedAt\" => _updatedAt)) {_id, title, _updatedAt, description, \"slug\": slug.current}": ProjectsListQueryResult;
     "*[_type == \"settings\"][0]": SettingsQueryResult;
     "*[_type == \"project\" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n  content,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  author,\n}": ProjectsQueryResult;
-    "*[_type == \"project\"] | order(select($orderBy == \"title\" => title, $orderBy == \"_updatedAt\" => _updatedAt)) {_id, title, _updatedAt, description, \"slug\": slug.current}": ProjectsListQueryResult;
     "*[_type == \"project\"]{slug}": ProjectSlugsResult;
     "*[_type == \"project\" && slug.current == $slug] [0] {\n  \"documentation\": documentation[] {\n    ...,\n    _type == \"file\" => {\n      asset->\n    }\n  },\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  \"showcases\": showcase[] {\n    type,\n    type == 'image' => showcaseImage.asset->{\"content\": url, \"blurHash\": metadata.blurHash, mimeType},\n    type == 'audio' => showcaseAudio.asset->{\"content\": url, mimeType},\n    type == 'video' => showcaseVideo.asset->{\"content\": url, mimeType},\n    type == 'text' => @{\"content\": showcaseText},\n    type == 'website' => @{\"content\": showcaseWebsite},\n    description\n  }\n}": ProjectBySlugQueryResult;
   }
