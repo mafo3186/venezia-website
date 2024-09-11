@@ -97,26 +97,28 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <article className={styles.article}>
-      <hgroup className={styles.projectTitle}>
-        <h1>
-          {project.title}
-        </h1>
-        <p>
-          von {project.author}
-        </p>
-      </hgroup>
       <div className={styles.content}>
-        <main className={styles.showcase}>
-          <EmblaCarousel>
-            {project.showcases && project.showcases.map((showcase, index) => {
-              return (
-                <Suspense key={index}>
-                  <ShowcasePiece showcase={showcase as any} />
-                </Suspense>
-              );
-            })}
-          </EmblaCarousel>
-        </main>
+        <div className={styles.showcaseAndTitle}>
+          <hgroup className={styles.projectTitle}>
+            <h1>
+              {project.title}
+            </h1>
+            <p>
+              von {project.author}
+            </p>
+          </hgroup>
+          <main className={styles.showcase}>
+            <EmblaCarousel>
+              {project.showcases && project.showcases.map((showcase, index) => {
+                return (
+                  <Suspense key={index}>
+                    <ShowcasePiece showcase={showcase as any} />
+                  </Suspense>
+                );
+              })}
+            </EmblaCarousel>
+          </main>
+        </div>
         <aside className={styles.documentation}>
           {project.documentation?.length && (
             <PortableText

@@ -46,12 +46,12 @@ export default function CustomPortableText({
     types: {
       // https://www.sanity.io/docs/presenting-images
       // eslint-disable-next-line @next/next/no-img-element
-      image: ({ value }) => <img src={urlFor(value).width(500).url()} alt="" />,
+      image: ({ value }) => <img style={{ borderRadius: "var(--border-radius-content)" }} src={urlFor(value).width(500).url()} alt="" />,
       file: ({ value }) => {
         const [topMimeType] = value.asset?.mimeType?.split("/") ?? [];
         if (topMimeType === "video") {
           return (
-            <video controls>
+            <video controls style={{ borderRadius: "var(--border-radius-content)" }}>
               <source src={value.asset.url} type={value.asset.mimeType} />
             </video>
           );
