@@ -15,6 +15,8 @@ import { sanityFetch } from "@/sanity/lib/fetch";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { projectsQuery, settingsQuery } from "@/sanity/lib/queries";
 import { Layout } from "./scene";
+import HamburgerMenu from "./hamburgerMenu";
+
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch<SettingsQueryResult>({
@@ -62,6 +64,7 @@ export default async function RootLayout({
     <html lang="de">
       <body>
         {draftMode().isEnabled && <AlertBanner />}
+        <HamburgerMenu projects={projects} />
         <Layout projects={projects}>{children}</Layout>
         {draftMode().isEnabled && <VisualEditing />}
         <SpeedInsights />

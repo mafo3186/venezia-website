@@ -9,8 +9,10 @@ import { AdaptiveDpr, Environment, FirstPersonControls, useGLTF } from '@react-t
 import { FirstPersonControls as FirstPersonControlImpl } from 'three-stdlib';
 import styles from "./home.module.css";
 import { Mesh } from 'three';
+import Link from 'next/link';
 import { usePathname } from "next/navigation";
 import { PropsWithChildren } from "react";
+import HamburgerMenu from './hamburgerMenu';
 
 function Content({ onChildPage, children }: PropsWithChildren<{ onChildPage: boolean }>) {
   return <main className={onChildPage ? styles.mainVisible : styles.mainHidden}>
@@ -136,10 +138,12 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
 export function Layout({ projects, children }: PropsWithChildren<{ projects: ProjectsQueryResult }>) {
   const pathname = usePathname();
   const onChildPage = pathname !== "/";
-  return (<>
-    <div className={styles.home}>
-      <Scene projects={projects} inBackground={onChildPage} />
-    </div>
-    <Content onChildPage={onChildPage}>{children}</Content>
-  </>);
+
+  return (
+    <>
+      <div className={styles.home}>
+        <Scene projects={projects} inBackground={onChildPage} />
+      </div>
+      <Content onChildPage={onChildPage}>{children}</Content>
+    </>);
 }

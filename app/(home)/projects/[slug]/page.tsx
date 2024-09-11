@@ -1,3 +1,4 @@
+
 import type { Metadata, ResolvingMetadata } from "next";
 import { groq, type PortableTextBlock } from "next-sanity";
 import Link from "next/link";
@@ -81,7 +82,7 @@ export async function generateMetadata(
   } satisfies Metadata;
 }
 
-export default async function PostPage({ params }: Props) {
+export default async function ProjectPage({ params }: Props) {
   const [project, settings] = await Promise.all([
     sanityFetch<ProjectBySlugQueryResult>({
       query: projectBySlugQuery,
