@@ -77,7 +77,12 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
     <Environment preset="sunset" />
     <fogExp2 attach="fog" color="#96b0e4" density={iAmGod ? 0 : 0.18} />
     <OrbitControls enabled={iAmGod} />
-    <PointerLockControls enabled={!iAmGod} pointerSpeed={2} ref={controls} />
+    <PointerLockControls
+      enabled={!iAmGod}
+      selector="#canvas-instance"
+      pointerSpeed={2}
+      ref={controls}
+    />
     <Globals />
     <directionalLight
       intensity={0.9}
@@ -123,6 +128,7 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
 export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
   return (
     <Canvas
+      id="canvas-instance"
       style={{ width: "100%", height: "100vh" }}
       shadows="soft"
       className={styles.scene}
