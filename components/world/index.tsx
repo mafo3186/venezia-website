@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { PropsWithChildren } from "react";
 import { ProjectsQueryResult } from "@/sanity.types";
 import { SceneCanvas } from "./scene";
-import styles from "../home.module.css";
+import styles from "./world.module.css";
 
 function Content({ onChildPage, children }: PropsWithChildren<{ onChildPage: boolean }>) {
   return <main className={onChildPage ? styles.mainVisible : styles.mainHidden}>

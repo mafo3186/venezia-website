@@ -13,7 +13,7 @@ import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { projectsQuery, settingsQuery } from "@/sanity/lib/queries";
-import { CanvasContainer } from "./world";
+import { CanvasContainer } from "@/components/world";
 import HamburgerMenu from "./hamburgerMenu";
 
 

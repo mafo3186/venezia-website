@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { DepthOfField, EffectComposer, Vignette } from "@react-three/postprocessing";
 import { AdaptiveDpr, BakeShadows, Environment, OrbitControls, PointerLockControls, Stats } from "@react-three/drei";
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
-import styles from "../home.module.css";
+import styles from "./world.module.css";
 import { Mesh } from "three";
 import { Physics } from "@react-three/cannon";
 import { Player } from "./player";
