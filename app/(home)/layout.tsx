@@ -9,12 +9,11 @@ import {
 import { draftMode } from "next/headers";
 
 import AlertBanner from "./alert-banner";
-import PortableText from "./portable-text";
 import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { projectsQuery, settingsQuery } from "@/sanity/lib/queries";
-import { Layout } from "./scene";
+import { CanvasContainer } from "./world";
 import HamburgerMenu from "./hamburgerMenu";
 
 
@@ -65,7 +64,9 @@ export default async function RootLayout({
       <body>
         {draftMode().isEnabled && <AlertBanner />}
         <HamburgerMenu projects={projects} />
-        <Layout projects={projects}>{children}</Layout>
+        <CanvasContainer projects={projects}>
+          {children}
+        </CanvasContainer>
         {draftMode().isEnabled && <VisualEditing />}
         <SpeedInsights />
       </body>
