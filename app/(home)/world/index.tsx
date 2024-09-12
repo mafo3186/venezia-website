@@ -8,11 +8,7 @@ import styles from "../home.module.css";
 
 function Content({ onChildPage, children }: PropsWithChildren<{ onChildPage: boolean }>) {
   return <main className={onChildPage ? styles.mainVisible : styles.mainHidden}>
-    <div className={styles.outerWrapper}>
-      <div className={styles.innerWrapper}>
-        {children}
-      </div>
-    </div>
+    {children}
   </main>;
 }
 

@@ -30,17 +30,6 @@
   opacity: 1;
 }
 
-.outerWrapper {
-  padding: 80px;
-  box-sizing: border-box;
-}
-
-.innerWrapper {
-  display: inline-block;
-  width: 100%;
-  min-height: 100vh;
-}
-
 .scene {
   background-color: #7a635b;
 }

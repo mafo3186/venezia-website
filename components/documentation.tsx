@@ -15,25 +15,15 @@ import {
 } from "next-sanity";
 import Image from "next/image";
 import { urlFor } from '@/sanity/lib/image'
+import styles from "./documentation.module.css";
 
-
-
-export default function CustomPortableText({
-  className,
+export default function Documentation({
   value,
 }: {
-  className?: string;
   value: PortableTextBlock[];
 }) {
   const components: PortableTextComponents = {
-    block: {
-      h5: ({ children }) => (
-        <h5>{children}</h5>
-      ),
-      h6: ({ children }) => (
-        <h6>{children}</h6>
-      ),
-    },
+    block: {},
     marks: {
       link: ({ children, value }) => {
         return (
@@ -46,18 +36,18 @@ export default function CustomPortableText({
     types: {
       // https://www.sanity.io/docs/presenting-images
       // eslint-disable-next-line @next/next/no-img-element
-      image: ({ value }) => <img src={urlFor(value).width(500).url()} alt="" />,
+      image: ({ value }) => <img className={styles.media} src={urlFor(value).width(500).url()} alt="" />,
       file: ({ value }) => {
         const [topMimeType] = value.asset?.mimeType?.split("/") ?? [];
         if (topMimeType === "video") {
           return (
-            <video controls>
+            <video className={styles.media} controls>
               <source src={value.asset.url} type={value.asset.mimeType} />
             </video>
           );
         } else if (topMimeType === "audio") {
           return (
-            <audio controls>
+            <audio className={styles.media} controls>
               <source src={value.asset.url} type={value.asset.mimeType} />
             </audio>
           );
@@ -69,8 +59,6 @@ export default function CustomPortableText({
   };
 
   return (
-    <div className={["prose", className].filter(Boolean).join(" ")}>
-      <PortableText components={components} value={value} />
-    </div>
+    <PortableText components={components} value={value} />
   );
 }

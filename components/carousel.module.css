@@ -1,0 +1,16 @@
+.container {
+  overflow: hidden;
+  border-radius: var(--border-radius-content);
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  grid-template-rows: 1fr 40px 1fr;
+  justify-tracks: center;
+}
+
+.button {
+  border: none;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  cursor: pointer;
+  z-index: 2;
+}
