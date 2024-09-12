@@ -13,6 +13,7 @@
     "typegen": "sanity schema extract && sanity typegen generate"
   },
   "dependencies": {
+    "@react-three/cannon": "^6.6.0",
     "@react-three/drei": "^9.112.0",
     "@react-three/fiber": "^8.17.6",
     "@react-three/postprocessing": "^2.16.2",
