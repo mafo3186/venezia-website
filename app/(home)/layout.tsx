@@ -14,7 +14,7 @@ import { sanityFetch } from "@/sanity/lib/fetch";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { projectsQuery, settingsQuery } from "@/sanity/lib/queries";
 import { CanvasContainer } from "@/components/world";
-import HamburgerMenu from "./hamburgerMenu";
+import HamburgerMenu from "@/components/hamburgerMenu";
 
 
 export async function generateMetadata(): Promise<Metadata> {

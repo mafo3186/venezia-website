@@ -1,7 +1,6 @@
 
 import type { Metadata, ResolvingMetadata } from "next";
 import { groq, type PortableTextBlock } from "next-sanity";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import PortableText from "@/components/documentation";

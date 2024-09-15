@@ -31,7 +31,7 @@ const HamburgerMenu = ({ projects }: HamburgerMenuProps) => {
                 <nav className={styles.navMenu}>
                     <ul>
                         <li>
-                            <Link href="/" onClick={closeMenu}>
+                            <Link href="/public" onClick={closeMenu}>
                                 Home
                             </Link>
                         </li>
