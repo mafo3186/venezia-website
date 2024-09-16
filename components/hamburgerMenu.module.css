@@ -49,6 +49,19 @@
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: max-content;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+@media (max-width: 600px) {
+    .navMenu {
+        right: 5;
+        left: 5;
+        width: 90%;
+        margin: 0 auto;
+    }
 }
 
 .navMenu ul {
