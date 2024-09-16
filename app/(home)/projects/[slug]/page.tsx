@@ -16,6 +16,7 @@ import styles from "./styles.module.css";
 import { EmblaCarousel } from "@/components/carousel";
 import ShowcasePiece from "@/components/showcase-piece";
 import { Suspense } from "react";
+import {BackButton, HomeButton} from "@/components/button";
 
 type Props = {
   params: { slug: string };
@@ -96,6 +97,10 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <article className={styles.article}>
+      <div>
+        <HomeButton/>
+        <BackButton/>
+      </div>
       <div className={styles.content}>
         <div className={styles.showcaseAndTitle}>
           <hgroup className={styles.projectTitle}>
@@ -111,7 +116,7 @@ export default async function ProjectPage({ params }: Props) {
               {project.showcases && project.showcases.map((showcase, index) => {
                 return (
                   <Suspense key={index}>
-                    <ShowcasePiece showcase={showcase as any} />
+                    <ShowcasePiece showcase={showcase as any}/>
                   </Suspense>
                 );
               })}
