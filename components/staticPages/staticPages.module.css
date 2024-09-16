@@ -1,0 +1,35 @@
+/* Container für das gesamte Layout und die Positionierung */
+.boxContainer {
+  display: flex;
+  flex-direction: column; /* Inhalte untereinander anordnen */
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Der Container nimmt mindestens die Höhe des Viewports ein */
+  margin: 0; /* Kein zusätzlicher Margin */
+  padding: 20px; /* Optionaler Padding für den Container */
+}
+
+/* Container für die Textformatierung */
+.textContainer {
+  display: flex;
+  flex-direction: column; /* Inhalte untereinander anordnen */
+  width: 80%; /* Breite des Containers */
+  max-width: 800px; /* Maximale Breite */
+  text-align: justify; /* Blocksatz für den Text */
+  background-color: rgba(169, 169, 169, 0.8);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  padding-bottom: 50px; /* Zusätzlicher Abstand zum unteren Rand */
+  margin: 20px auto; /* Zentriert den Container horizontal */
+  border-radius: 10px;
+}
+
+.title {
+  text-align: center; /* Überschrift zentrieren */
+}
+
+.bold {
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
