@@ -1,24 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
-import { useGLTF } from "@react-three/drei";
 import { useCompoundBody } from "@react-three/cannon";
 
 export function Model() {
-  const model = useGLTF("/assets/scene.gltf");
-  const scene = useMemo(() => {
-    model.scene.castShadow = true
-    model.scene.receiveShadow = true
-    model.scene.traverse((node) => {
-      if (node.type === "Mesh") {
-        node.castShadow = true;
-        node.receiveShadow = true;
-      }
-    });
-    return model.scene
-  }, [model]);
   const [ref] = useCompoundBody(() => ({
     type: "Static",
+    position: [0.5, -0.3, 0.0],
     shapes: [
       // ground, expands throughout the whole world
       {
@@ -61,10 +48,5 @@ export function Model() {
       },
     ],
   }));
-  return <>
-    {scene && <mesh>
-      <primitive object={scene} position={[-0.67, 0, 0]} />
-      <mesh ref={ref as any}></mesh>
-    </mesh>}
-  </>;
+  return <mesh ref={ref as any}></mesh>;
 }
