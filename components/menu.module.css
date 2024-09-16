@@ -5,9 +5,9 @@
     z-index: 1000;
 }
 
-.hamburger {
-    width: 50px;
-    height: 50px;
+.menu {
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     background-color: white;
     display: flex;
@@ -15,36 +15,22 @@
     align-items: center;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s ease, height 0.3s ease;
 }
 
-.hamburgerIcon {
-    width: 30px;
-    height: 3px;
-    background-color: black;
-    position: relative;
+.menu:hover {
+  width: 80px; 
+  height: 80px;
 }
 
-.hamburgerIcon::before,
-.hamburgerIcon::after {
-    content: '';
-    position: absolute;
-    width: 30px;
-    height: 3px;
-    background-color: black;
-    left: 0;
-}
-
-.hamburgerIcon::before {
-    top: -8px;
-}
-
-.hamburgerIcon::after {
-    top: 8px;
+.menu.active {
+  width: 80px; 
+  height: 80px; 
 }
 
 .navMenu {
     position: absolute;
-    top: 60px;
+    top: 90px;
     right: 10px;
     background-color: white;
     border-radius: 8px;
