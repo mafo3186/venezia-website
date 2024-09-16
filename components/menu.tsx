@@ -1,15 +1,15 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import styles from './hamburgerMenu.module.css'; // Neues CSS für das Menü
+import styles from './menu.module.css'; // Neues CSS für das Menü
 import { ProjectsQueryResult } from '@/sanity.types';
 import Kompass from "@/components/kompass";
 
-interface HamburgerMenuProps {
+interface MenuProps {
     projects: ProjectsQueryResult;
 }
 
-const HamburgerMenu = ({ projects }: HamburgerMenuProps) => {
+const Menu = ({ projects }: MenuProps) => {
     const [menuOpen, setMenuOpen] = useState(false);
 
     const toggleMenu = () => {
@@ -22,7 +22,10 @@ const HamburgerMenu = ({ projects }: HamburgerMenuProps) => {
 
     return (
         <header className={styles.header}>
-            <div className={styles.hamburger} onClick={toggleMenu}>
+            <div
+              className={`${styles.menu} ${menuOpen ? styles.active : ''}`} 
+              onClick={toggleMenu}
+            >
               <Kompass height={'80%'} width={'80%'}/>
             </div>
 
@@ -54,4 +57,4 @@ const HamburgerMenu = ({ projects }: HamburgerMenuProps) => {
     );
 };
 
-export default HamburgerMenu;
+export default Menu;

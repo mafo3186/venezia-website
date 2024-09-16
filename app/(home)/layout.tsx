@@ -14,7 +14,7 @@ import { sanityFetch } from "@/sanity/lib/fetch";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { projectsQuery, settingsQuery } from "@/sanity/lib/queries";
 import { CanvasContainer } from "@/components/world";
-import HamburgerMenu from "@/components/hamburgerMenu";
+import Menu from "@/components/menu";
 
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -63,7 +63,7 @@ export default async function RootLayout({
     <html lang="de">
       <body>
         {draftMode().isEnabled && <AlertBanner />}
-        <HamburgerMenu projects={projects} />
+        <Menu projects={projects} />
         <CanvasContainer projects={projects}>
           {children}
         </CanvasContainer>
