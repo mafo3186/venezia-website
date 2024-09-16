@@ -10,6 +10,7 @@
     "presetup": "echo 'about to setup env variables, follow the guide here: https://github.com/vercel/next.js/tree/canary/examples/cms-sanity#using-the-sanity-cli'",
     "setup": "npx sanity@latest init --env .env.local",
     "postsetup": "echo 'create the read token by following the rest of the guide: https://github.com/vercel/next.js/tree/canary/examples/cms-sanity#creating-a-read-token'",
+    "gltf": "gltfjsx public/assets/environment.glb --shadows --instance --transform --output=public/assets/environment.jsx --console --root=./public > ./components/world/environmentModel.jsx",
     "typegen": "sanity schema extract && sanity typegen generate"
   },
   "dependencies": {
@@ -44,6 +45,7 @@
   },
   "devDependencies": {
     "eslint": "^8.57.0",
-    "eslint-config-next": "^14.2.5"
+    "eslint-config-next": "^14.2.5",
+    "gltfjsx": "^6.5.0"
   }
 }

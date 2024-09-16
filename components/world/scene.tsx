@@ -11,7 +11,8 @@ import styles from "./world.module.css";
 import { Mesh } from "three";
 import { Physics } from "@react-three/cannon";
 import { Player } from "./player";
-import { Model } from "./environment";
+import { Model as ColliderModel } from "./environment";
+import { Model } from "./environmentModel";
 
 function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
   const router = useRouter()
@@ -99,6 +100,7 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
     <Physics>
       {/* uncomment to following tags to show a debug view for the physics */}
       {/* <Debug color="black" scale={1.001}> */}
+      <ColliderModel />
       <Model />
       <Player position={[0, 3, 0]} enableCamera={!iAmGod} />
       {/* </Debug> */}
