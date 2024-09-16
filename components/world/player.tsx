@@ -1,20 +1,44 @@
 "use client";
 
 import { useFrame } from "@react-three/fiber"
-import { useEffect, useRef, useState } from "react";
-import { PerspectiveCamera } from "@react-three/drei";
-import { Object3D, Vector3 } from "three";
-import { useSphere, Triplet } from "@react-three/cannon";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { PerspectiveCamera, useGLTF } from "@react-three/drei";
+import { Mesh, Object3D, Vector3 } from "three";
+import { Node, Pathfinding } from "three-pathfinding";
 
-export function Player({ position, enableCamera }: { position: Triplet, enableCamera?: boolean }) {
-  const [ref, body] = useSphere(() => ({
-    type: "Dynamic",
-    mass: 1,
-    linearDamping: 0.9,
-    args: [0.2],
-    position,
-  }));
+
+const navMeshPath = "/assets/navmesh.glb";
+useGLTF.preload(navMeshPath);
+const ZONE = 'level1';
+
+
+export function Player({ position, debug }: { position: [number, number, number], debug?: boolean }) {
+  const navMeshModel = useGLTF(navMeshPath);
+  const [navMeshGeometry, pathFinding] = useMemo(() => {
+    let navMesh: Mesh | undefined;
+    navMeshModel.scene.traverse((node) => {
+      if (node.type === "Mesh") navMesh = node as Mesh;
+    });
+    if (navMesh) {
+      const navMeshGeometry = navMesh?.geometry;
+      const pathFinding = new Pathfinding();
+      pathFinding.setZoneData(ZONE, Pathfinding.createZone(navMeshGeometry));
+      return [navMeshGeometry, pathFinding];
+    } else {
+      return [undefined, undefined];
+    }
+  }, [navMeshModel]);
+// const [ref, body] = useSphere(() => ({
+//   type: "Dynamic",
+//   mass: 1,
+//   linearDamping: 0.9,
+//   args: [0.2],
+//   position,
+// }));
   const dummy = useRef<Object3D>(null!);
+  const rayTarget = useRef<Object3D>(null!);
+  const node = useRef<Node | undefined>();
+  const [targetVisible, setTargetVisible] = useState(false);
   const [moveForward, setMoveForward] = useState(false);
   const [moveBackward, setMoveBackward] = useState(false);
   const [moveLeft, setMoveLeft] = useState(false);
@@ -68,18 +92,20 @@ export function Player({ position, enableCamera }: { position: Triplet, enableCa
     }
   }, []);
   const velocity = useRef([0, 0, 0])
-  useEffect(() => {
-    const unsubscribe = body.velocity.subscribe((v) => (velocity.current = v))
-    return unsubscribe
-  }, [body]);
-  const position2 = useRef<Triplet>([0, 0, 0])
-  useEffect(() => {
-    const unsubscribe = body.position.subscribe((v) => (position2.current = v))
-    return unsubscribe
-  }, [body]);
+  // useEffect(() => {
+  //   const unsubscribe = body.velocity.subscribe((v) => (velocity.current = v))
+  //   return unsubscribe
+  // }, [body]);
+  // const position2 = useRef<Triplet>([0, 0, 0])
+  // useEffect(() => {
+  //   const unsubscribe = body.position.subscribe((v) => (position2.current = v))
+  //   return unsubscribe
+  // }, [body]);
   const direction = new Vector3();
   const frontVector = new Vector3();
   const sideVector = new Vector3();
+  const pathFindingNext = new Vector3();
+  const pathFindingEndTarget = new Vector3();
   useFrame(({ camera }, delta) => {
     frontVector.set(0, 0, (moveBackward ? 1 : 0) - (moveForward ? 1 : 0));
     sideVector.set((moveLeft ? 1 : 0) - (moveRight ? 1 : 0), 0, 0);
@@ -88,11 +114,21 @@ export function Player({ position, enableCamera }: { position: Triplet, enableCa
       .normalize()
       .multiplyScalar(2.5)
       .applyEuler(camera.rotation);
-    body.velocity.set(direction.x, velocity.current[1], direction.z);
-    dummy.current.position.set(...position2.current);
+    // body.velocity.set(direction.x, velocity.current[1], direction.z);
+    // dummy.current.position.set(...position2.current);
+
+    if (pathFinding) {
+      pathFindingNext.copy(direction).multiplyScalar(delta * 0.75).add(dummy.current.position);
+      const groupID = pathFinding.getGroup(ZONE, dummy.current.position);
+      if (!node.current) {
+        node.current = pathFinding.getClosestNode(dummy.current.position, ZONE, groupID);
+      }
+      node.current = pathFinding.clampStep(dummy.current.position, pathFindingNext, node.current, ZONE, groupID, pathFindingEndTarget);
+      dummy.current.position.copy(pathFindingEndTarget);
+    }
   });
   return <>
-    <mesh ref={ref as any} />
+    {/* <mesh ref={ref as any} /> */}
     <mesh ref={dummy as any}>
       <mesh position={[0, 0.4, 0]}>
         <capsuleGeometry args={[0.2, 0.8, 3, 6]} />
@@ -101,8 +137,41 @@ export function Player({ position, enableCamera }: { position: Triplet, enableCa
       <mesh position={[0, 0.8, 0]}>
         <sphereGeometry args={[0.21]} />
         <meshBasicMaterial color="red" />
-        <PerspectiveCamera fov={90} makeDefault={enableCamera} />
+        <PerspectiveCamera fov={90} makeDefault={!debug} />
       </mesh>
     </mesh>
+    {navMeshGeometry && <>
+      <mesh
+        position={[0, 0, 0]}
+        geometry={navMeshGeometry}
+        visible={debug}
+        onPointerEnter={() => setTargetVisible(true)}
+        onPointerLeave={() => setTargetVisible(false)}
+        onPointerMove={(event) => {
+          rayTarget.current.position.copy(event.point)
+        }}
+        onPointerDown={(event) => {
+          dummy.current.position.copy(event.point);
+        }}
+      >
+        <meshBasicMaterial color="cyan" opacity={0.5} transparent />
+      </mesh>
+      <group ref={rayTarget as any} visible={targetVisible}>
+        <mesh
+          castShadow
+          receiveShadow
+          position={[0, 0.25, 0]}
+          scale-y={1.5}
+        >
+          <octahedronGeometry args={[0.1]} />
+          <meshPhysicalMaterial
+            attach="material"
+            color="white"
+            transmission={0.6}
+            thickness={0.5}
+            roughness={0.1} />
+        </mesh>
+      </group>
+    </>}
   </>;
 }

@@ -9,10 +9,8 @@ import { AdaptiveDpr, BakeShadows, Environment, OrbitControls, PointerLockContro
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import styles from "./world.module.css";
 import { Mesh } from "three";
-import { Physics } from "@react-three/cannon";
 import { Player } from "./player";
-import { Model as ColliderModel } from "./environment";
-import { Model } from "./environmentModel";
+import { Model as EnvironmentModel } from "./environmentModel";
 
 function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
   const router = useRouter()
@@ -97,20 +95,14 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
       shadow-camera-top={15}
       shadow-camera-bottom={-15}
     />
-    <Physics>
-      {/* uncomment to following tags to show a debug view for the physics */}
-      {/* <Debug color="black" scale={1.001}> */}
-      <ColliderModel />
-      <Model />
-      <Player position={[0, 3, 0]} enableCamera={!iAmGod} />
-      {/* </Debug> */}
-    </Physics>
+    <EnvironmentModel />
+    <Player position={[0, 3, 0]} debug={iAmGod} />
     {projects.map((project, index) => (
       <ProjectBox
         key={project._id}
         href={`/projects/${project.slug}`}
         position={[
-          Math.cos((index / projects.length + 0.125) * 2 * Math.PI) * 0.75, 2.6,
+          Math.cos((index / projects.length + 0.125) * 2 * Math.PI) * 0.75, 2,
           Math.sin((index / projects.length + 0.125) * 2 * Math.PI) * 0.75
         ]}
       />
