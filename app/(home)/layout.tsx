@@ -8,7 +8,7 @@ import {
 } from "next-sanity";
 import { draftMode } from "next/headers";
 
-import AlertBanner from "./alert-banner";
+import AlertBanner from "@/components/alert-banner";
 import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
