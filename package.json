@@ -14,7 +14,6 @@
     "typegen": "sanity schema extract && sanity typegen generate"
   },
   "dependencies": {
-    "@react-three/cannon": "^6.6.0",
     "@react-three/drei": "^9.112.0",
     "@react-three/fiber": "^8.17.6",
     "@react-three/postprocessing": "^2.16.2",
@@ -41,6 +40,7 @@
     "sanity-plugin-media": "^2.3.2",
     "server-only": "^0.0.1",
     "three": "^0.168.0",
+    "three-pathfinding": "^1.3.0",
     "typescript": "5.5.4"
   },
   "devDependencies": {
