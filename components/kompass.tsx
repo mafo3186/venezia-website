@@ -1,12 +1,12 @@
 import React from 'react';
 import styles from './kompass.module.css';
 
-interface CompassProps {
+interface KompassProps {
   width?: string;
   height?: string;
 }
 
-export default function Kompass({ width = '50%', height = '50%' }: CompassProps) {
+export default function Kompass({ width = '50%', height = '50%' }: KompassProps) {
   return (
     <div className={styles.kompass}>
       <img
