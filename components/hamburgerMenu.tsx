@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import styles from './hamburgerMenu.module.css'; // Neues CSS für das Menü
 import { ProjectsQueryResult } from '@/sanity.types';
+import Kompass from "@/components/kompass";
 
 interface HamburgerMenuProps {
     projects: ProjectsQueryResult;
@@ -22,8 +23,7 @@ const HamburgerMenu = ({ projects }: HamburgerMenuProps) => {
     return (
         <header className={styles.header}>
             <div className={styles.hamburger} onClick={toggleMenu}>
-                {/* Hamburger Icon */}
-                <div className={styles.hamburgerIcon}></div>
+              <Kompass height={'80%'} width={'80%'}/>
             </div>
 
             {/* Dropdown-Menü */}
