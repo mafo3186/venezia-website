@@ -18,8 +18,8 @@ export default function Fremde() {
           Perspektiven auf das Gefühl der Fremdheit und bereicherte unser Verständnis für das künstlerische
           Auseinandersetzen mit diesem bedeutenden und aktuellen Thema.</p>
         <p className={styles.bold}>Webseite</p>
-        <p>Diese Webseite dient als Projektdokumentation. Zu den Projekten mit dem Thema 'Fremde überall' kann entweder mit dem Kompass navigiert werden, oder durch eine eigene Entdeckungsreise durch eine fremde und vielleicht doch vertraute Welt.</p>
-        <Kompass/>
+        <p>Diese Webseite dient als Projektdokumentation. Zu den Projekten mit dem Thema &apos;Fremde überall&apos; kann entweder mit dem Kompass navigiert werden, oder durch eine eigene Entdeckungsreise durch eine fremde und vielleicht doch vertraute Welt.</p>
+        <Kompass height={'50%'} width={'50%'}/>
       </div>
     </div>
   );
