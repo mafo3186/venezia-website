@@ -1,12 +1,18 @@
 import styles from "./staticPages.module.css";
+import { HomeButton, BackButton}  from "@/components/button";
 
 export default function Datenschutz() {
   return (
     <div className={styles.boxContainer}>
       <div className={styles.textContainer}>
+        <div className={styles.navigation}>
+          <HomeButton/>
+          <BackButton/>
+        </div>
         <h1 className={styles.title}>Datenschutz</h1>
         <p className={styles.bold}>
-          Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst und möchten, dass Sie wissen, wann wir welche Daten speichern und wie wir sie verwenden.
+          Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst und möchten, dass Sie wissen, wann wir welche Daten
+          speichern und wie wir sie verwenden.
         </p>
         <br/>
         <p className={styles.bold}>Angaben nach Artikel 12 DSGVO</p>
@@ -26,11 +32,14 @@ export default function Datenschutz() {
         <br/>
         <p className={styles.bold}>Inhalte</p>
         <p>Die Webseite verwendet keine Cookies.</p>
-        <p>Die Webseite verwendet Sanity als Content-Management-System. Falls Sie sich im CMS anmelden, wird lokal ein Authentifizierungs-Token gespeichert, um die Benutzeranmeldung und -sitzung zu verwalten.</p>
+        <p>Die Webseite verwendet Sanity als Content-Management-System. Falls Sie sich im CMS anmelden, wird lokal ein
+          Authentifizierungs-Token gespeichert, um die Benutzeranmeldung und -sitzung zu verwalten.</p>
         <p>Die Webseite enthält ggf. Links zu fremden Internetseiten.</p>
         <br/>
         <p className={styles.bold}>Haftungshinweis</p>
-        <p>Die Hochschule Düsseldorf hat keinen Einfluss auf Gestaltung und Inhalte fremder Internetseiten. Für die Inhalte von Internetseiten, auf die externe Links verweisen, übernimmt die Hochschule Düsseldorf deshalb keine Verantwortung.</p>
+        <p>Die Hochschule Düsseldorf hat keinen Einfluss auf Gestaltung und Inhalte fremder Internetseiten. Für die
+          Inhalte von Internetseiten, auf die externe Links verweisen, übernimmt die Hochschule Düsseldorf deshalb keine
+          Verantwortung.</p>
       </div>
     </div>
   );

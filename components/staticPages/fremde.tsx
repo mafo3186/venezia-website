@@ -1,10 +1,15 @@
 import styles from "./staticPages.module.css";
 import Kompass from "@/components/kompass";
+import {BackButton, HomeButton} from "@/components/button";
 
 export default function Fremde() {
   return (
     <div className={styles.boxContainer}>
       <div className={styles.textContainer}>
+        <div className={styles.navigation}>
+          <HomeButton/>
+          <BackButton/>
+        </div>
         <h1 className={styles.title}>Fremde überall</h1>
         <h2 className={styles.title}>Biennale Venedig 2024</h2>
         <br/>
@@ -18,7 +23,9 @@ export default function Fremde() {
           Perspektiven auf das Gefühl der Fremdheit und bereicherte unser Verständnis für das künstlerische
           Auseinandersetzen mit diesem bedeutenden und aktuellen Thema.</p>
         <p className={styles.bold}>Webseite</p>
-        <p>Diese Webseite dient als Projektdokumentation. Zu den Projekten mit dem Thema &apos;Fremde überall&apos; kann entweder mit dem Kompass navigiert werden, oder durch eine eigene Entdeckungsreise durch eine fremde und vielleicht doch vertraute Welt.</p>
+        <p>Diese Webseite dient als Projektdokumentation. Zu den Projekten mit dem Thema &apos;Fremde überall&apos; kann
+          entweder mit dem Kompass navigiert werden, oder durch eine eigene Entdeckungsreise durch eine fremde und
+          vielleicht doch vertraute Welt.</p>
         <Kompass height={'50%'} width={'50%'}/>
       </div>
     </div>
