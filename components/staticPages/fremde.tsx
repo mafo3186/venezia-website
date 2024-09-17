@@ -1,6 +1,7 @@
 import styles from "./staticPages.module.css";
 import Kompass from "@/components/kompass";
 import {BackButton, HomeButton} from "@/components/button";
+import Link from "next/link";
 
 export default function Fremde() {
   return (
@@ -26,7 +27,9 @@ export default function Fremde() {
         <p>Diese Webseite dient als Projektdokumentation. Zu den Projekten mit dem Thema &apos;Fremde überall&apos; kann
           entweder mit dem Kompass navigiert werden, oder durch eine eigene Entdeckungsreise durch eine fremde und
           vielleicht doch vertraute Welt.</p>
-        <Kompass height={'50%'} width={'50%'}/>
+        <Link href={"./list"}>
+          <Kompass height={'50%'} width={'50%'}/>
+        </Link>
       </div>
     </div>
   );
