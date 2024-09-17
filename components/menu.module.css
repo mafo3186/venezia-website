@@ -73,3 +73,28 @@
 .navMenu li:first-child a {
     font-weight: bold;
 }
+
+/* Styling für den separaten Abschnitt der statischen Links */
+.staticLinks {
+  margin-top: 10px;
+}
+
+.staticLinks ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.staticLinks li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.staticLinks li:last-child {
+  border-bottom: none;
+}
+
+.staticLinks a {
+  color: #29486b;
+}
+
