@@ -5,36 +5,24 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { PerspectiveCamera, useGLTF } from "@react-three/drei";
 import { Mesh, Object3D, Vector3 } from "three";
 import { Node, Pathfinding } from "three-pathfinding";
+import { GLTFResult } from "./model";
 
-
-const navMeshPath = "/assets/navmesh.glb";
-useGLTF.preload(navMeshPath);
 const ZONE = 'level1';
 
-
 export function Player({ position, debug }: { position: [number, number, number], debug?: boolean }) {
-  const navMeshModel = useGLTF(navMeshPath);
-  const [navMeshGeometry, pathFinding] = useMemo(() => {
-    let navMesh: Mesh | undefined;
-    navMeshModel.scene.traverse((node) => {
-      if (node.type === "Mesh") navMesh = node as Mesh;
-    });
-    if (navMesh) {
-      const navMeshGeometry = navMesh?.geometry;
-      const pathFinding = new Pathfinding();
-      pathFinding.setZoneData(ZONE, Pathfinding.createZone(navMeshGeometry));
-      return [navMeshGeometry, pathFinding];
-    } else {
-      return [undefined, undefined];
-    }
-  }, [navMeshModel]);
-// const [ref, body] = useSphere(() => ({
-//   type: "Dynamic",
-//   mass: 1,
-//   linearDamping: 0.9,
-//   args: [0.2],
-//   position,
-// }));
+  const navmesh = (useGLTF('/assets/venice.glb') as GLTFResult).nodes.Navmesh.geometry;
+  const [pathFinding] = useMemo(() => {
+    const pathFinding = new Pathfinding();
+    pathFinding.setZoneData(ZONE, Pathfinding.createZone(navmesh));
+    return [pathFinding];
+  }, [navmesh]);
+  // const [ref, body] = useSphere(() => ({
+  //   type: "Dynamic",
+  //   mass: 1,
+  //   linearDamping: 0.9,
+  //   args: [0.2],
+  //   position,
+  // }));
   const dummy = useRef<Object3D>(null!);
   const rayTarget = useRef<Object3D>(null!);
   const node = useRef<Node | undefined>();
@@ -140,10 +128,10 @@ export function Player({ position, debug }: { position: [number, number, number]
         <PerspectiveCamera fov={90} makeDefault={!debug} />
       </mesh>
     </mesh>
-    {navMeshGeometry && <>
+    {navmesh && <>
       <mesh
         position={[0, 0, 0]}
-        geometry={navMeshGeometry}
+        geometry={navmesh}
         visible={debug}
         onPointerEnter={() => setTargetVisible(true)}
         onPointerLeave={() => setTargetVisible(false)}

@@ -10,7 +10,7 @@ import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import styles from "./world.module.css";
 import { Mesh } from "three";
 import { Player } from "./player";
-import { Model as EnvironmentModel } from "./environmentModel";
+import { Model as EnvironmentModel } from "./model";
 
 function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
   const router = useRouter()
@@ -95,7 +95,9 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
       shadow-camera-top={15}
       shadow-camera-bottom={-15}
     />
+
     <EnvironmentModel />
+
     <Player position={[0, 3, 0]} debug={iAmGod} />
     {projects.map((project, index) => (
       <ProjectBox
