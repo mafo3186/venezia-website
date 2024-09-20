@@ -23,17 +23,19 @@ export function EmblaCarousel(props: PropsWithChildren<{
   return (
     <div className={styles.container} style={{
       aspectRatio: props.aspectRatio ?? (3 / 2),
-      maxHeight: "80vh", // Ensure the container does not exceed 80% of the viewport height
-    }} ref={emblaRef}>
-      <div className={styles.viewport}>
-        {Children.map(props.children, child =>
-          <div className={styles.slide}>
-            {child}
-          </div>
-        )}
+      //maxHeight: "80vh", // Ensure the container does not exceed 80% of the viewport height
+    }}>
+      <div className={styles.emblaViewport} ref={emblaRef}>
+        <div className={styles.emblaContainer}>
+          {Children.map(props.children, (child, index) =>
+            <div className={styles.emblaSlide} key={index}>
+              {child}
+            </div>
+          )}
+        </div>
       </div>
-      <button className={styles.button} onClick={scrollPrev}>←</button>
-      <button className={styles.button} onClick={scrollNext}>→</button>
+      <button className={styles.emblaButtonPrev} onClick={scrollPrev}>←</button>
+      <button className={styles.emblaButtonNext} onClick={scrollNext}>→</button>
     </div>
   );
 }
