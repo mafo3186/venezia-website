@@ -3,7 +3,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import styles from './menu.module.css';
 import { ProjectsQueryResult } from '@/sanity.types';
-import Kompass from "@/components/kompass";
+import IconKompass from "@/components/iconKompass";
+import IconVenedig from "@/components/iconVenedig";
 
 interface MenuProps {
     projects: ProjectsQueryResult;
@@ -26,7 +27,7 @@ const Menu = ({ projects }: MenuProps) => {
               className={`${styles.menu} ${menuOpen ? styles.active : ''}`} 
               onClick={toggleMenu}
             >
-              <Kompass height={'80%'} width={'80%'}/>
+              <IconKompass height={'80%'} width={'80%'}/>
             </div>
 
             {/* Dropdown-Menü */}
@@ -35,7 +36,7 @@ const Menu = ({ projects }: MenuProps) => {
                 <ul>
                   <li>
                     <Link href="/" onClick={closeMenu}>
-                      Home
+                      Fremde entdecken
                     </Link>
                   </li>
                   {projects.map((project) => (
@@ -52,11 +53,6 @@ const Menu = ({ projects }: MenuProps) => {
                     <li>
                       <Link href={"/fremde"} onClick={closeMenu}>
                         Fremde überall
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href={"/studio"} onClick={closeMenu}>
-                        Neues Projekt anlegen
                       </Link>
                     </li>
                     <li>

@@ -1,89 +1,98 @@
-/* Layout */
-.layout {
-  padding: 0px;
-  height: 100%;
+/*styles.module.css*/
+
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  justify-content: center;
+  padding: 10px;
+  margin: auto;
 }
 
 .navigationButtons {
-  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  padding: 1rem;
+  height: 60px;
+  flex-shrink: 0;
 }
 
-/* Article */
 .article {
-  color-scheme: dark;
-  backdrop-filter: blur(4px);
-  height: 100%;
+  display: flex;
+  flex-grow: 1;
+  padding: 1rem;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: var(--border-radius-container);
 }
 
 .content {
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
+  flex-grow: 1;
+  gap: 1rem;
+  flex-direction: row;
+  overflow: hidden;
 }
 
 .showcaseAndTitle {
+  flex-grow: 2;
+  flex-basis: 60%;
+  min-width: 60%;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
-  border-radius: var(--border-radius-container) var(--border-radius-container) 0 0;
-  background: radial-gradient(ellipse 50% 33%, black 25%, rgba(0, 0, 0, 0.6) 100%);
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  overflow: hidden;
+  max-height: 100%;
 }
 
 .showcase {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  flex-shrink: 1;
+  max-height: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
-
 
 .projectTitle {
   color: white;
   background: rgba(0, 0, 0, 0.6);
   padding: 1rem;
   border-radius: var(--border-radius-content);
+  flex-shrink: 1;
+  width: 100%;
+}
 
-  & h1 {
-    font-size: 2em;
-  }
+.projectTitle h1 {
+  font-size: 2em;
 }
 
 .documentation {
-  color: white;
-  background: rgba(0, 0, 0, 0.6);
+  flex-grow: 1;
   padding: 1rem;
   overflow-y: auto;
-  flex-grow: 1;
-  border-radius: 0 0 var(--border-radius-container) var(--border-radius-container);
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border-radius: var(--border-radius-container);
 }
 
-/* Widescreen Desktop Side by Side */
-@media (min-width: 1000px) {
-  .layout {
-    padding: 32px;
-    height: 100%;
-  }
-
-  .article {
-    backdrop-filter: blur(8px);
-  }
-
+/* Media Query: bei kleinen Bildschirmen wird Dokumentation unterhalb der ShowCases angezeigt */
+@media (max-width: 768px) {
   .content {
-    flex-direction: row;
-  }
-
-  .showcase {
-    height: 100%;
-  }
-
-  .showcaseAndTitle {
-    min-width: 0px;
-    width: 70%;
-    border-radius: var(--border-radius-container) 0 0 var(--border-radius-container);
+    flex-direction: column;
+    overflow: auto;
   }
 
   .documentation {
-    width: 400px;
-    border-radius: 0 var(--border-radius-container) var(--border-radius-container) 0;
+    overflow-y: visible;
   }
 }

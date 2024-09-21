@@ -31,8 +31,8 @@
 }
 
 .navMenu {
-    position: absolute;
-    top: 90px;
+    position: fixed;
+    top: 100px;
     right: 10px;
     background-color: white;
     border-radius: 8px;

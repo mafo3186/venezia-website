@@ -1,11 +1,11 @@
-.kompass {
+.icon {
   display: flex;
   justify-content: center; /* Horizontale Zentrierung */
   align-items: center; /* Vertikale Zentrierung */
   margin: 20px 0; /* Optional: Abstand oben und unten */
 }
 
-.kompass img {
+.icon img {
   max-width: 100%; /* Macht das Bild responsiv */
   max-height: 100%; /* Verhindert, dass das Bild den Container überläuft */
 }
