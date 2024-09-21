@@ -4,6 +4,10 @@
   height: 100%;
 }
 
+.navigationButtons {
+  margin-bottom: 0.5rem;
+}
+
 /* Article */
 .article {
   color-scheme: dark;
@@ -31,6 +35,7 @@
   flex-direction: column;
   justify-content: center;
 }
+
 
 .projectTitle {
   color: white;
