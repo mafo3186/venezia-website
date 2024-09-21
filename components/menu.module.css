@@ -26,7 +26,8 @@
 
 .menu.active {
   width: 80px; 
-  height: 80px; 
+  height: 80px;
+  background-color: rgba(255, 255, 255, 1);
 }
 
 .navMenu {
