@@ -23,7 +23,7 @@ export function EmblaCarousel(props: PropsWithChildren<{
   return (
     <div className={styles.container} style={{
       aspectRatio: props.aspectRatio ?? (3 / 2),
-      //maxHeight: "80vh", // Ensure the container does not exceed 80% of the viewport height
+      maxHeight: "80vh", // Ensure the container does not exceed 80% of the viewport height
     }}>
       <div className={styles.emblaViewport} ref={emblaRef}>
         <div className={styles.emblaContainer}>

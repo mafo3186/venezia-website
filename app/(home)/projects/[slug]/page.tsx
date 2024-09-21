@@ -97,10 +97,12 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <article className={styles.article}>
+      {/* 
       <div>
         <HomeButton/>
         <BackButton/>
       </div>
+      */}
       <div className={styles.content}>
         <div className={styles.showcaseAndTitle}>
           <hgroup className={styles.projectTitle}>
