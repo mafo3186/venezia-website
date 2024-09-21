@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  /* wrapper takes the full width */
 }
 
 .embla {
@@ -37,6 +38,7 @@
   aspect-ratio: 1;
   cursor: pointer;
   z-index: 2;
+  align-self: center;
 }
 
 .embla__button.prev {
@@ -52,8 +54,6 @@
 }
 
 .embla__dots {
-  grid-column: 2;
-  grid-row: 2;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -63,8 +63,11 @@
   padding: 5px;
   border-radius: 10px;
   margin-top: 10px;
+  /* Add some space between the carousel and the dots */
   width: 100%;
+  /* Ensure the dots container takes the full width */
   box-sizing: border-box;
+  /* Include padding in the element's total width and height */
 }
 
 .embla__dot {
