@@ -1,4 +1,3 @@
-
 import type { Metadata, ResolvingMetadata } from "next";
 import { groq, type PortableTextBlock } from "next-sanity";
 import { notFound } from "next/navigation";
