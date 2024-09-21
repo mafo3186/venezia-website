@@ -14,7 +14,7 @@ import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
 import styles from "./styles.module.css";
 import { EmblaCarousel } from "@/components/carousel";
-import ShowcasePiece from "@/components/showcase-piece";
+import ShowcasePiece from "@/components/showcasePiece";
 import { Suspense } from "react";
 import {BackButton, HomeButton} from "@/components/button";
 

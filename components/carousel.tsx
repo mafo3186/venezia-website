@@ -22,17 +22,18 @@ export function EmblaCarousel(props: PropsWithChildren<{
 
 
   return (
-    <div className={styles.container} style={{
-      aspectRatio: props.aspectRatio ?? (3 / 2),
-      maxHeight: "80vh", // sucks but I can't get it to not overflow otherwise :/
-    }} ref={emblaRef}>
-      <div style={{ gridColumnStart: 1, gridColumnEnd: 4, gridRowStart: 1, gridRowEnd: 4, display: "flex", height: "100%" }}>
+    <div
+      className={styles.embla}
+      style={{ aspectRatio: props.aspectRatio ?? (3 / 2), }}
+      ref={emblaRef}
+    >
+      <div className={styles.embla__container}>
         {Children.map(props.children, child =>
-          <div style={{ flex: "0 0 100%", width: "100%", height: "100%" }}>{child}</div>
+          <div className={styles.embla__slide}>{child}</div>
         )}
       </div>
-      <button style={{ gridColumn: 1, gridRow: 2 }} className={styles.button} onClick={scrollPrev}>←</button>
-      <button style={{ gridColumn: 3, gridRow: 2 }} className={styles.button} onClick={scrollNext}>→</button>
+      <button className={`${styles.embla__button} ${styles.prev}`} onClick={scrollPrev}>←</button>
+      <button className={`${styles.embla__button} ${styles.next}`} onClick={scrollNext}>→</button>
     </div>
   )
 }

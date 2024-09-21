@@ -3,6 +3,7 @@ import { urlForImage } from "@/sanity/lib/utils";
 import project from "@/sanity/schemas/project";
 import { Image } from "next-sanity/image";
 import { blurhashToBase64 } from "blurhash-base64";
+import styles from "./showcasePiece.module.css";
 
 interface ShowcasePieceProps {
   showcase: {
@@ -17,7 +18,7 @@ interface ShowcasePieceProps {
 export default function ShowcasePiece(props: ShowcasePieceProps) {
   const { showcase } = props;
 
-  return <figure style={{ position: "relative", height: "100%", background: "black"}}>
+  return <figure className={styles.figure}>
     {showcase.type === "image" && (
       <Image
         fill
@@ -27,8 +28,7 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
       />
     )}
     {showcase.type === "video" && (
-      <video
-        controls autoPlay muted loop>
+      <video controls autoPlay muted loop className={styles.video}>
         <source
           src={showcase.content}
           type={showcase.mimeType!}
@@ -36,24 +36,16 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
       </video>
     )}
     {showcase.type === "audio" && (
-      <audio controls>
+      <audio controls className={styles.audio}>
         <source src={showcase.content} type={showcase.mimeType!} />
       </audio>
     )}
     {showcase.type === "text" &&
-      <pre>{showcase.content}</pre>
+      <pre className={styles.text}>{showcase.content}</pre>
     }
     {showcase.type === "website" &&
-      <a href={showcase.content} target="_blank" style={{pointerEvents: "auto"}}>
-        <iframe style={
-          {
-            width: "100%",
-            height: "100%",
-            border: "none",
-            pointerEvents: "none",
-            overflow: "hidden",
-          }
-        } scrolling="no" src={showcase.content}></iframe>
+      <a href={showcase.content} target="_blank" className={styles.website}>
+        <iframe className={styles.website} scrolling="no" src={showcase.content}></iframe>
       </a>
     }
     {showcase.description && <figcaption>{showcase.description}</figcaption>}
