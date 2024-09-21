@@ -4,6 +4,10 @@
   height: 100%;
 }
 
+.navigationButtons {
+  margin-bottom: 0.5rem;
+}
+
 /* Article */
 .article {
   color-scheme: dark;

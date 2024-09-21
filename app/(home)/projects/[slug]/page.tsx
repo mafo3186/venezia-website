@@ -16,7 +16,7 @@ import styles from "./styles.module.css";
 import { EmblaCarousel } from "@/components/carousel";
 import ShowcasePiece from "@/components/showcasePiece";
 import { Suspense } from "react";
-import {BackButton, HomeButton} from "@/components/button";
+import { BackButton, HomeButton } from "@/components/button";
 
 type Props = {
   params: { slug: string };
@@ -96,41 +96,43 @@ export default async function ProjectPage({ params }: Props) {
   }
 
   return (
-    <article className={styles.article}>
-      <div>
-        <HomeButton/>
-        <BackButton/>
+    <>
+      <div className={styles.navigationButtons}>
+        <HomeButton />
+        <BackButton />
       </div>
-      <div className={styles.content}>
-        <div className={styles.showcaseAndTitle}>
-          <hgroup className={styles.projectTitle}>
-            <h1>
-              {project.title}
-            </h1>
-            <p>
-              von {project.author}
-            </p>
-          </hgroup>
-          <main className={styles.showcase}>
-            <EmblaCarousel>
-              {project.showcases && project.showcases.map((showcase, index) => {
-                return (
-                  <Suspense key={index}>
-                    <ShowcasePiece showcase={showcase as any}/>
-                  </Suspense>
-                );
-              })}
-            </EmblaCarousel>
-          </main>
+      <article className={styles.article}>
+        <div className={styles.content}>
+          <div className={styles.showcaseAndTitle}>
+            <hgroup className={styles.projectTitle}>
+              <h1>
+                {project.title}
+              </h1>
+              <p>
+                von {project.author}
+              </p>
+            </hgroup>
+            <main className={styles.showcase}>
+              <EmblaCarousel>
+                {project.showcases && project.showcases.map((showcase, index) => {
+                  return (
+                    <Suspense key={index}>
+                      <ShowcasePiece showcase={showcase as any} />
+                    </Suspense>
+                  );
+                })}
+              </EmblaCarousel>
+            </main>
+          </div>
+          <aside className={styles.documentation}>
+            {project.documentation?.length && (
+              <PortableText
+                value={project.documentation as PortableTextBlock[]}
+              />
+            )}
+          </aside>
         </div>
-        <aside className={styles.documentation}>
-          {project.documentation?.length && (
-            <PortableText
-              value={project.documentation as PortableTextBlock[]}
-            />
-          )}
-        </aside>
-      </div>
-    </article>
+      </article>
+    </>
   );
 }
