@@ -1,3 +1,4 @@
+
 import type { Metadata, ResolvingMetadata } from "next";
 import { groq, type PortableTextBlock } from "next-sanity";
 import { notFound } from "next/navigation";
@@ -108,7 +109,7 @@ export default async function ProjectPage({ params }: Props) {
               <p>von {project.author}</p>
             </hgroup>
             <main className={styles.showcase}>
-              <EmblaCarousel aspectRatio={16 / 9}> {/* Breitbildformat fürs Karussell */}
+              <EmblaCarousel aspectRatio={16 / 9}>
                 {project.showcases &&
                   project.showcases.map((showcase, index) => {
                     return (

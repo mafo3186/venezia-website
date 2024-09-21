@@ -9,33 +9,35 @@
 }
 
 .article {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
+  position: relative;
+  margin: 0 auto;
+  /* Zentriert den Content */
+  padding-top: 100px;
+  /* Platz für die Buttons lassen */
+  width: 90%;
+  max-width: 1200px;
+  /* Maximalbreite für große Bildschirme */
+  height: auto;
+  background: rgba(193, 27, 27, 0.5);
+  /* Transparent-dunkler Hintergrund */
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  padding: 1.5rem;
+  overflow: hidden;
 }
 
+/* Content bleibt im Grid */
 .content {
   display: grid;
   grid-template-columns: 2fr 1fr;
-
   gap: 2rem;
-  width: 90%;
-  max-width: 1200px;
-  height: 80vh;
-  /* Höhe begrenzt auf 80% des Viewports */
-  background-color: rgba(0, 0, 0, 0.5);
-  /* Semi-transparenter Hintergrund für den Content */
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
 }
+
+
+
 
 .showcaseAndTitle {
   display: grid;
@@ -73,4 +75,22 @@
 .documentation h2,
 .documentation p {
   margin: 0 0 1rem 0;
+}
+
+/* Responsive Layout für kleinere Bildschirme */
+@media (max-width: 768px) {
+  .content {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    height: auto;
+    max-height: none;
+  }
+
+  .showcaseAndTitle {
+    grid-row: 1;
+  }
+
+  .documentation {
+    grid-row: 2;
+  }
 }
