@@ -3,32 +3,45 @@
 .container {
   position: relative;
   width: 100%;
-  max-height: 100%;
+  height: auto;
+  max-height: 80vh;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.9); /* Schwarzer Hintergrund für das Karussell */
+  background: rgba(13, 11, 74, 0.9);
 }
 
 .emblaViewport {
   overflow: hidden;
   width: 100%;
-  max-height: 80%;
+  max-height: 80vh;
 }
 
 .emblaContainer {
   display: flex;
   user-select: none;
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease;
 }
 
 .emblaSlide {
   position: relative;
   min-width: 100%;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+
+.emblaSlide img,
+.emblaSlide text,
+.emblaSlide video,
+.emblaSlide iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Inhalt wird skaliert, ohne das Seitenverhältnis zu verzerren */
 }
 
 .emblaButtonPrev,
@@ -51,4 +64,18 @@
 
 .emblaButtonNext {
   right: 10px;
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 768px) {
+  .container {
+    max-height: 60vh;
+    /* Weniger Höhe auf kleineren Bildschirmen */
+  }
+
+  .emblaButtonPrev,
+  .emblaButtonNext {
+    padding: 0.5rem;
+    font-size: 1.2rem;
+  }
 }
