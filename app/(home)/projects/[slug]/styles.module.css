@@ -1,108 +1,95 @@
-/* Container mit Flexbox für Layout und Resizing */
+/*styles.module.css*/
+
 .pageContainer {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  /* Volle Höhe des Viewports */
   width: 100vw;
-  /* Volle Breite des Viewports */
   overflow: hidden;
-  /* Verhindert unnötige Scrollbars */
 }
 
-/* Navigation Buttons: bleibt unverändert */
 .navigationButtons {
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   align-items: center;
   padding: 1rem;
   height: 60px;
   flex-shrink: 0;
-  /* Verhindert, dass Navigation die Höhe beeinflusst */
 }
 
-/* Article: nimmt den restlichen Platz nach den Buttons ein */
 .article {
   display: flex;
   flex-grow: 1;
   padding: 1rem;
   overflow: hidden;
-  /* Entfernt unnötige Scrollbars */
   background-color: rgba(0, 0, 0, 0.6);
-  /* Hintergrundfarbe für den gesamten Artikel */
   border-radius: var(--border-radius-container);
-  /* Einheitliche Abrundung für den Artikel */
 }
 
-/* Showcase und Documentation nebeneinander bei großen Bildschirmen */
 .content {
   display: flex;
   flex-grow: 1;
   gap: 1rem;
-  /* Platz zwischen Showcase und Dokumentation */
   flex-direction: row;
-  /* Nebeneinander für große Bildschirme */
   overflow: hidden;
-  /* Verhindert unnötige Scrollbars */
 }
 
-/* Showcase */
 .showcaseAndTitle {
   flex-grow: 2;
+  flex-basis: 60%;
+  min-width: 60%;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 0;
-  /* Wichtig, um Flexbox richtig zu steuern */
+  min-height: 100%;
+  overflow: hidden;
+  max-height: 100%;
 }
 
-/* Showcase-Container */
 .showcase {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  flex-shrink: 1;
+  max-height: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
-/* Projekt-Titel */
 .projectTitle {
   color: white;
   background: rgba(0, 0, 0, 0.6);
   padding: 1rem;
   border-radius: var(--border-radius-content);
+  flex-shrink: 1;
+  width: 100%;
 }
 
 .projectTitle h1 {
   font-size: 2em;
 }
 
-/* Dokumentation */
 .documentation {
   flex-grow: 1;
-  /* Dokumentation nimmt verbleibenden Platz ein */
   padding: 1rem;
   overflow-y: auto;
-  /* Scrollbar nur in der Dokumentation bei großen Bildschirmen */
   background: rgba(0, 0, 0, 0.6);
-  /* Einheitlicher Hintergrund mit Showcase */
   color: white;
   border-radius: var(--border-radius-container);
-  /* Abrundung anpassen */
 }
 
-/* Media Query: bei kleinen Bildschirmen ändern wir das Layout */
+/* Media Query: bei kleinen Bildschirmen wird Dokumentation unterhalb der ShowCases angezeigt */
 @media (max-width: 768px) {
   .content {
     flex-direction: column;
-    /* Vertikale Anordnung */
     overflow: auto;
-    /* Scrollen des gesamten Inhalts */
   }
 
-  /* Dokumentation unterhalb des Showcases und scrollbarer Bildschirm */
   .documentation {
     overflow-y: visible;
-    /* Scrollen über den gesamten Bildschirm */
   }
 }

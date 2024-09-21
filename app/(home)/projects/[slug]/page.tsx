@@ -95,7 +95,7 @@ export default async function ProjectPage({ params }: Props) {
   }
 
   return (
-    <>
+    <div className={styles.pageContainer}>
       <div className={styles.navigationButtons}>
         <HomeButton />
         <BackButton />
@@ -132,6 +132,6 @@ export default async function ProjectPage({ params }: Props) {
           </aside>
         </div>
       </article>
-    </>
+    </div>
   );
 }
