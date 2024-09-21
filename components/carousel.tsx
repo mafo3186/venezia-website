@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
 import { EmblaOptionsType } from 'embla-carousel';
 import { Children, PropsWithChildren } from 'react'
@@ -11,14 +11,33 @@ export function EmblaCarousel(props: PropsWithChildren<{
   aspectRatio?: number,
 }>) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, axis: props.direction ?? "x" })
+  const [canScroll, setCanScroll] = useState(false);
+
+  useEffect(() => {
+    if (emblaApi) {
+      setCanScroll(emblaApi.slideNodes().length > 1);
+    }
+  }, [emblaApi]);
 
   const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev()
-  }, [emblaApi])
+    if (emblaApi) {
+      if (emblaApi.canScrollPrev()) {
+        emblaApi.scrollPrev();
+      } else {
+        emblaApi.scrollTo(emblaApi.slideNodes().length - 1);
+      }
+    }
+  }, [emblaApi]);
 
   const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext()
-  }, [emblaApi])
+    if (emblaApi) {
+      if (emblaApi.canScrollNext()) {
+        emblaApi.scrollNext();
+      } else {
+        emblaApi.scrollTo(0);
+      }
+    }
+  }, [emblaApi]);
 
 
   return (
@@ -31,9 +50,12 @@ export function EmblaCarousel(props: PropsWithChildren<{
         {Children.map(props.children, child =>
           <div className={styles.embla__slide}>{child}</div>
         )}
-      </div>
-      <button className={`${styles.embla__button} ${styles.prev}`} onClick={scrollPrev}>←</button>
-      <button className={`${styles.embla__button} ${styles.next}`} onClick={scrollNext}>→</button>
+      </div>{canScroll && (
+        <>
+          <button className={`${styles.embla__button} ${styles.prev}`} onClick={scrollPrev}>←</button>
+          <button className={`${styles.embla__button} ${styles.next}`} onClick={scrollNext}>→</button>
+        </>
+      )}
     </div>
   )
 }
