@@ -3,45 +3,49 @@
 .container {
   position: relative;
   width: 100%;
-  height: auto;
+  height: 100%;
   max-height: 80vh;
+  /* Maximale Höhe auf 80% der Viewport-Höhe */
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(13, 11, 74, 0.9);
+  background: rgba(5, 37, 97, 0.9);
+  /* Dunkler Hintergrund */
 }
 
 .emblaViewport {
   overflow: hidden;
   width: 100%;
-  max-height: 80vh;
+  height: 100%;
 }
 
 .emblaContainer {
   display: flex;
   user-select: none;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s ease;
 }
 
 .emblaSlide {
   position: relative;
   min-width: 100%;
-  height: auto;
+  /* Jedes Slide nimmt die volle Breite des Containers ein */
+  flex: 0 0 100%;
+  /* Kein Shrinking oder Growing - nimmt immer die volle Breite */
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-
 .emblaSlide img,
-.emblaSlide text,
 .emblaSlide video,
 .emblaSlide iframe {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  /* Bild füllt die Breite des Containers */
+  max-height: 100%;
+  /* Bild füllt die Höhe des Containers */
   object-fit: contain;
-  /* Inhalt wird skaliert, ohne das Seitenverhältnis zu verzerren */
+  /* Bild anpassen, ohne Verzerrung */
 }
 
 .emblaButtonPrev,
@@ -70,7 +74,14 @@
 @media (max-width: 768px) {
   .container {
     max-height: 60vh;
-    /* Weniger Höhe auf kleineren Bildschirmen */
+    /* Kleinere Höhe bei schmaleren Bildschirmen */
+  }
+
+  .emblaSlide img,
+  .emblaSlide video,
+  .emblaSlide iframe {
+    max-height: 60vh;
+    /* Maximale Höhe der Inhalte anpassen */
   }
 
   .emblaButtonPrev,

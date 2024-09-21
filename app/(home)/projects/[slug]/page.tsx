@@ -109,7 +109,7 @@ export default async function ProjectPage({ params }: Props) {
               <p>von {project.author}</p>
             </hgroup>
             <main className={styles.showcase}>
-              <EmblaCarousel aspectRatio={16 / 9}>
+              <EmblaCarousel>
                 {project.showcases &&
                   project.showcases.map((showcase, index) => {
                     return (
