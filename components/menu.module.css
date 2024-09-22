@@ -1,79 +1,94 @@
 .header {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 1000;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
 }
 
 .menu {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.9);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: width 0.2s ease, height 0.2s ease;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: width 0.2s ease, height 0.2s ease;
 }
 
 .menu:hover {
-  width: 80px; 
+  width: 80px;
   height: 80px;
   background-color: rgba(255, 255, 255, 1);
 }
 
 .menu.active {
-  width: 80px; 
+  width: 80px;
   height: 80px;
   background-color: rgba(255, 255, 255, 1);
 }
 
 .navMenu {
-    position: fixed;
-    top: 100px;
-    right: 10px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    min-width: max-content;
-    max-width: 100%;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+  position: fixed;
+  top: 100px;
+  right: 10px;
+  background-image: url('/icons/Karte_auf_weiss_klein-01.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 8px;
+  width: 80vw;
+  height: 80vh;
+  max-width: 90vh;
+  max-height: 90vh;
+  min-width: 300px;
+  min-height: 300px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: top;
+  text-align: center;
+  padding: 10%;
 }
 
 @media (max-width: 600px) {
-    .navMenu {
-        right: 5px;
-        left: 5px;
-        width: 90%;
-        margin: 0 auto;
-    }
+  .navMenu {
+    right: 0;
+    left: 0;
+    height: 100vh;
+    width: auto;
+    background-size: cover;
+    background-position: center center;
+    padding: 10px;
+  }
 }
 
 .navMenu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .navMenu li {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
 }
 
 .navMenu li:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .navMenu a {
-    text-decoration: none;
-    color: black;
+  text-decoration: none;
+  color: black;
 }
 
 .navMenu li:first-child a {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 /* Styling für den separaten Abschnitt der statischen Links */
@@ -99,4 +114,3 @@
 .staticLinks a {
   color: #29486b;
 }
-
