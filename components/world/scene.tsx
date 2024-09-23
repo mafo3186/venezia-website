@@ -114,7 +114,7 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
 }
 
 export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
-  const [dpr, setDpr] = useState(window.devicePixelRatio);
+  const [dpr, setDpr] = useState<number | undefined>(undefined);
   return (
     <Canvas
       id="canvas-instance"
@@ -122,13 +122,11 @@ export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQuer
       shadows="soft"
       className={styles.scene}
       dpr={dpr}
+      frameloop={inBackground ? "demand" : "always"}
     >
       <PerformanceMonitor
-        factor={1.0}
-        onChange={({ factor }) => {
-          const newDpr = Math.max(MIN_DPR, window.devicePixelRatio * 0.5 ** Math.round((1 - factor) * 10));
-          setDpr(newDpr);
-        }}
+        onIncline={() => setDpr(Math.min(window.devicePixelRatio, (dpr ?? window.devicePixelRatio) * 2))}
+        onDecline={() => setDpr(Math.max(MIN_DPR, (dpr ?? window.devicePixelRatio) * 0.5))}
       />
       <Scene projects={projects} inBackground={inBackground} />
     </Canvas>
