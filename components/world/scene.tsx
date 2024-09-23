@@ -5,12 +5,14 @@ import { Canvas, MeshProps, useFrame, useThree } from "@react-three/fiber"
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { DepthOfField, EffectComposer, Vignette } from "@react-three/postprocessing";
-import { AdaptiveDpr, BakeShadows, Environment, OrbitControls, PointerLockControls, Stats } from "@react-three/drei";
+import { BakeShadows, Environment, OrbitControls, PerformanceMonitor, PointerLockControls, Stats } from "@react-three/drei";
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import styles from "./world.module.css";
 import { Mesh } from "three";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
+
+const MIN_DPR = 0.25;
 
 function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
   const router = useRouter()
@@ -44,13 +46,6 @@ function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
   )
 }
 
-function Globals() {
-  useThree(({ performance }) => {
-    console.log(performance);
-  });
-  return <></>;
-}
-
 function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
   const [iAmGod, setGod] = useState(false);
   const controls = useRef<PointerLockControlsImpl | null>(null);
@@ -82,7 +77,6 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
       pointerSpeed={2}
       ref={controls}
     />
-    <Globals />
     <directionalLight
       intensity={0.9}
       castShadow
@@ -113,8 +107,6 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
       <DepthOfField focusDistance={0} focalLength={0.01} bokehScale={2} />
       <Vignette eskil={false} offset={0.1} darkness={0.75} />
     </EffectComposer>
-    {/* reduce dpr if performance is low */}
-    <AdaptiveDpr pixelated />
     {/* keeping shadows static in hope for better performance */}
     <BakeShadows />
     <Stats />
@@ -122,13 +114,22 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
 }
 
 export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
+  const [dpr, setDpr] = useState(window.devicePixelRatio);
   return (
     <Canvas
       id="canvas-instance"
       style={{ width: "100%", height: "100vh" }}
       shadows="soft"
       className={styles.scene}
+      dpr={dpr}
     >
+      <PerformanceMonitor
+        factor={1.0}
+        onChange={({ factor }) => {
+          const newDpr = Math.max(MIN_DPR, window.devicePixelRatio * 0.5 ** Math.round((1 - factor) * 10));
+          setDpr(newDpr);
+        }}
+      />
       <Scene projects={projects} inBackground={inBackground} />
     </Canvas>
   );
