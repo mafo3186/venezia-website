@@ -1,14 +1,14 @@
 "use client";
 
 import { ProjectsQueryResult } from "@/sanity.types";
-import { Canvas, MeshProps, useFrame, useThree } from "@react-three/fiber"
+import { Canvas, MeshProps, useFrame } from "@react-three/fiber"
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { DepthOfField, EffectComposer, Vignette } from "@react-three/postprocessing";
-import { BakeShadows, Environment, OrbitControls, PerformanceMonitor, PointerLockControls, Stats } from "@react-three/drei";
+import { BakeShadows, Environment, OrbitControls, PerformanceMonitor, Stats } from "@react-three/drei";
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import styles from "./world.module.css";
-import { Mesh } from "three";
+import { Mesh, MOUSE } from "three";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
 
@@ -65,17 +65,25 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
       }
     });
   }, [iAmGod]);
-
   return (<>
     <color attach="background" args={["#96b0e4"]} />
     <Environment preset="sunset" />
     <fogExp2 attach="fog" color="#96b0e4" density={iAmGod ? 0 : 0.18} />
     <OrbitControls enabled={iAmGod} />
-    <PointerLockControls
+    <OrbitControls
       enabled={!iAmGod}
-      selector="#canvas-instance"
-      pointerSpeed={2}
-      ref={controls}
+      target={[-1000, 2.5, 0]}
+      enableZoom={false}
+      enablePan={true}
+      enableRotate={false}
+      panSpeed={1.5}
+      keyPanSpeed={0}
+      dampingFactor={0.1}
+      mouseButtons={{
+        RIGHT: undefined,
+        LEFT: MOUSE.PAN,
+        MIDDLE: undefined,
+      }}
     />
     <directionalLight
       intensity={0.9}
