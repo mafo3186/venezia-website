@@ -12,8 +12,6 @@ import { Mesh, MOUSE } from "three";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
 
-const MIN_DPR = 0.25;
-
 function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
   const router = useRouter()
   const ref = useRef<Mesh | null>(null)
@@ -134,8 +132,10 @@ export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQuer
       frameloop={inBackground ? "demand" : "always"}
     >
       <PerformanceMonitor
-        onIncline={() => setDpr(Math.min(window.devicePixelRatio, (dpr ?? window.devicePixelRatio) * 2))}
-        onDecline={() => setDpr(Math.max(MIN_DPR, (dpr ?? window.devicePixelRatio) * 0.5))}
+        flipflops={3}
+        onDecline={() => setDpr(Math.max(0.5, window.devicePixelRatio * 0.25))}
+        onIncline={() => setDpr(undefined)}
+        onFallback={() => setDpr(Math.max(0.5, window.devicePixelRatio * 0.25))}
       />
       <Suspense fallback={null}>
         <Scene projects={projects} inBackground={inBackground} />
