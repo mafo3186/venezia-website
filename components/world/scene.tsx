@@ -11,9 +11,7 @@ import styles from "./world.module.css";
 import { Mesh, MOUSE } from "three";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
-import Controller from "node-pid-controller";
-
-const MIN_DPR = 0.2;
+import useDynamicRes from "./dynamic-res";
 
 function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
   const router = useRouter()
@@ -123,8 +121,7 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
 }
 
 export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
-  const [dpr, setDpr] = useState<number>(.8);
-
+  const dpr = useDynamicRes();
   return (
     <Canvas
       id="canvas-instance"
@@ -134,46 +131,7 @@ export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQuer
       dpr={dpr}
       frameloop={inBackground ? "demand" : "always"}
     >
-      <DynamicResolution setDpr={setDpr} />
       <Scene projects={projects} inBackground={inBackground} />
     </Canvas>
   );
-}
-
-function DynamicResolution({setDpr} : {setDpr: Dispatch<SetStateAction<number>>}) {
-  const pid = useMemo(() => {
-    const controller = new Controller(0.1, 0.1, 0.01);
-    // TODO find out the actual screen refresh rate
-    controller.setTarget(1000 / 60);
-    return controller;
-  }, []);
-
-  const previousTimeRef = useRef<number | null>(null);
-
-  
-  useEffect(() => {
-    let animationFrameId = -1;
-
-    const updateFrameTime = (currentTime: number) => {
-      if (previousTimeRef.current != null) {
-        const delta = currentTime - previousTimeRef.current;
-        const correction = pid.update(delta);
-        
-        setDpr((dpr) => {
-          // console.log(`delta ${delta}, target ${pid.target}, correction ${correction}, dpr ${dpr}`);
-          return Math.min(1.2, Math.max(dpr - correction, MIN_DPR));
-        });
-
-      }
-      previousTimeRef.current = currentTime;
-      animationFrameId = requestAnimationFrame(updateFrameTime);
-    };
-
-    // Start the loop
-    animationFrameId = requestAnimationFrame(updateFrameTime);
-
-    // Cleanup on unmount
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [pid, setDpr]);
-  return (<> </>)
 }
