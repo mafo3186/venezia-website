@@ -18,25 +18,24 @@ export default function useDynamicRes(minDpr: number = 0.2, maxDpr: number = 1.2
     return controller;
   }, []);
 
-  const previousTimeRef = useRef<number | null>(null);
+  const previousTimeRef = useRef<number>(document.timeline.currentTime as number);
 
   useEffect(() => {
     let animationFrameId = -1;
 
     const updateFrameTime = (currentTime: number) => {
-      if (previousTimeRef.current != null) {
-        const delta = currentTime - previousTimeRef.current;
-        if (delta < pid.target && delta > 0.1) {
-          pid.setTarget(delta);
-        }
-        const correction = pid.update(delta);
-
-        const nextDpr = Math.min(maxDpr, Math.max(dpr - correction, minDpr));
-        // console.log(`delta ${delta.toFixed(2)}, target ${pid.target.toFixed(2)}, correction ${correction.toFixed(2)}, dpr ${nextDpr}`);
-        if (nextDpr !== dpr) {
-          setDpr(() => nextDpr);
-        }
+      const delta = currentTime - previousTimeRef.current;
+      if (delta < pid.target && delta > 0.1) {
+        pid.setTarget(delta);
       }
+      const correction = pid.update(delta);
+
+      const nextDpr = Math.min(maxDpr, Math.max(dpr - correction, minDpr));
+      // console.log(`delta ${delta.toFixed(2)}, target ${pid.target.toFixed(2)}, correction ${correction.toFixed(2)}, dpr ${nextDpr}`);
+      if (nextDpr !== dpr) {
+        setDpr(() => nextDpr);
+      }
+
       previousTimeRef.current = currentTime;
       animationFrameId = requestAnimationFrame(updateFrameTime);
     };
