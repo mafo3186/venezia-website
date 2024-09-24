@@ -14,7 +14,7 @@ export default function useDynamicRes(minDpr: number = 0.2, maxDpr: number = 1.2
   const [dpr, setDpr] = useState<number>((minDpr + maxDpr) / 2);
 
   const pid = useMemo(() => {
-    const controller = new Controller(0.1, 0.1, 0.01);
+    const controller = new Controller(0.07, 0.05, 0.01);
     controller.setTarget(1000 / 60);
     return controller;
   }, []);
@@ -32,8 +32,8 @@ export default function useDynamicRes(minDpr: number = 0.2, maxDpr: number = 1.2
         }
         const correction = pid.update(delta);
 
-        // console.log(`delta ${delta.toFixed(2)}, target ${pid.target.toFixed(2)}, correction ${correction.toFixed(2)}, dpr ${dpr}`);
         const nextDpr = Math.min(maxDpr, Math.max(dpr - correction, minDpr));
+        // console.log(`delta ${delta.toFixed(2)}, target ${pid.target.toFixed(2)}, correction ${correction.toFixed(2)}, dpr ${nextDpr}`);
         if (nextDpr !== dpr) {
           setDpr(() => nextDpr);
         }
@@ -48,5 +48,6 @@ export default function useDynamicRes(minDpr: number = 0.2, maxDpr: number = 1.2
     // Cleanup on unmount
     return () => cancelAnimationFrame(animationFrameId);
   }, [pid, dpr, setDpr, minDpr, maxDpr]);
+
   return dpr;
 }

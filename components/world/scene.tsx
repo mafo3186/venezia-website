@@ -5,13 +5,14 @@ import { Canvas, MeshProps, useFrame } from "@react-three/fiber"
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { DepthOfField, EffectComposer, Vignette } from "@react-three/postprocessing";
-import { BakeShadows, Environment, OrbitControls, PerformanceMonitor, Stats } from "@react-three/drei";
+import { BakeShadows, Environment, OrbitControls, PerformanceMonitor } from "@react-three/drei";
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import styles from "./world.module.css";
 import { Mesh, MOUSE } from "three";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
 import useDynamicRes from "./dynamic-res";
+import Stats, { Panel } from "./stats";
 
 function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
   const router = useRouter()
@@ -116,7 +117,6 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
     </EffectComposer>
     {/* keeping shadows static in hope for better performance */}
     <BakeShadows />
-    <Stats />
   </>);
 }
 
@@ -132,6 +132,9 @@ export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQuer
       frameloop={inBackground ? "demand" : "always"}
     >
       <Scene projects={projects} inBackground={inBackground} />
+      <Stats>
+        <Panel title="cDPR" value={dpr * 100} maxValue={120} />
+      </Stats>
     </Canvas>
   );
 }
