@@ -3,9 +3,9 @@
 import { ProjectsQueryResult } from "@/sanity.types";
 import { Canvas, MeshProps, useFrame } from "@react-three/fiber"
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DepthOfField, EffectComposer, Vignette } from "@react-three/postprocessing";
-import { BakeShadows, Environment, OrbitControls, PerformanceMonitor } from "@react-three/drei";
+import { BakeShadows, Environment, OrbitControls } from "@react-three/drei";
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import styles from "./world.module.css";
 import { Mesh, MOUSE } from "three";
