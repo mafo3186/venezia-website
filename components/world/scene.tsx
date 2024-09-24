@@ -3,7 +3,7 @@
 import { ProjectsQueryResult } from "@/sanity.types";
 import { Canvas, MeshProps, useFrame } from "@react-three/fiber"
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { DepthOfField, EffectComposer, Vignette } from "@react-three/postprocessing";
 import { BakeShadows, Environment, OrbitControls, PerformanceMonitor, Stats } from "@react-three/drei";
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
@@ -11,8 +11,9 @@ import styles from "./world.module.css";
 import { Mesh, MOUSE } from "three";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
+import Controller from "node-pid-controller";
 
-const MIN_DPR = 0.25;
+const MIN_DPR = 0.2;
 
 function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
   const router = useRouter()
@@ -122,7 +123,8 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
 }
 
 export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
-  const [dpr, setDpr] = useState<number | undefined>(undefined);
+  const [dpr, setDpr] = useState<number>(.8);
+
   return (
     <Canvas
       id="canvas-instance"
@@ -132,11 +134,46 @@ export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQuer
       dpr={dpr}
       frameloop={inBackground ? "demand" : "always"}
     >
-      <PerformanceMonitor
-        onIncline={() => setDpr(Math.min(window.devicePixelRatio, (dpr ?? window.devicePixelRatio) * 2))}
-        onDecline={() => setDpr(Math.max(MIN_DPR, (dpr ?? window.devicePixelRatio) * 0.5))}
-      />
+      <DynamicResolution setDpr={setDpr} />
       <Scene projects={projects} inBackground={inBackground} />
     </Canvas>
   );
+}
+
+function DynamicResolution({setDpr} : {setDpr: Dispatch<SetStateAction<number>>}) {
+  const pid = useMemo(() => {
+    const controller = new Controller(0.1, 0.1, 0.01);
+    // TODO find out the actual screen refresh rate
+    controller.setTarget(1000 / 60);
+    return controller;
+  }, []);
+
+  const previousTimeRef = useRef<number | null>(null);
+
+  
+  useEffect(() => {
+    let animationFrameId = -1;
+
+    const updateFrameTime = (currentTime: number) => {
+      if (previousTimeRef.current != null) {
+        const delta = currentTime - previousTimeRef.current;
+        const correction = pid.update(delta);
+        
+        setDpr((dpr) => {
+          // console.log(`delta ${delta}, target ${pid.target}, correction ${correction}, dpr ${dpr}`);
+          return Math.min(1.2, Math.max(dpr - correction, MIN_DPR));
+        });
+
+      }
+      previousTimeRef.current = currentTime;
+      animationFrameId = requestAnimationFrame(updateFrameTime);
+    };
+
+    // Start the loop
+    animationFrameId = requestAnimationFrame(updateFrameTime);
+
+    // Cleanup on unmount
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [pid, setDpr]);
+  return (<> </>)
 }
