@@ -5,14 +5,14 @@ import { Canvas, MeshProps, useFrame } from "@react-three/fiber"
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { DepthOfField, EffectComposer, Vignette } from "@react-three/postprocessing";
-import { BakeShadows, Environment, OrbitControls, PerformanceMonitor, Stats, useProgress } from "@react-three/drei";
+import { BakeShadows, Environment, OrbitControls, PerformanceMonitor, useProgress } from "@react-three/drei";
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import styles from "./world.module.css";
 import { Mesh, MOUSE } from "three";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
-
-const MIN_DPR = 0.25;
+import useDynamicRes from "./dynamic-res";
+import Stats, { Panel } from "./stats";
 
 function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
   const router = useRouter()
@@ -117,12 +117,11 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
     </EffectComposer>
     {/* keeping shadows static in hope for better performance */}
     <BakeShadows />
-    <Stats />
   </>);
 }
 
 export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
-  const [dpr, setDpr] = useState<number | undefined>(undefined);
+  const dpr = useDynamicRes();
   const { active, progress } = useProgress();
   return (<>
     <Canvas
@@ -133,13 +132,12 @@ export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQuer
       dpr={dpr}
       frameloop={inBackground ? "demand" : "always"}
     >
-      <PerformanceMonitor
-        onIncline={() => setDpr(Math.min(window.devicePixelRatio, (dpr ?? window.devicePixelRatio) * 2))}
-        onDecline={() => setDpr(Math.max(MIN_DPR, (dpr ?? window.devicePixelRatio) * 0.5))}
-      />
       <Suspense fallback={null}>
         <Scene projects={projects} inBackground={inBackground} />
       </Suspense>
+      <Stats>
+        <Panel title="cDPR" value={dpr * 100} maxValue={120} />
+      </Stats>
     </Canvas>
     <div className={active ? styles.loaderPlaceholderActive : styles.loaderPlaceholder} />
     <div className={active ? styles.loaderActive : styles.loader}>
