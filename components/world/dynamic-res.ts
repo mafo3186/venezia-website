@@ -13,12 +13,17 @@ import { useEffect, useMemo, useRef, useState } from "react";
  * @param maxDpr - The maximum dynamic resolution factor (default: 1.2).
  * @returns The current dynamic resolution value.
  */
-export default function useDynamicRes(minDpr: number = 0.2, maxDpr: number = 1.2): number {
+export default function useDynamicRes(minDpr: number = 0.25, maxDpr: number = 1.2): number {
   const [dpr, setDpr] = useState<number>((minDpr + maxDpr) / 2);
   const samples = useRef<number[]>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const counter = useRef<number>(0);
-  const targetFrameTime = useRef<number>(1000 / 60);
+  const targetFrameTime = useRef<number>(1000.0 / 60.0);
   const previousTimeRef = useRef<number | undefined>(undefined);
+
+  // Bias to prevent the resolution from slowly creeping down,
+  // when the measured frame time cannot reach the target frame time
+  // due to measurement inaccuracies.
+  const BIAS = .1;
 
   useEffect(() => {
     let animationFrameId = -1;
@@ -31,7 +36,7 @@ export default function useDynamicRes(minDpr: number = 0.2, maxDpr: number = 1.2
 
         // Update DPR every 10 frames
         if (counter.current === (samples.current.length - 1)) {
-          const median = samples.current.sort((a, b) => a - b)[Math.floor(samples.current.length / 2)];
+          const median = samples.current.sort((a, b) => a - b)[Math.floor(samples.current.length / 2)] - BIAS;
 
           const throughput = dpr / median;
 
