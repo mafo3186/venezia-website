@@ -1,9 +1,13 @@
-import Controller from "node-pid-controller";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 /**
- * Custom hook for calculating and updating the dynamic resolution (dpr) factor
- * using a PID controller.
+ * Custom hook for calculating and updating the dynamic resolution (dpr) factor.
+ * 
+ * Algorithm:
+ * 1. Sample 10 Frames
+ * 2. Take the median of the frame times
+ * 3. Use the current DPR & the frame time to calculate the _throughput_
+ * 4. Solve that equation for DPR assuming that the frame time is the target frame time
  * 
  * @param minDpr - The minimum dynamic resolution factor (default: 0.2).
  * @param maxDpr - The maximum dynamic resolution factor (default: 1.2).
@@ -11,29 +15,34 @@ import { useEffect, useMemo, useRef, useState } from "react";
  */
 export default function useDynamicRes(minDpr: number = 0.2, maxDpr: number = 1.2): number {
   const [dpr, setDpr] = useState<number>((minDpr + maxDpr) / 2);
-
-  const pid = useMemo(() => {
-    const controller = new Controller(0.07, 0.05, 0.01);
-    controller.setTarget(1000 / 60);
-    return controller;
-  }, []);
-
-  const previousTimeRef = useRef<number>(document.timeline.currentTime as number);
+  const samples = useRef<number[]>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  const counter = useRef<number>(0);
+  const targetFrameTime = useRef<number>(1000 / 60);
+  const previousTimeRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     let animationFrameId = -1;
 
     const updateFrameTime = (currentTime: number) => {
-      const delta = currentTime - previousTimeRef.current;
-      if (delta < pid.target && delta > 0.1) {
-        pid.setTarget(delta);
-      }
-      const correction = pid.update(delta);
+      if (previousTimeRef.current) {
+        const delta = currentTime - previousTimeRef.current;
+        samples.current[counter.current] = delta;
+        counter.current = (counter.current + 1) % samples.current.length;
 
-      const nextDpr = Math.min(maxDpr, Math.max(dpr - correction, minDpr));
-      // console.log(`delta ${delta.toFixed(2)}, target ${pid.target.toFixed(2)}, correction ${correction.toFixed(2)}, dpr ${nextDpr}`);
-      if (nextDpr !== dpr) {
-        setDpr(() => nextDpr);
+        // Update DPR every 10 frames
+        if (counter.current === (samples.current.length - 1)) {
+          const median = samples.current.sort((a, b) => a - b)[Math.floor(samples.current.length / 2)];
+
+          const throughput = dpr / median;
+
+          const nextDpr = Math.min(maxDpr, Math.max(targetFrameTime.current * throughput, minDpr));
+          
+          // console.log(`median ${median.toFixed(2)}, throughput ${throughput.toFixed(2)}`);
+          if (nextDpr !== dpr) {
+            // console.log(`delta ${delta.toFixed(2)}, target ${targetFrameTime.current.toFixed(2)}, dpr ${nextDpr}`);
+            setDpr(() => nextDpr);
+          }
+        }
       }
 
       previousTimeRef.current = currentTime;
@@ -45,7 +54,7 @@ export default function useDynamicRes(minDpr: number = 0.2, maxDpr: number = 1.2
 
     // Cleanup on unmount
     return () => cancelAnimationFrame(animationFrameId);
-  }, [pid, dpr, setDpr, minDpr, maxDpr]);
+  }, [dpr, setDpr, minDpr, maxDpr]);
 
   return dpr;
 }

@@ -132,10 +132,8 @@ export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQuer
       dpr={dpr}
       frameloop={inBackground ? "demand" : "always"}
     >
-
       <Suspense fallback={null}>
         <Scene projects={projects} inBackground={inBackground} />
-
       </Suspense>
       <Stats>
         <Panel title="cDPR" value={dpr * 100} maxValue={120} />
