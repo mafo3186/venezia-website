@@ -5,12 +5,13 @@ import { Canvas, MeshProps, useFrame } from "@react-three/fiber"
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { DepthOfField, EffectComposer, Vignette } from "@react-three/postprocessing";
-import { BakeShadows, Environment, OrbitControls, PerformanceMonitor, Stats, useProgress } from "@react-three/drei";
+import { BakeShadows, Environment, OrbitControls, PerformanceMonitor, useProgress } from "@react-three/drei";
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import styles from "./world.module.css";
 import { Mesh, MOUSE } from "three";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
+import Stats, { Panel } from "./stats";
 
 function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
   const router = useRouter()
@@ -115,7 +116,6 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
     </EffectComposer>
     {/* keeping shadows static in hope for better performance */}
     <BakeShadows />
-    <Stats />
   </>);
 }
 
@@ -139,7 +139,11 @@ export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQuer
       />
       <Suspense fallback={null}>
         <Scene projects={projects} inBackground={inBackground} />
+
       </Suspense>
+      <Stats>
+        <Panel title="cDPR" value={(dpr ?? 0) * 100} maxValue={120} />
+      </Stats>
     </Canvas>
     <div className={active ? styles.loaderPlaceholderActive : styles.loaderPlaceholder} />
     <div className={active ? styles.loaderActive : styles.loader}>
