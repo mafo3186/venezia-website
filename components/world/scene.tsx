@@ -3,9 +3,9 @@
 import { ProjectsQueryResult } from "@/sanity.types";
 import { Canvas, MeshProps, useFrame } from "@react-three/fiber"
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { DepthOfField, EffectComposer, Vignette } from "@react-three/postprocessing";
-import { BakeShadows, Environment, OrbitControls } from "@react-three/drei";
+import { BakeShadows, Environment, OrbitControls, PerformanceMonitor, useProgress } from "@react-three/drei";
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import styles from "./world.module.css";
 import { Mesh, MOUSE } from "three";
@@ -122,7 +122,8 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
 
 export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
   const dpr = useDynamicRes();
-  return (
+  const { active, progress } = useProgress();
+  return (<>
     <Canvas
       id="canvas-instance"
       style={{ width: "100%", height: "100vh" }}
@@ -131,10 +132,20 @@ export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQuer
       dpr={dpr}
       frameloop={inBackground ? "demand" : "always"}
     >
-      <Scene projects={projects} inBackground={inBackground} />
+
+      <Suspense fallback={null}>
+        <Scene projects={projects} inBackground={inBackground} />
+
+      </Suspense>
       <Stats>
         <Panel title="cDPR" value={dpr * 100} maxValue={120} />
       </Stats>
     </Canvas>
-  );
+    <div className={active ? styles.loaderPlaceholderActive : styles.loaderPlaceholder} />
+    <div className={active ? styles.loaderActive : styles.loader}>
+      <div className={styles.progress} style={{ opacity: 1 - (progress / 100) ** 2 }}>
+        <div className={styles.bar} style={{ scale: progress / 100 }} />
+      </div>
+    </div>
+  </>);
 }
