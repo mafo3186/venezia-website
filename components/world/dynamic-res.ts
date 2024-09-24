@@ -15,7 +15,6 @@ export default function useDynamicRes(minDpr: number = 0.2, maxDpr: number = 1.2
 
   const pid = useMemo(() => {
     const controller = new Controller(0.1, 0.1, 0.01);
-    // TODO find out the actual screen refresh rate
     controller.setTarget(1000 / 60);
     return controller;
   }, []);
