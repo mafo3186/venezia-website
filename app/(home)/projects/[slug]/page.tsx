@@ -1,5 +1,5 @@
 import type { Metadata, ResolvingMetadata } from "next";
-import { groq, type PortableTextBlock } from "next-sanity";
+import { type PortableTextBlock } from "next-sanity";
 import { notFound } from "next/navigation";
 
 import PortableText from "@/components/projectPage/documentation";
@@ -10,7 +10,7 @@ import type {
   SettingsQueryResult,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { settingsQuery } from "@/sanity/lib/queries";
+import {projectBySlugQuery, projectSlugs, settingsQuery} from "@/sanity/lib/queries";
 import styles from "./styles.module.css";
 import { EmblaCarousel } from "@/components/projectPage/carousel";
 import ShowcasePiece from "@/components/projectPage/showcasePiece";
@@ -20,33 +20,6 @@ import { BackButton, HomeButton } from "@/components/button";
 export type Props = {
   params: { slug: string };
 };
-
-const projectSlugs = groq`*[_type == "project"]{slug}`;
-
-const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug] [0] {
-  "documentation": documentation[] {
-    ...,
-    _type == "file" => {
-      asset->
-    }
-  },
-  description,
-  _id,
-  "status": select(_originalId in path("drafts.**") => "draft", "published"),
-  "title": coalesce(title, "Untitled"),
-  "slug": slug.current,
-  author,
-  type,
-  "showcases": showcase[] {
-    type,
-    type == 'image' => showcaseImage.asset->{"content": url, "blurHash": metadata.blurHash, mimeType},
-    type == 'audio' => showcaseAudio.asset->{"content": url, mimeType},
-    type == 'video' => showcaseVideo.asset->{"content": url, mimeType},
-    type == 'text' => @{"content": showcaseText},
-    type == 'website' => @{"content": showcaseWebsite},
-    description
-  }
-}`;
 
 export async function generateStaticParams() {
   const params = await sanityFetch<ProjectSlugsResult>({

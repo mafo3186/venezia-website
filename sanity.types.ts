@@ -376,8 +376,6 @@ export type ProjectsQueryResult = Array<{
   excerpt: null;
   author: string | null;
 }>;
-
-// Source: ./app/(home)/projects/[slug]/page.tsx
 // Variable: projectSlugs
 // Query: *[_type == "project"]{slug}
 export type ProjectSlugsResult = Array<{
