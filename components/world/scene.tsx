@@ -5,6 +5,7 @@ import { Canvas, MeshProps, useFrame } from "@react-three/fiber"
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { DepthOfField, EffectComposer, N8AO, SSAO, ToneMapping, Vignette } from "@react-three/postprocessing";
+import { BlendFunction } from 'postprocessing';
 import { BakeShadows, ContactShadows, Environment, OrbitControls, PerformanceMonitor, useProgress } from "@react-three/drei";
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import styles from "./world.module.css";
@@ -49,6 +50,7 @@ function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
 
 function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
   const [iAmGod, setGod] = useState(false);
+  const [debugGraphics, setDebugGraphics] = useState(false);
   const controls = useRef<PointerLockControlsImpl | null>(null);
   useEffect(() => {
     if (controls.current) {
@@ -60,12 +62,16 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
     }
   }, [controls, inBackground])
   useEffect(() => {
-    window.addEventListener("keydown", (event) => {
+    const listener = (event: KeyboardEvent) => {
       if (event.key === "g") {
         setGod(!iAmGod);
+      } else if (event.key === "h") {
+        setDebugGraphics(!debugGraphics);
       }
-    });
-  }, [iAmGod]);
+    };
+    window.addEventListener("keydown", listener);
+    return () => window.removeEventListener("keydown", listener);
+  }, [iAmGod, debugGraphics]);
   return (<>
     <color attach="background" args={["#96b0e4"]} />
     <Environment preset="sunset" environmentIntensity={0.8} environmentRotation={new Euler(0, -0.5, 0)} />
@@ -73,6 +79,15 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
     <fogExp2 attach="fog" color="#96b0e4" density={iAmGod ? 0 : 0.03} />
     <EffectComposer enableNormalPass enabled={!iAmGod}>
       <DepthOfField focusDistance={0} focalLength={inBackground ? 0.01 : 0.2} bokehScale={8} />
+      <SSAO
+        blendFunction={debugGraphics ? BlendFunction.SET : BlendFunction.MULTIPLY}
+        resolutionScale={0.5}
+        worldDistanceThreshold={50}
+        worldDistanceFalloff={0.03}
+        worldProximityThreshold={50}
+        worldProximityFalloff={0.03}
+        intensity={10}
+      />
       <Vignette technique={0} offset={0.1} darkness={0.75} />
 
     </EffectComposer>
