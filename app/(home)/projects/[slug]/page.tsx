@@ -2,7 +2,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 import { groq, type PortableTextBlock } from "next-sanity";
 import { notFound } from "next/navigation";
 
-import PortableText from "@/components/documentation";
+import PortableText from "@/components/projectPage/documentation";
 
 import type {
   ProjectBySlugQueryResult,
@@ -12,8 +12,8 @@ import type {
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery } from "@/sanity/lib/queries";
 import styles from "./styles.module.css";
-import { EmblaCarousel } from "@/components/carousel";
-import ShowcasePiece from "@/components/showcasePiece";
+import { EmblaCarousel } from "@/components/projectPage/carousel";
+import ShowcasePiece from "@/components/projectPage/showcasePiece";
 import { Suspense } from "react";
 import { BackButton, HomeButton } from "@/components/button";
 
