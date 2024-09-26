@@ -78,21 +78,6 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
     </EffectComposer>
     
     <OrbitControls enabled={iAmGod} />
-    <OrbitControls
-      enabled={!iAmGod}
-      target={[-1000, 2.5, 0]}
-      enableZoom={false}
-      enablePan={true}
-      enableRotate={false}
-      panSpeed={1.5}
-      keyPanSpeed={0}
-      dampingFactor={0.1}
-      mouseButtons={{
-        RIGHT: undefined,
-        LEFT: MOUSE.PAN,
-        MIDDLE: undefined,
-      }}
-    />
 
     <EnvironmentModel />
 

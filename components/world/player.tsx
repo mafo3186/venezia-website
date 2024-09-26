@@ -2,10 +2,11 @@
 
 import { useFrame } from "@react-three/fiber"
 import { useEffect, useMemo, useRef, useState } from "react";
-import { PerspectiveCamera, useGLTF } from "@react-three/drei";
-import { Mesh, Object3D, Vector3 } from "three";
+import { OrbitControls, PerspectiveCamera, useGLTF } from "@react-three/drei";
+import { Mesh, MOUSE, Object3D, Vector3 } from "three";
 import { Node, Pathfinding } from "three-pathfinding";
 import { GLTFResult } from "./model";
+import { LookTutorial } from "./tutorial";
 
 const ZONE = 'level1';
 const SPEED = 2.0;
@@ -27,7 +28,11 @@ export function Player({ position, debug }: { position: [number, number, number]
   const [moveRight, setMoveRight] = useState(false);
   const currentPath = useRef<Vector3[] | undefined>(undefined);
   const currentPathLength = useRef(0);
+  const [lookedAround, setLookedAround] = useState(false);
+  const [enableLookTutorial, setEnableLookTutorial] = useState(false);
   useEffect(() => {
+    const timeout = setTimeout(() => setEnableLookTutorial(true), 5000);
+
     const keyDown = (event: KeyboardEvent) => {
       switch (event.code) {
         case "KeyW":
@@ -71,6 +76,7 @@ export function Player({ position, debug }: { position: [number, number, number]
     window.addEventListener("keydown", keyDown);
     window.addEventListener("keyup", keyUp);
     return () => {
+      clearTimeout(timeout);
       window.removeEventListener("keydown", keyDown);
       window.removeEventListener("keyup", keyUp);
     }
@@ -127,7 +133,24 @@ export function Player({ position, debug }: { position: [number, number, number]
         <sphereGeometry args={[0.21]} />
         <meshBasicMaterial color="red" />
         <PerspectiveCamera fov={90} near={.04} far={100} makeDefault={!debug} />
+        <OrbitControls
+          enabled={!debug}
+          target={[-1000, 2.5, 0]}
+          enableZoom={false}
+          enablePan={true}
+          enableRotate={false}
+          panSpeed={1.5}
+          keyPanSpeed={0}
+          dampingFactor={0.1}
+          mouseButtons={{
+            RIGHT: undefined,
+            LEFT: MOUSE.PAN,
+            MIDDLE: undefined,
+          }}
+          onEnd={() => setLookedAround(true)}
+        />
       </mesh>
+      <LookTutorial enable={enableLookTutorial} completed={lookedAround} />
     </mesh>
     {navmesh && <>
       <mesh
