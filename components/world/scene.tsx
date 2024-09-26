@@ -40,7 +40,7 @@ function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
       <icosahedronGeometry args={[0.1]} />
       <meshPhysicalMaterial
         attach="material"
-        color="white"
+        color="red"
         transmission={1}
         thickness={0.5}
         roughness={0.2} />
@@ -75,9 +75,9 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
   return (<>
     <color attach="background" args={["#96b0e4"]} />
     <Environment preset="sunset" environmentIntensity={0.8} environmentRotation={new Euler(0, -0.5, 0)} />
-    <CascadedShadowMap lightIntensity={0} shadowMapSize={4096} lightDirection={[-0.5, -1.2, -0.5]} lightMargin={10} maxFar={25}/>
+    <CascadedShadowMap lightIntensity={0} shadowMapSize={4096} lightDirection={[-0.5, -1.2, -0.5]} lightMargin={10} maxFar={25} />
     <fogExp2 attach="fog" color="#96b0e4" density={iAmGod ? 0 : 0.03} />
-    <EffectComposer enableNormalPass enabled={!iAmGod}>
+    <EffectComposer enableNormalPass frameBufferType={1016} enabled={!iAmGod}>
       <DepthOfField focusDistance={0} focalLength={inBackground ? 0.01 : 0.2} bokehScale={8} />
       <SSAO
         blendFunction={debugGraphics ? BlendFunction.SET : BlendFunction.MULTIPLY}
@@ -86,12 +86,13 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
         worldDistanceFalloff={0.03}
         worldProximityThreshold={50}
         worldProximityFalloff={0.03}
-        intensity={10}
+        intensity={25}
+        radius={.01}
       />
       <Vignette technique={0} offset={0.1} darkness={0.75} />
 
     </EffectComposer>
-    
+
     <OrbitControls enabled={iAmGod} />
     <OrbitControls
       enabled={!iAmGod}
