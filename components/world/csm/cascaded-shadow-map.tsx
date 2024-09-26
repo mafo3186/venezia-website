@@ -97,7 +97,7 @@ export function CascadedShadowMap({
     if (proxyInstance && proxyInstance.instance) {
       proxyInstance.instance.update();
     }
-  });
+  }, 999999);
 
   useLayoutEffect(() => {
     proxyInstance.attach();
