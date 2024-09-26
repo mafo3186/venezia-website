@@ -126,7 +126,7 @@ export function Player({ position, debug }: { position: [number, number, number]
       <mesh position={[0, 0.8, 0]}>
         <sphereGeometry args={[0.21]} />
         <meshBasicMaterial color="red" />
-        <PerspectiveCamera fov={90} makeDefault={!debug} />
+        <PerspectiveCamera fov={90} near={.04} far={100} makeDefault={!debug} />
       </mesh>
     </mesh>
     {navmesh && <>
