@@ -37,7 +37,7 @@ export default async function ListProjectsPage({ searchParams }: { searchParams:
                 <td valign="top">
                   <img src="https://www.apache.org/icons/image2.gif" alt="" />
                 </td>
-                <td><Link href={'/projects/' + project.slug}>{project.title}</Link></td>
+                <td><Link href={'/list/' + project.slug}>{project.title}</Link></td>
                 <td align="right">{project._updatedAt.replace(/T|Z/g, " ")}</td>
                 <td align="right">N/A</td>
                 <td>{project.description}</td>

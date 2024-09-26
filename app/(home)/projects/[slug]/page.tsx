@@ -17,7 +17,7 @@ import ShowcasePiece from "@/components/showcasePiece";
 import { Suspense } from "react";
 import { BackButton, HomeButton } from "@/components/button";
 
-type Props = {
+export type Props = {
   params: { slug: string };
 };
 
