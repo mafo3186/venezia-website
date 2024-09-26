@@ -11,6 +11,7 @@ interface ShowcasePieceProps {
     content: string;
     mimeType: string | null;
     blurHash?: string;
+    aspectRatio?: number; // Füge das aspectRatio-Attribut hinzu
   };
 }
 
@@ -26,14 +27,13 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
           placeholder="blur"
           src={showcase.content}
           alt={showcase.description ?? ""}
+          style={{ aspectRatio: showcase.aspectRatio }} // Setze das Seitenverhältnis
         />
       )}
       {showcase.type === "video" && (
-
         <video controls autoPlay muted loop className={styles.video}>
           <source src={showcase.content} type={showcase.mimeType!} />
         </video>
-
       )}
       {showcase.type === "audio" && (
         <div className={styles.audio}>
@@ -44,14 +44,11 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
       )}
       {showcase.type === "text" && (
         <pre className={styles.text}>{showcase.content}</pre>
-
       )}
       {showcase.type === "website" && (
-
         <a href={showcase.content} target="_blank" className={styles.website}>
           <iframe className={styles.website} scrolling="no" src={showcase.content}></iframe>
         </a>
-
       )}
       {showcase.description && <figcaption>{showcase.description}</figcaption>}
     </figure>

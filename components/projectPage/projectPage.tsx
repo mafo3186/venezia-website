@@ -100,12 +100,12 @@ export default async function ProjectPage({ params }: Props) {
               </p>
             </hgroup>
             <main className={styles.showcase}>
-              <EmblaCarousel>
+              <EmblaCarousel aspectRatio={project.showcases[0]?.aspectRatio}>
                 {project.showcases && project.showcases.map((showcase, index) => {
                   return (
-                  <Suspense key={index}>
-                    <ShowcasePiece showcase={showcase as any} />
-                  </Suspense>
+                    <Suspense key={index}>
+                      <ShowcasePiece showcase={showcase as any} />
+                    </Suspense>
                   );
                 })}
               </EmblaCarousel>
