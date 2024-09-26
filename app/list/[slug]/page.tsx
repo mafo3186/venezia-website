@@ -1,5 +1,5 @@
-import Page, { Props } from "@/app/(home)/projects/[slug]/page";
+import ProjectPage, { Props } from "@/components/projectPage/projectPage";
 
-export default async function MyPage({ params } : Props) {
-  return <Page params={params} />;
+export default async function ListPage({ params }: Props) {
+  return <ProjectPage params={params} />;
 }
