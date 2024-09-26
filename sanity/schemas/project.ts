@@ -1,6 +1,4 @@
 import { DocumentTextIcon, DocumentVideoIcon } from "@sanity/icons";
-import { format, parseISO } from "date-fns";
-import { metadata } from "next-sanity/studio";
 import { defineField, defineType } from "sanity";
 
 export default defineType({
@@ -81,7 +79,7 @@ export default defineType({
               description: "Wer hat das Bild erstellt?"
             }
           ],
-          options: { metadata: ["blurhash"], }
+          options: { metadata: ["dimensions", "palette", "lqip", "blurHash", "hasAlpha", "isOpaque"] }
         },
         {
           type: "file", title: "Video & Audio", icon: DocumentVideoIcon, options: { accept: "video/*,audio/*" },

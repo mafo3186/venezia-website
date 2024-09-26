@@ -51,12 +51,28 @@ export async function generateMetadata(
   } satisfies Metadata;
 }
 
+export async function fetchProjectData(params) {
+  const project = await sanityFetch({
+    query: projectBySlugQuery,
+    params,
+  });
+
+  // Berechnung des Seitenverhältnisses für jedes Bild in den showcases
+  project.showcases.forEach(showcase => {
+    if (showcase.type === 'image' && showcase.dimensions) {
+      const { width, height, aspectRatio } = showcase.dimensions;
+      showcase.aspectRatio = aspectRatio; // Das Seitenverhältnis ist bereits in den Dimensionen enthalten
+    }
+  });
+
+  console.log("Abgerufene Projektdaten:", project);
+
+  return project;
+}
+
 export default async function ProjectPage({ params }: Props) {
   const [project, settings] = await Promise.all([
-    sanityFetch<ProjectBySlugQueryResult>({
-      query: projectBySlugQuery,
-      params,
-    }),
+    fetchProjectData(params), // Verwende die fetchProjectData-Funktion
     sanityFetch<SettingsQueryResult>({
       query: settingsQuery,
     }),
@@ -87,9 +103,9 @@ export default async function ProjectPage({ params }: Props) {
               <EmblaCarousel>
                 {project.showcases && project.showcases.map((showcase, index) => {
                   return (
-                    <Suspense key={index}>
-                      <ShowcasePiece showcase={showcase as any} />
-                    </Suspense>
+                  <Suspense key={index}>
+                    <ShowcasePiece showcase={showcase as any} />
+                  </Suspense>
                   );
                 })}
               </EmblaCarousel>

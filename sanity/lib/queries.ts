@@ -30,7 +30,15 @@ export const projectBySlugQuery = groq`*[_type == "project" && slug.current == $
   type,
   "showcases": showcase[] {
     type,
-    type == 'image' => showcaseImage.asset->{"content": url, "blurHash": metadata.blurHash, mimeType},
+    type == 'image' => showcaseImage.asset->{
+      "content": url,
+      "blurHash": metadata.blurHash,
+      "palette": metadata.palette,
+      "location": metadata.location,
+      "exif": metadata.exif,
+      "dimensions": metadata.dimensions,
+      mimeType
+    },
     type == 'audio' => showcaseAudio.asset->{"content": url, mimeType},
     type == 'video' => showcaseVideo.asset->{"content": url, mimeType},
     type == 'text' => @{"content": showcaseText},

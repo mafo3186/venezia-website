@@ -294,17 +294,6 @@ export type Slug = {
 
 export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | Geopoint | Showcase | Project | SanityFileAsset | Settings | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | MediaTag | Slug;
 export declare const internalGroqTypeReferenceTo: unique symbol;
-// Source: ./app/list/page.tsx
-// Variable: projectsListQuery
-// Query: *[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}
-export type ProjectsListQueryResult = Array<{
-  _id: string;
-  title: string | null;
-  _updatedAt: string;
-  description: string | null;
-  slug: string | null;
-}>;
-
 // Source: ./sanity/lib/queries.ts
 // Variable: settingsQuery
 // Query: *[_type == "settings"][0]
@@ -382,7 +371,7 @@ export type ProjectSlugsResult = Array<{
   slug: Slug | null;
 }>;
 // Variable: projectBySlugQuery
-// Query: *[_type == "project" && slug.current == $slug] [0] {  "documentation": documentation[] {    ...,    _type == "file" => {      asset->    }  },  description,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  author,  type,  "showcases": showcase[] {    type,    type == 'image' => showcaseImage.asset->{"content": url, "blurHash": metadata.blurHash, mimeType},    type == 'audio' => showcaseAudio.asset->{"content": url, mimeType},    type == 'video' => showcaseVideo.asset->{"content": url, mimeType},    type == 'text' => @{"content": showcaseText},    type == 'website' => @{"content": showcaseWebsite},    description  }}
+// Query: *[_type == "project" && slug.current == $slug] [0] {  "documentation": documentation[] {    ...,    _type == "file" => {      asset->    }  },  description,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  author,  type,  "showcases": showcase[] {    type,    type == 'image' => showcaseImage.asset->{      "content": url,      "blurHash": metadata.blurHash,      "palette": metadata.palette,      "location": metadata.location,      "exif": metadata.exif,      "dimensions": metadata.dimensions,      mimeType    },    type == 'audio' => showcaseAudio.asset->{"content": url, mimeType},    type == 'video' => showcaseVideo.asset->{"content": url, mimeType},    type == 'text' => @{"content": showcaseText},    type == 'website' => @{"content": showcaseWebsite},    description  }}
 export type ProjectBySlugQueryResult = {
   documentation: Array<{
     children?: Array<{
@@ -452,6 +441,10 @@ export type ProjectBySlugQueryResult = {
     type: "audio" | "image" | "text" | "video" | "website" | null;
     content: string | null;
     blurHash: string | null;
+    palette: SanityImagePalette | null;
+    location: Geopoint | null;
+    exif: null;
+    dimensions: SanityImageDimensions | null;
     mimeType: string | null;
     description: string | null;
   } | {
@@ -469,14 +462,25 @@ export type ProjectBySlugQueryResult = {
   }> | null;
 } | null;
 
+// Source: ./app/list/page.tsx
+// Variable: projectsListQuery
+// Query: *[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}
+export type ProjectsListQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  _updatedAt: string;
+  description: string | null;
+  slug: string | null;
+}>;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"project\"] | order(select($orderBy == \"title\" => title, $orderBy == \"_updatedAt\" => _updatedAt)) {_id, title, _updatedAt, description, \"slug\": slug.current}": ProjectsListQueryResult;
     "*[_type == \"settings\"][0]": SettingsQueryResult;
     "*[_type == \"project\" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n  content,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  author,\n}": ProjectsQueryResult;
     "*[_type == \"project\"]{slug}": ProjectSlugsResult;
-    "*[_type == \"project\" && slug.current == $slug] [0] {\n  \"documentation\": documentation[] {\n    ...,\n    _type == \"file\" => {\n      asset->\n    }\n  },\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  \"showcases\": showcase[] {\n    type,\n    type == 'image' => showcaseImage.asset->{\"content\": url, \"blurHash\": metadata.blurHash, mimeType},\n    type == 'audio' => showcaseAudio.asset->{\"content\": url, mimeType},\n    type == 'video' => showcaseVideo.asset->{\"content\": url, mimeType},\n    type == 'text' => @{\"content\": showcaseText},\n    type == 'website' => @{\"content\": showcaseWebsite},\n    description\n  }\n}": ProjectBySlugQueryResult;
+    "*[_type == \"project\" && slug.current == $slug] [0] {\n  \"documentation\": documentation[] {\n    ...,\n    _type == \"file\" => {\n      asset->\n    }\n  },\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  \"showcases\": showcase[] {\n    type,\n    type == 'image' => showcaseImage.asset->{\n      \"content\": url,\n      \"blurHash\": metadata.blurHash,\n      \"palette\": metadata.palette,\n      \"location\": metadata.location,\n      \"exif\": metadata.exif,\n      \"dimensions\": metadata.dimensions,\n      mimeType\n    },\n    type == 'audio' => showcaseAudio.asset->{\"content\": url, mimeType},\n    type == 'video' => showcaseVideo.asset->{\"content\": url, mimeType},\n    type == 'text' => @{\"content\": showcaseText},\n    type == 'website' => @{\"content\": showcaseWebsite},\n    description\n  }\n}": ProjectBySlugQueryResult;
+    "*[_type == \"project\"] | order(select($orderBy == \"title\" => title, $orderBy == \"_updatedAt\" => _updatedAt)) {_id, title, _updatedAt, description, \"slug\": slug.current}": ProjectsListQueryResult;
   }
 }
