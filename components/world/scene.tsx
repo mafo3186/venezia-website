@@ -1,11 +1,11 @@
 "use client";
 
 import { ProjectsQueryResult } from "@/sanity.types";
-import { Canvas, MeshProps, useFrame } from "@react-three/fiber"
+import { Canvas, MeshProps, useFrame, useThree } from "@react-three/fiber";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
-import { DepthOfField, EffectComposer, N8AO, SSAO, ToneMapping, Vignette } from "@react-three/postprocessing";
-import { BakeShadows, ContactShadows, Environment, OrbitControls, PerformanceMonitor, useProgress } from "@react-three/drei";
+import { DepthOfField, EffectComposer, Vignette } from "@react-three/postprocessing";
+import { Environment, OrbitControls, useProgress } from "@react-three/drei";
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import styles from "./world.module.css";
 import { Euler, Mesh, MOUSE } from "three";
@@ -49,6 +49,7 @@ function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
 
 function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
   const [iAmGod, setGod] = useState(false);
+  const dpr = useThree(({ viewport }) => viewport.dpr);
   const controls = useRef<PointerLockControlsImpl | null>(null);
   useEffect(() => {
     if (controls.current) {
@@ -72,11 +73,13 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
     <CascadedShadowMap lightIntensity={0} shadowMapSize={4096} lightDirection={[-0.5, -1.2, -0.5]} lightMargin={10} maxFar={25}/>
     <fogExp2 attach="fog" color="#96b0e4" density={iAmGod ? 0 : 0.03} />
     <EffectComposer enableNormalPass enabled={!iAmGod}>
-      <DepthOfField focusDistance={0} focalLength={inBackground ? 0.01 : 0.2} bokehScale={8} />
+      <DepthOfField
+        focusDistance={0}
+        focalLength={(inBackground ? 0.01 : 0.2)}
+        bokehScale={8 * dpr}
+      />
       <Vignette technique={0} offset={0.1} darkness={0.75} />
-
     </EffectComposer>
-    
     <OrbitControls enabled={iAmGod} />
     <OrbitControls
       enabled={!iAmGod}
