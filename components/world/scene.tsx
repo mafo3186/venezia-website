@@ -70,7 +70,7 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
   return (<>
     <color attach="background" args={["#96b0e4"]} />
     <Environment preset="sunset" environmentIntensity={0.8} environmentRotation={new Euler(0, -0.5, 0)} />
-    <CascadedShadowMap lightIntensity={0} shadowMapSize={4096} lightDirection={[-0.5, -1.2, -0.5]} lightMargin={10} maxFar={25}/>
+    <CascadedShadowMap lightIntensity={0} shadowMapSize={4096} lightDirection={[-0.5, -1.2, -0.5]} lightMargin={10} maxFar={25} />
     <fogExp2 attach="fog" color="#96b0e4" density={iAmGod ? 0 : 0.03} />
     <EffectComposer enableNormalPass enabled={!iAmGod}>
       <DepthOfField
@@ -114,7 +114,7 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
 }
 
 export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
-  const dpr = useDynamicRes();
+  const dpr = useDynamicRes({ baseDpr: 1, optimism: 0.3, interval: 6 });
   const { active, progress } = useProgress();
   return (<>
     <Canvas
