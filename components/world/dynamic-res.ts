@@ -42,6 +42,7 @@ export default function useDynamicRes({ targetFrameRate = 60, minDpr = 0.25, bas
   const counter = useRef<number>(0);
   const targetFrameTime = 1000.0 / targetFrameRate;
   const previousTimeRef = useRef<number | undefined>(undefined);
+  const streak = useRef<number>(optimism);
 
   useEffect(() => {
     counter.current = 0;
@@ -59,7 +60,7 @@ export default function useDynamicRes({ targetFrameRate = 60, minDpr = 0.25, bas
 
         // Update DPR every 10 frames
         if (counter.current === (samples.current.length - 1)) {
-          const median = samples.current.sort((a, b) => a - b)[Math.floor(samples.current.length / 2)] - optimism;
+          const median = samples.current.sort((a, b) => a - b)[Math.floor(samples.current.length / 2)] - streak.current;
 
           const throughput = dpr / median;
 
@@ -68,6 +69,7 @@ export default function useDynamicRes({ targetFrameRate = 60, minDpr = 0.25, bas
           // console.log(`median ${median.toFixed(2)}, throughput ${throughput.toFixed(2)}`);
           if (nextDpr !== dpr) {
             // console.log(`delta ${delta.toFixed(2)}, target ${targetFrameTime.current.toFixed(2)}, dpr ${nextDpr}`);
+            streak.current = nextDpr > dpr ? streak.current + optimism : optimism;
             setDpr(() => nextDpr);
           }
         }

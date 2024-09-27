@@ -114,7 +114,7 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
 }
 
 export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
-  const dpr = useDynamicRes({ baseDpr: 1, optimism: 0.3, interval: 6 });
+  const dpr = useDynamicRes({ baseDpr: 1, optimism: 0.02, interval: 6 });
   const { active, progress } = useProgress();
   return (<>
     <Canvas
