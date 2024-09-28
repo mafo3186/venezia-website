@@ -49,7 +49,7 @@ export function EmblaCarousel(props: PropsWithChildren<{
     <div className={styles.emblaWrapper}>
       <div
         className={styles.embla}
-        style={{ aspectRatio: props.aspectRatio ?? (10 / 2) }}
+        style={{ aspectRatio: (3 / 2) }}
         ref={emblaRef}
       >
         <div className={styles.embla__container}>

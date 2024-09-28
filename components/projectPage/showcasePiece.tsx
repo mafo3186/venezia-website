@@ -27,7 +27,6 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
           placeholder="blur"
           src={showcase.content}
           alt={showcase.description ?? ""}
-          style={{ aspectRatio: showcase.aspectRatio }} // Setze das Seitenverhältnis
         />
       )}
       {showcase.type === "video" && (

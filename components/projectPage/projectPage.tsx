@@ -21,22 +21,6 @@ export type Props = {
   params: { slug: string };
 };
 
-
-interface ExtendedShowcase extends Showcase {
-  content?: string;
-  blurHash?: string;
-  dimensions?: {
-    width: number;
-    height: number;
-    aspectRatio: number;
-  };
-  mimeType?: string;
-}
-
-interface ExtendedProject extends Project {
-  showcases: ExtendedShowcase[];
-}
-
 export async function generateStaticParams() {
   const params = await sanityFetch<ProjectSlugsResult>({
     query: projectSlugs,
@@ -48,23 +32,15 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(
   { params }: Props,
-  parent: Metadata,
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const project = await sanityFetch<ExtendedProject>({
+  const project = await sanityFetch<ProjectBySlugQueryResult>({
     query: projectBySlugQuery,
     params,
+    stega: false,
   });
-
-  // Berechnung des Seitenverhältnisses für jedes Bild in den showcases
-  project.showcases.forEach(showcase => {
-    if (showcase.type === 'image' && showcase.dimensions) {
-      const { aspectRatio } = showcase.dimensions;
-      showcase.aspectRatio = aspectRatio; // Das Seitenverhältnis ist bereits in den Dimensionen enthalten
-    }
-  });
-
   const previousImages = (await parent).openGraph?.images || [];
-  const ogImage = undefined; // resolveOpenGraphImage(project?.coverImage);
+  const ogImage = undefined; // resolveOpenGraphImage(post?.coverImage);
 
   return {
     authors: project?.author ? [{ name: project?.author }] : [],
@@ -76,31 +52,9 @@ export async function generateMetadata(
   } satisfies Metadata;
 }
 
-/*
-export async function fetchProjectData(params) {
-  const project = await sanityFetch({
-    query: projectBySlugQuery,
-    params,
-  });
-
-  // Berechnung des Seitenverhältnisses für jedes Bild in den showcases
-  project.showcases.forEach(showcase => {
-    if (showcase.type === 'image' && showcase.dimensions) {
-      const { width, height, aspectRatio } = showcase.dimensions;
-      showcase.aspectRatio = aspectRatio; // Das Seitenverhältnis ist bereits in den Dimensionen enthalten
-    }
-  });
-
-  console.log("Abgerufene Projektdaten:", project);
-
-  return project;
-}
- */
-
 export default async function ProjectPage({ params }: Props) {
-  
     const [project, settings] = await Promise.all([
-      sanityFetch<ExtendedProject>({
+      sanityFetch<ProjectBySlugQueryResult>({
         query: projectBySlugQuery,
         params,
       }),
@@ -112,15 +66,7 @@ export default async function ProjectPage({ params }: Props) {
     if (!project?._id) {
       return notFound();
     }
-
-    // Berechnung des Seitenverhältnisses für jedes Bild in den showcases
-    project.showcases.forEach(showcase => {
-      if (showcase.type === 'image' && showcase.dimensions) {
-        const { aspectRatio } = showcase.dimensions;
-        showcase.aspectRatio = aspectRatio; // Das Seitenverhältnis ist bereits in den Dimensionen enthalten
-      }
-    });
-
+    
   return (
     <div className={styles.pageContainer}>
       <div className={styles.navigationButtons}>
@@ -139,7 +85,7 @@ export default async function ProjectPage({ params }: Props) {
               </p>
             </hgroup>
             <main className={styles.showcase}>
-              <EmblaCarousel aspectRatio={project.showcases[0]?.aspectRatio}>
+              <EmblaCarousel>
                 {project.showcases && project.showcases.map((showcase, index) => {
                   return (
                     <Suspense key={index}>
