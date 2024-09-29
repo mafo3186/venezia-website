@@ -31,7 +31,7 @@
   flex: 0 0 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   position: relative; /* Stellt sicher, dass der Inhalt in der Slide korrekt positioniert ist */
   overflow: hidden;
   box-sizing: border-box;
