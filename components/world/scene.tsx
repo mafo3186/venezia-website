@@ -6,14 +6,14 @@ import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { DepthOfField, EffectComposer, Vignette } from "@react-three/postprocessing";
 import { Environment, OrbitControls, useProgress } from "@react-three/drei";
-import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import styles from "./world.module.css";
-import { Euler, Mesh, MOUSE } from "three";
+import { Euler, Mesh } from "three";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
 import useDynamicRes from "./dynamic-res";
 import Stats, { Panel } from "./stats";
 import { CascadedShadowMap } from "./csm/cascaded-shadow-map";
+import { PreDefinedView } from "@/components/types";
 
 function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
   const router = useRouter()
@@ -47,19 +47,19 @@ function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
   )
 }
 
-function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
+function Scene({
+  projects,
+  inBackground,
+  view,
+  onViewReached,
+}: {
+  projects: ProjectsQueryResult,
+  inBackground: boolean,
+  view?: PreDefinedView,
+  onViewReached?: () => void,
+}) {
   const [iAmGod, setGod] = useState(false);
   const dpr = useThree(({ viewport }) => viewport.dpr);
-  const controls = useRef<PointerLockControlsImpl | null>(null);
-  useEffect(() => {
-    if (controls.current) {
-      if (inBackground && controls.current.isLocked) {
-        controls.current.unlock();
-      } else if (!inBackground && !controls.current.isLocked) {
-        controls.current.lock();
-      }
-    }
-  }, [controls, inBackground])
   useEffect(() => {
     window.addEventListener("keydown", (event) => {
       if (event.key === "g") {
@@ -67,6 +67,7 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
       }
     });
   }, [iAmGod]);
+
   return (<>
     <color attach="background" args={["#96b0e4"]} />
     <Environment preset="sunset" environmentIntensity={0.8} environmentRotation={new Euler(0, -0.5, 0)} />
@@ -81,25 +82,15 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
       <Vignette technique={0} offset={0.1} darkness={0.75} />
     </EffectComposer>
     <OrbitControls enabled={iAmGod} />
-    <OrbitControls
-      enabled={!iAmGod}
-      target={[-1000, 2.5, 0]}
-      enableZoom={false}
-      enablePan={true}
-      enableRotate={false}
-      panSpeed={1.5}
-      keyPanSpeed={0}
-      dampingFactor={0.1}
-      mouseButtons={{
-        RIGHT: undefined,
-        LEFT: MOUSE.PAN,
-        MIDDLE: undefined,
-      }}
-    />
 
     <EnvironmentModel />
 
-    <Player position={[0, 3, 0]} debug={iAmGod} />
+    <Player
+      debug={iAmGod}
+      targetPosition={view?.position}
+      targetRotation={view?.rotation}
+      onTargetCompleted={onViewReached}
+    />
     {projects.map((project, index) => (
       <ProjectBox
         key={project._id}
@@ -113,7 +104,17 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
   </>);
 }
 
-export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
+export function SceneCanvas({
+  projects,
+  inBackground,
+  view,
+  onViewReached,
+}: {
+  projects: ProjectsQueryResult,
+  inBackground: boolean,
+  view?: PreDefinedView,
+  onViewReached?: () => void,
+}) {
   const dpr = useDynamicRes({ baseDpr: 1, optimism: 0.02, interval: 6 });
   const { active, progress } = useProgress();
   return (<>
@@ -126,7 +127,12 @@ export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQuer
       frameloop={inBackground ? "demand" : "always"}
     >
       <Suspense fallback={null}>
-        <Scene projects={projects} inBackground={inBackground} />
+        <Scene
+          projects={projects}
+          inBackground={inBackground}
+          view={view}
+          onViewReached={onViewReached}
+        />
       </Suspense>
       <Stats>
         <Panel title="cDPR" value={dpr * 100} maxValue={120} />
