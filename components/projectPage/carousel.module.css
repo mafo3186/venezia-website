@@ -3,17 +3,17 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  height: 100%;
 }
 
 .embla {
   overflow: hidden;
   border-radius: var(--border-radius-content);
+  width: 100%;
+  height: 100%;
   display: grid;
   grid-template-columns: 40px 1fr 40px;
-  grid-template-rows: 1fr 40px 1fr;
-  justify-tracks: center;
-  max-height: 80vh;
-  /* aspect ratio hier oder eine Ebene drunter?*/
+  grid-template-rows: 1fr 40px;
 }
 
 .embla__container {
@@ -27,29 +27,33 @@
 
 .embla__slide {
   flex: 0 0 100%;
-  width: 100%;
-  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .embla__button {
   border: none;
+  /*
   border-radius: 50%;
   aspect-ratio: 1;
+   */
   cursor: pointer;
-  z-index: 2;
-  align-self: center;
+  font-size: 2rem;
+  grid-row: 1;
+  z-index: 1;
 }
 
-.embla__button.prev {
+.prev {
   grid-column: 1;
-  grid-row: 2;
-  left: 10px;
 }
 
-.embla__button.next {
+.next {
   grid-column: 3;
-  grid-row: 2;
-  right: 10px;
+ 
 }
 
 .embla__dots {
@@ -57,16 +61,15 @@
   justify-content: center;
   align-items: center;
   gap: 5px;
-  z-index: 3;
+  grid-column: 1 / span 3;
+  grid-row: 2;
+  /* ab hier Box um Dots*/
   background: rgba(255, 255, 255, 0.8);
-  padding: 5px;
+  padding: 1px;
   border-radius: 10px;
-  margin-top: 10px;
-  /* Add some space between the carousel and the dots */
+  margin-top: 5px;
   width: 100%;
-  /* Ensure the dots container takes the full width */
   box-sizing: border-box;
-  /* Include padding in the element's total width and height */
 }
 
 .embla__dot {
@@ -79,5 +82,4 @@
 }
 
 .embla__dot__active {
-  background: rgba(0, 0, 0, 0.9);
-}
+  background: rgba(0, 0, 0, 0.9);}

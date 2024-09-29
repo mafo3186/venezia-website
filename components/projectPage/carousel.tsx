@@ -47,11 +47,7 @@ export function EmblaCarousel(props: PropsWithChildren<{
 
   return (
     <div className={styles.emblaWrapper}>
-      <div
-        className={styles.embla}
-        style={{ aspectRatio: (3 / 2) }}
-        ref={emblaRef}
-      >
+      <div className={styles.embla} ref={emblaRef}>
         <div className={styles.embla__container}>
           {Children.map(props.children, child =>
             <div className={styles.embla__slide}>{child}</div>
@@ -75,9 +71,6 @@ export function EmblaCarousel(props: PropsWithChildren<{
           ))}
         </div>
       )}
-      <div>
-        Aktuelles Seitenverhältnis: {props.aspectRatio ?? (10 / 2)}
-      </div>
     </div>
   );
 }
