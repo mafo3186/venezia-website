@@ -9,7 +9,7 @@
 .embla {
   overflow: hidden;
   border-radius: var(--border-radius-content);
-  background-color: rgb(255, 255, 255, 0.3);
+  /*background-color: rgb(255, 255, 255, 0.3);*/
   margin-bottom: 0.5rem;
   width: 100%;
   height: 100%;
@@ -45,6 +45,12 @@
   grid-row: 1;
   z-index: 1;
   align-self: center;
+  /* icon zentrieren */
+  display: flex; 
+  justify-content: center;  
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+
 }
 
 .prev {
@@ -63,21 +69,22 @@
   grid-column: 1 / span 3;
   grid-row: 2;
   /* ab hier Box um Dots*/
-  background: rgba(255, 255, 255, 0.8);
-  padding: 1px;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 0.5rem;
   border-radius: 10px;
   width: 100%;
   box-sizing: border-box;
 }
 
 .embla__dot {
-  width: 10px;
-  height: 10px;
+  width: 1rem;
+  aspect-ratio: 1;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.3);
   border: none;
   cursor: pointer;
 }
 
 .embla__dot__active {
-  background: rgba(0, 0, 0, 0.9);}
+  background: rgba(255, 255, 255, 0.8);
+}
