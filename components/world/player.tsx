@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PerspectiveCamera, useGLTF } from "@react-three/drei";
 import { Object3D, Vector3, Quaternion } from "three";
 import { Node, Pathfinding } from "three-pathfinding";
+import { animated, config, useSpring } from "@react-spring/three";
 import { GLTFResult } from "./model";
 import { SpatialControls } from "./spatial-controls";
 
@@ -12,6 +13,7 @@ const ZONE = 'level1';
 const SPEED = 2.0;
 
 const initialRotation = new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), Math.PI * 0.5);
+const maxTeleportDistance = 5;
 
 function pathLength(start: Vector3, path: Vector3[]) {
   let length = 0;
@@ -45,6 +47,10 @@ export function Player({
   const node = useRef<Node | undefined>();
   const camera = useThree(({ camera }) => camera);
   const [targetVisible, setTargetVisible] = useState(false);
+  const targetSpring = useSpring({
+    scale: targetVisible ? 1 : 0,
+    config: config.wobbly,
+  });
   const [moveForward, setMoveForward] = useState(false);
   const [moveBackward, setMoveBackward] = useState(false);
   const [moveLeft, setMoveLeft] = useState(false);
@@ -152,6 +158,7 @@ export function Player({
   const playerNextStep = new Vector3();
   const cameraWorldDirection = new Vector3();
   const axis = new Vector3(0, 1, 0);
+  const rayTargetDiff = new Vector3();
   useFrame(({ camera }, delta) => {
     const currentPlayer = playerRef.current;
     frontVector.set(0, 0, (moveBackward ? 1 : 0) - (moveForward ? 1 : 0));
@@ -236,19 +243,28 @@ export function Player({
         onPointerEnter={() => setTargetVisible(true)}
         onPointerLeave={() => setTargetVisible(false)}
         onPointerMove={(event) => {
-          rayTarget.current.position.copy(event.point)
+          rayTargetDiff.subVectors(event.point, playerRef.current.position);
+          if (rayTargetDiff.length() <= maxTeleportDistance) {
+            setTargetVisible(true);
+              rayTarget.current.position.copy(event.point);
+          } else {
+            setTargetVisible(false);
+          }
         }}
         onClick={(event) => {
-          if (navigatingToTarget) {
-            onTargetCompleted?.(false);
-            setNavigatingToTarget(false);
+          rayTargetDiff.subVectors(event.point, playerRef.current.position);
+          if (rayTargetDiff.length() <= maxTeleportDistance) {
+            if (navigatingToTarget) {
+              onTargetCompleted?.(false);
+              setNavigatingToTarget(false);
+            }
+            beginNavigation(event.point);
           }
-          beginNavigation(event.point);
         }}
       >
         <meshBasicMaterial color="cyan" opacity={0.5} transparent />
       </mesh>
-      <group ref={rayTarget as any} visible={targetVisible}>
+      <animated.group ref={rayTarget as any} scale={targetSpring.scale}>
         <mesh
           castShadow
           receiveShadow
@@ -263,7 +279,7 @@ export function Player({
             thickness={0.5}
             roughness={0.1} />
         </mesh>
-      </group>
+      </animated.group>
     </>}
   </>;
 }
