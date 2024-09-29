@@ -31,6 +31,7 @@
   justify-content: center;
   align-items: center;
   padding: 10px;
+  position: relative; /* Stellt sicher, dass der Inhalt in der Slide korrekt positioniert ist */
   overflow: hidden;
   box-sizing: border-box;
 }

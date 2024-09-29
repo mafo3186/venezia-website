@@ -1,5 +1,3 @@
-import { Showcase } from "@/sanity.types";
-import { urlForImage } from "@/sanity/lib/utils";
 import { Image } from "next-sanity/image";
 import { blurhashToBase64 } from "blurhash-base64";
 import styles from "./showcasePiece.module.css";
@@ -27,6 +25,8 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
           placeholder="blur"
           src={showcase.content}
           alt={showcase.description ?? ""}
+          className={styles.image}
+          style={{ aspectRatio: "auto" }}
         />
       )}
       {showcase.type === "video" && (
@@ -45,8 +45,14 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
         <pre className={styles.text}>{showcase.content}</pre>
       )}
       {showcase.type === "website" && (
-        <a href={showcase.content} target="_blank" className={styles.website}>
-          <iframe className={styles.website} scrolling="no" src={showcase.content}></iframe>
+        <a href={showcase.content} target="_blank" rel="noopener noreferrer" className={styles.websiteLink}>
+          <iframe
+            className={styles.website}
+            src={showcase.content}
+            title={showcase.description ?? "Website"}
+            scrolling="yes"
+          />
+          <button className={styles.link}>Webseite extern öffnen</button>
         </a>
       )}
       {showcase.description && <figcaption>{showcase.description}</figcaption>}
