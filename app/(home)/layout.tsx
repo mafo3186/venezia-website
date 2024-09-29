@@ -15,6 +15,7 @@ import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { projectsQuery, settingsQuery } from "@/sanity/lib/queries";
 import { CanvasContainer } from "@/components/world";
 import Menu from "@/components/menu";
+import { ClientLayout } from '@/components/client-layout';
 
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -63,10 +64,7 @@ export default async function RootLayout({
     <html lang="de">
       <body>
         {draftMode().isEnabled && <AlertBanner />}
-        <Menu projects={projects} />
-        <CanvasContainer projects={projects}>
-          {children}
-        </CanvasContainer>
+        <ClientLayout projects={projects}>{children}</ClientLayout>
         {draftMode().isEnabled && <VisualEditing />}
         <SpeedInsights />
       </body>

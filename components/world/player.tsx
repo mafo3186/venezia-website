@@ -1,32 +1,77 @@
 "use client";
 
-import { useFrame } from "@react-three/fiber"
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PerspectiveCamera, useGLTF } from "@react-three/drei";
-import { Mesh, Object3D, Vector3 } from "three";
+import { Object3D, Vector3, Quaternion } from "three";
 import { Node, Pathfinding } from "three-pathfinding";
 import { GLTFResult } from "./model";
+import { SpatialControls } from "./spatial-controls";
 
 const ZONE = 'level1';
 const SPEED = 2.0;
 
-export function Player({ position, debug }: { position: [number, number, number], debug?: boolean }) {
+const initialRotation = new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), Math.PI * 0.5);
+
+function pathLength(start: Vector3, path: Vector3[]) {
+  let length = 0;
+  let previous = start;
+  for (const point of path) {
+    length += previous.clone().sub(point).length();
+    previous = point;
+  }
+  return length;
+}
+
+export function Player({
+  debug,
+  targetPosition,
+  targetRotation,
+  onTargetCompleted,
+}: {
+  debug?: boolean,
+  targetPosition?: Vector3,
+  targetRotation?: Quaternion,
+  onTargetCompleted?: (success: boolean) => void,
+}) {
   const navmesh = (useGLTF('/assets/venice.glb') as GLTFResult).nodes.Navmesh.geometry;
   const [pathFinding] = useMemo(() => {
     const pathFinding = new Pathfinding();
     pathFinding.setZoneData(ZONE, Pathfinding.createZone(navmesh));
     return [pathFinding];
   }, [navmesh]);
-  const dummy = useRef<Object3D>(null!);
+  const playerRef = useRef<Object3D>(null!);
   const rayTarget = useRef<Object3D>(null!);
   const node = useRef<Node | undefined>();
+  const camera = useThree(({ camera }) => camera);
   const [targetVisible, setTargetVisible] = useState(false);
   const [moveForward, setMoveForward] = useState(false);
   const [moveBackward, setMoveBackward] = useState(false);
   const [moveLeft, setMoveLeft] = useState(false);
   const [moveRight, setMoveRight] = useState(false);
+  const [navigatingToTarget, setNavigatingToTarget] = useState(false);
+  const [sourceRotation, setSourceRotation] = useState<Quaternion | undefined>();
+  const rotationTimerRef = useRef<number | undefined>();
   const currentPath = useRef<Vector3[] | undefined>(undefined);
   const currentPathLength = useRef(0);
+  const endNavigation = useCallback(() => {
+    currentPath.current = undefined;
+    if (navigatingToTarget) {
+      setNavigatingToTarget(false);
+      onTargetCompleted?.(true);
+    }
+  }, [navigatingToTarget, onTargetCompleted]);
+  const beginNavigation = useCallback((target: Vector3) => {
+    const groupId = pathFinding.getGroup(ZONE, playerRef.current.position);
+    const path = pathFinding.findPath(playerRef.current.position, target, ZONE, groupId);
+    if (!path || path.length === 0) {
+      endNavigation();
+    } else {
+      currentPath.current = path;
+      currentPathLength.current = pathLength(playerRef.current.position, path);
+      node.current = undefined;
+    }
+  }, [endNavigation, pathFinding]);
   useEffect(() => {
     const keyDown = (event: KeyboardEvent) => {
       switch (event.code) {
@@ -45,6 +90,12 @@ export function Player({ position, debug }: { position: [number, number, number]
         case "KeyD":
         case "ArrowRight":
           setMoveRight(true);
+          break;
+        case "KeyP":
+          navigator.clipboard.writeText(JSON.stringify({
+            position: playerRef.current.position.toArray(),
+            rotation: camera.quaternion.toArray(),
+          }, undefined, "  "));
           break;
       }
     };
@@ -74,51 +125,86 @@ export function Player({ position, debug }: { position: [number, number, number]
       window.removeEventListener("keydown", keyDown);
       window.removeEventListener("keyup", keyUp);
     }
-  }, []);
+  }, [camera]);
+  useEffect(() => {
+    if (targetPosition) {
+      setNavigatingToTarget(true);
+      beginNavigation(targetPosition);
+    }
+  // intentionally omitting beginNavigation from dependencies
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [targetPosition]);
+  useEffect(() => {
+    if (targetRotation) {
+      setSourceRotation(camera.quaternion.clone());
+      rotationTimerRef.current = 0;
+    } else {
+      setSourceRotation(undefined);
+    }
+  // intentionally omitting camera from dependencies
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [targetRotation]);
   const direction = new Vector3();
   const frontVector = new Vector3();
   const sideVector = new Vector3();
   const pathFindingNext = new Vector3();
-  const walkDiff = new Vector3();
+  const targetDiff = new Vector3();
   const playerNextStep = new Vector3();
+  const cameraWorldDirection = new Vector3();
+  const axis = new Vector3(0, 1, 0);
   useFrame(({ camera }, delta) => {
-    const currentPlayer = dummy.current;
+    const currentPlayer = playerRef.current;
     frontVector.set(0, 0, (moveBackward ? 1 : 0) - (moveForward ? 1 : 0));
     sideVector.set((moveLeft ? 1 : 0) - (moveRight ? 1 : 0), 0, 0);
+    camera.getWorldDirection(cameraWorldDirection);
+    const theta = Math.atan2(cameraWorldDirection.x,cameraWorldDirection.z);
     direction
       .subVectors(frontVector, sideVector)
       .normalize()
       .multiplyScalar(2.5)
-      .applyEuler(camera.rotation);
+      .applyAxisAngle(axis, theta + Math.PI);
     if (pathFinding) {
-      if (currentPath.current) {
-        const target = currentPath.current[0];
-        walkDiff.subVectors(target, currentPlayer.position);
-        const distance = delta * currentPathLength.current * SPEED;
-        if (walkDiff.length() > distance) {
-          walkDiff.normalize().multiplyScalar(distance);
-          playerNextStep.addVectors(currentPlayer.position, walkDiff);
+      const path = currentPath.current;
+      if (path) {
+        const target = path[0];
+        targetDiff.subVectors(target, currentPlayer.position);
+        const stepDistance = delta * currentPathLength.current * SPEED;
+        if (targetDiff.length() > stepDistance) {
+          targetDiff.normalize().multiplyScalar(stepDistance);
+          playerNextStep.addVectors(currentPlayer.position, targetDiff);
           currentPlayer.position.copy(playerNextStep);
         } else {
-          currentPath.current = (currentPath.current.length > 1 ? currentPath.current.slice(1) : undefined);
+          playerRef.current.position.copy(target);
+          if (path.length > 1) {
+            currentPath.current = path.slice(1);
+          } else {
+            endNavigation();
+          }
         }
       } else {
-        pathFindingNext.copy(direction).multiplyScalar(delta * 0.75).add(dummy.current.position);
-        const groupID = pathFinding.getGroup(ZONE, dummy.current.position);
+        pathFindingNext.copy(direction).multiplyScalar(delta * 0.75).add(playerRef.current.position);
+        const groupID = pathFinding.getGroup(ZONE, playerRef.current.position);
         if (!node.current) {
-          node.current = pathFinding.getClosestNode(dummy.current.position, ZONE, groupID);
+          node.current = pathFinding.getClosestNode(playerRef.current.position, ZONE, groupID);
         }
-        node.current = pathFinding.clampStep(dummy.current.position, pathFindingNext, node.current, ZONE, groupID, playerNextStep);
-        dummy.current.position.copy(playerNextStep);
+        node.current = pathFinding.clampStep(playerRef.current.position, pathFindingNext, node.current, ZONE, groupID, playerNextStep);
+        playerRef.current.position.copy(playerNextStep);
       }
     }
-    if (!debug) {
-      // hacky way to turn the orbit controls into drag-based first-person controls
-      camera.position.set(0, 0, 0);
+    const rotationTimer = rotationTimerRef.current;
+    if (sourceRotation && targetRotation && rotationTimer !== undefined) {
+      const currentTime = rotationTimer + delta * SPEED;
+      if (currentTime < 1) {
+        rotationTimerRef.current = currentTime;
+        camera.quaternion.slerpQuaternions(sourceRotation, targetRotation, currentTime);
+      } else {
+        camera.quaternion.copy(targetRotation);
+        setSourceRotation(undefined);
+      }
     }
   });
   return <>
-    <mesh ref={dummy as any}>
+    <group ref={playerRef as any}>
       <mesh position={[0, 0.4, 0]}>
         <capsuleGeometry args={[0.2, 0.8, 3, 6]} />
         <meshBasicMaterial />
@@ -126,9 +212,22 @@ export function Player({ position, debug }: { position: [number, number, number]
       <mesh position={[0, 0.8, 0]}>
         <sphereGeometry args={[0.21]} />
         <meshBasicMaterial color="red" />
-        <PerspectiveCamera fov={90} near={.04} far={100} makeDefault={!debug} />
+        <PerspectiveCamera
+          fov={90}
+          near={.04}
+          far={100}
+          makeDefault={!debug}
+        />
+        <SpatialControls
+          enabled={!debug}
+          domElement="canvas-instance"
+          settings-rotation-invertedX
+          settings-rotation-invertedY
+          settings-rotation-sensitivity={2}
+          initialRotation={initialRotation}
+        />
       </mesh>
-    </mesh>
+    </group>
     {navmesh && <>
       <mesh
         position={[0, 0, 0]}
@@ -140,17 +239,11 @@ export function Player({ position, debug }: { position: [number, number, number]
           rayTarget.current.position.copy(event.point)
         }}
         onClick={(event) => {
-          const groupId = pathFinding.getGroup(ZONE, dummy.current.position);
-          const path = pathFinding.findPath(dummy.current.position, event.point, ZONE, groupId);
-          currentPath.current = path;
-          let length = 0;
-          let previous = dummy.current.position;
-          for (const point of path) {
-            length += previous.clone().sub(point).length();
-            previous = point;
+          if (navigatingToTarget) {
+            onTargetCompleted?.(false);
+            setNavigatingToTarget(false);
           }
-          currentPathLength.current = length;
-          node.current = undefined;
+          beginNavigation(event.point);
         }}
       >
         <meshBasicMaterial color="cyan" opacity={0.5} transparent />
