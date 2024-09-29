@@ -25,7 +25,7 @@
   flex-grow: 1;
   padding: 1rem;
   overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: var(--background-color-article);
   border-radius: var(--border-radius-container);
 }
 
@@ -38,41 +38,45 @@
 }
 
 .showcaseAndTitle {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
   flex-grow: 2;
   flex-basis: 66%;
   min-width: 66%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   min-height: 100%;
-  overflow: hidden;
   max-height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: var(--border-radius-content);
 }
 
+.projectTitle {
+  color: white;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: var(--border-radius-content);
+  flex-shrink: 1;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.projectTitle h1 {
+  font-size: 2em;
+}
 .showcase {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   flex-grow: 1;
-  flex-shrink: 1;
+  width: 100%;
   max-height: 100%;
   max-width: 100%;
   overflow: hidden;
-}
-
-.projectTitle {
-  color: white;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 1rem;
   border-radius: var(--border-radius-content);
-  flex-shrink: 1;
-  width: 100%;
-}
-
-.projectTitle h1 {
-  font-size: 2em;
+  /*background-color: rgb(45,88,255, 0.5);*/
 }
 
 .documentation {
@@ -81,10 +85,9 @@
   overflow-y: auto;
   background: rgba(0, 0, 0, 0.6);
   color: white;
-  border-radius: var(--border-radius-container);
+  border-radius: var(--border-radius-content);
 }
 
-/* Media Query: bei kleinen Bildschirmen wird Dokumentation unterhalb der ShowCases angezeigt */
 @media (max-width: 768px) {
   .content {
     flex-direction: column;
