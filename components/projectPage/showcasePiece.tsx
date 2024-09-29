@@ -1,6 +1,8 @@
 import { Image } from "next-sanity/image";
 import { blurhashToBase64 } from "blurhash-base64";
 import styles from "./showcasePiece.module.css";
+import { FaExpandArrowsAlt } from 'react-icons/fa';  // FontAwesome Icon
+
 
 interface ShowcasePieceProps {
   showcase: {
@@ -51,7 +53,7 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
             title={showcase.description ?? "Website"}
             scrolling="yes"
           />
-          <button className={styles.link}>Webseite extern öffnen</button>
+          <button className={styles.link}><FaExpandArrowsAlt /></button>
         </a>
       )}
       {showcase.description && <figcaption>{showcase.description}</figcaption>}
