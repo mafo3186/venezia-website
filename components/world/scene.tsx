@@ -79,16 +79,7 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
     <fogExp2 attach="fog" color="#96b0e4" density={iAmGod ? 0 : 0.03} />
     <EffectComposer enableNormalPass frameBufferType={1016} enabled={!iAmGod}>
       <DepthOfField focusDistance={0} focalLength={inBackground ? 0.01 : 0.2} bokehScale={8} />
-      <SSAO
-        blendFunction={debugGraphics ? BlendFunction.SET : BlendFunction.MULTIPLY}
-        resolutionScale={0.5}
-        worldDistanceThreshold={50}
-        worldDistanceFalloff={0.03}
-        worldProximityThreshold={50}
-        worldProximityFalloff={0.03}
-        intensity={25}
-        radius={.01}
-      />
+      <N8AO aoRadius={2} intensity={5} distanceFalloff={.4} />
       <Vignette technique={0} offset={0.1} darkness={0.75} />
 
     </EffectComposer>
