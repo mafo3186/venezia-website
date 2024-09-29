@@ -26,7 +26,6 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
           src={showcase.content}
           alt={showcase.description ?? ""}
           className={styles.image}
-          style={{ aspectRatio: "auto" }}
         />
       )}
       {showcase.type === "video" && (

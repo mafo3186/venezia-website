@@ -41,7 +41,6 @@
   flex-grow: 2;
   flex-basis: 66%;
   min-width: 66%;
-  padding: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

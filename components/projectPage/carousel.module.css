@@ -4,6 +4,7 @@
   align-items: center;
   width: 100%;
   height: 100%;
+  /*background-color: darkred;*/
 }
 
 .embla {
@@ -30,7 +31,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
   position: relative; /* Stellt sicher, dass der Inhalt in der Slide korrekt positioniert ist */
   overflow: hidden;
   box-sizing: border-box;
