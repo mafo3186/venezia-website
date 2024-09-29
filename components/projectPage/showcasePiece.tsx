@@ -1,3 +1,4 @@
+"use client";
 import { Image } from "next-sanity/image";
 import { blurhashToBase64 } from "blurhash-base64";
 import styles from "./showcasePiece.module.css";
@@ -46,17 +47,23 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
         <pre className={styles.text}>{showcase.content}</pre>
       )}
       {showcase.type === "website" && (
-        <a href={showcase.content} target="_blank" rel="noopener noreferrer" className={styles.websiteLink}>
-          <iframe
-            className={styles.website}
-            src={showcase.content}
-            title={showcase.description ?? "Website"}
-            scrolling="yes"
-          />
-          <button className={styles.link}><FaExpandArrowsAlt /></button>
-        </a>
+          <div className={styles.websiteContainer}>
+            <iframe
+              className={styles.iFrame}
+              src={showcase.content}
+              title={showcase.description ?? "Website"}
+              scrolling="yes"
+            />
+          <button 
+            className={styles.expandButton}
+            onClick={() => window.open(showcase.content, "_blank", "noopener noreferrer" )}
+            aria-label={"Öffne Webseite auf neuer Seite"}
+          >
+            <FaExpandArrowsAlt />
+          </button>
+          </div>
       )}
-      {showcase.description && <figcaption>{showcase.description}</figcaption>}
+      {showcase.description && <figcaption className={styles.description}>{showcase.description}</figcaption>}
     </figure>
   );
 }
