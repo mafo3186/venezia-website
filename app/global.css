@@ -2,6 +2,7 @@
 :root {
   --border-radius-container: 1rem;
   --border-radius-content: calc(var(--border-radius-container) / 2);
+  --background-color-article: rgb(0,0,0,0.6);
 }
 
 /* CSS Reset by Josh Comeau

@@ -3,18 +3,19 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  /* wrapper takes the full width */
+  height: 100%;
 }
 
 .embla {
   overflow: hidden;
   border-radius: var(--border-radius-content);
+  /*background-color: rgb(255, 255, 255, 0.3);*/
+  margin-bottom: 0.5rem;
+  width: 100%;
+  height: 100%;
   display: grid;
   grid-template-columns: 40px 1fr 40px;
-  grid-template-rows: 1fr 40px 1fr;
-  justify-tracks: center;
-  max-height: 80vh;
-  /* aspect ratio hier oder eine Ebene drunter?*/
+  grid-template-rows: 1fr 40px;
 }
 
 .embla__container {
@@ -28,8 +29,12 @@
 
 .embla__slide {
   flex: 0 0 100%;
-  width: 100%;
-  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative; /* Stellt sicher, dass der Inhalt in der Slide korrekt positioniert ist */
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .embla__button {
@@ -37,20 +42,21 @@
   border-radius: 50%;
   aspect-ratio: 1;
   cursor: pointer;
-  z-index: 2;
+  grid-row: 1;
+  z-index: 1;
   align-self: center;
+  /* icon zentrieren */
+  display: flex; 
+  justify-content: center;  
+  align-items: center;
 }
 
-.embla__button.prev {
+.prev {
   grid-column: 1;
-  grid-row: 2;
-  left: 10px;
 }
 
-.embla__button.next {
+.next {
   grid-column: 3;
-  grid-row: 2;
-  right: 10px;
 }
 
 .embla__dots {
@@ -58,27 +64,25 @@
   justify-content: center;
   align-items: center;
   gap: 5px;
-  z-index: 3;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 5px;
+  grid-column: 1 / span 3;
+  grid-row: 2;
+  /* ab hier Box um Dots*/
+  background: rgba(0, 0, 0, 0.9);
+  padding: 0.5rem;
   border-radius: 10px;
-  margin-top: 10px;
-  /* Add some space between the carousel and the dots */
   width: 100%;
-  /* Ensure the dots container takes the full width */
   box-sizing: border-box;
-  /* Include padding in the element's total width and height */
 }
 
 .embla__dot {
-  width: 10px;
-  height: 10px;
+  width: 1rem;
+  aspect-ratio: 1;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.3);
   border: none;
   cursor: pointer;
 }
 
 .embla__dot__active {
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(255, 255, 255, 0.8);
 }

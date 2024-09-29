@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { EmblaOptionsType } from 'embla-carousel';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';  // FontAwesome Icon
 import { Children, PropsWithChildren } from 'react';
 import styles from './carousel.module.css';
 
@@ -47,11 +48,7 @@ export function EmblaCarousel(props: PropsWithChildren<{
 
   return (
     <div className={styles.emblaWrapper}>
-      <div
-        className={styles.embla}
-        style={{ aspectRatio: props.aspectRatio ?? (3 / 2) }}
-        ref={emblaRef}
-      >
+      <div className={styles.embla} ref={emblaRef}>
         <div className={styles.embla__container}>
           {Children.map(props.children, child =>
             <div className={styles.embla__slide}>{child}</div>
@@ -59,8 +56,8 @@ export function EmblaCarousel(props: PropsWithChildren<{
         </div>
         {canScroll && (
           <>
-            <button className={`${styles.embla__button} ${styles.prev}`} onClick={scrollPrev}>←</button>
-            <button className={`${styles.embla__button} ${styles.next}`} onClick={scrollNext}>→</button>
+            <button className={`${styles.embla__button} ${styles.prev}`} onClick={scrollPrev}><FaChevronLeft/></button>
+            <button className={`${styles.embla__button} ${styles.next}`} onClick={scrollNext}><FaChevronRight/></button>
           </>
         )}
       </div>

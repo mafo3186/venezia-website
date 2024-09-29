@@ -33,7 +33,7 @@ export default defineType({
         return (parent as any)?.type === "image" && !current ? "Ein Bild ist erforderlich." : true;
       }),
       options: {
-        metadata: ["blurhash", "palette", "location", "exif"],
+        metadata: ["blurhash", "palette", "location", "exif", "image"],
       },
     }),
     defineField({

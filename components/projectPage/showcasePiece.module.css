@@ -1,0 +1,98 @@
+.figure {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.contentContainer {
+  position: relative; /* Macht den Container zum Bezugspunkt für absolute Positionierung */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+}
+
+
+.video, .audio, .iFrame {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  width: 100%;
+  height: auto;
+}
+
+.image {
+  object-fit: contain;
+}
+
+.text {
+  font-size: 1.1rem;
+  padding: 1rem;
+  white-space: pre-wrap;
+  background-color: rgba(0, 0, 0, 0.95);
+  color: white;
+  border-radius: var(--border-radius-container);
+  max-width: 100%;
+  max-height: 100%;
+  width: 90%;
+  overflow-wrap: break-word;
+  overflow-y: auto;
+}
+
+.audio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.websiteContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.iFrame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.expandButton {
+  position: absolute; 
+  bottom: 10px; 
+  right: 10px; 
+  background-color: rgb(64, 64, 64, 0.7); 
+  color: white; 
+  padding: 10px 15px; 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  z-index: 1; /* Stellt sicher, dass der Button über dem iFrame liegt */
+  transition: background-color 0.3s ease;
+}
+
+.expandButton:hover {
+  background-color: rgba(64, 64, 64, 0.9); 
+}
+
+.description {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  position: relative;
+}
+
+
