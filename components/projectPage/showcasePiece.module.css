@@ -30,6 +30,7 @@
   color: white;
   border-radius: var(--border-radius-container);
   max-width: 100%;
+  width: 90%;
   overflow-wrap: break-word;
   overflow-y: auto;
   margin: 2rem;
