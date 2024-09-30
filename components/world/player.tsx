@@ -1,13 +1,13 @@
 "use client";
 
 import { useFrame, useThree } from "@react-three/fiber";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { PerspectiveCamera, useGLTF } from "@react-three/drei";
 import { Object3D, Vector3, Quaternion } from "three";
 import { Node, Pathfinding } from "three-pathfinding";
 import { animated, config, useSpring } from "@react-spring/three";
 import { GLTFResult } from "./model";
-import { SpatialControls } from "./spatial-controls";
+import { FirstPersonDragControls } from "./controls";
 
 const ZONE = 'level1';
 const SPEED = 2.0;
@@ -78,6 +78,10 @@ export function Player({
       node.current = undefined;
     }
   }, [endNavigation, pathFinding]);
+  // set initial camera rotation
+  useLayoutEffect(() => {
+    camera.quaternion.copy(initialRotation);
+  }, [camera]);
   useEffect(() => {
     const keyDown = (event: KeyboardEvent) => {
       switch (event.code) {
@@ -225,13 +229,9 @@ export function Player({
           far={100}
           makeDefault={!debug}
         />
-        <SpatialControls
+        <FirstPersonDragControls
           enabled={!debug}
-          domElement="canvas-instance"
-          settings-rotation-invertedX
-          settings-rotation-invertedY
-          settings-rotation-sensitivity={2}
-          initialRotation={initialRotation}
+          makeDefault={!debug}
         />
       </mesh>
     </group>
