@@ -10,7 +10,6 @@ import styles from "./world.module.css";
 import { Euler, Mesh } from "three";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
-import useDynamicRes from "./dynamic-res";
 import Stats, { Panel } from "./stats";
 import { CascadedShadowMap } from "./csm/cascaded-shadow-map";
 import { PreDefinedView } from "@/components/types";
@@ -73,7 +72,7 @@ function Scene({
     <Environment preset="sunset" environmentIntensity={0.8} environmentRotation={new Euler(0, -0.5, 0)} />
     <CascadedShadowMap lightIntensity={0} shadowMapSize={4096} lightDirection={[-0.5, -1.2, -0.5]} lightMargin={10} maxFar={25} />
     <fogExp2 attach="fog" color="#96b0e4" density={iAmGod ? 0 : 0.03} />
-    <EffectComposer enabled={!iAmGod}>
+    <EffectComposer>
       <N8AO aoRadius={2} intensity={5} distanceFalloff={.4} depthAwareUpsampling quality="performance" />
       <DepthOfField
         focusDistance={0}
