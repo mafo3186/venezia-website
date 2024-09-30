@@ -66,7 +66,16 @@
 
 .titleWithInfo {
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  width: 100%;
+}
+
+.infoIconWrapper {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  margin-left: 0.5rem;
 }
 
 .infoIcon {
@@ -75,30 +84,6 @@
   cursor: pointer;
 }
 
-.tooltip {
-  position: absolute;
-  top: 100%; /* Tooltip unter dem Icon anzeigen */
-  left: 50%; /* Tooltip in der Mitte des Icons ausrichten */
-  transform: translate(-50%, 10px); /* Leichte Verschiebung nach unten */
-  background-color: #333;
-  color: #fff;
-  text-align: left; /* Text linksbündig */
-  border-radius: 5px;
-  padding: 8px;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  z-index: 1;
-  visibility: hidden;
-  opacity: 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optionaler Schatten */
-  white-space: normal;/* Umbrüche erlauben */
-  overflow-wrap: break-word; /* Umbrüche bei langen Wörtern */
-}
-
-.infoIconWrapper {
-  position: relative;
-  display: inline-block;
-  overflow: visible; /* Sicherstellen, dass der Tooltip nicht abgeschnitten wird */
-}
 
 .infoIcon:focus + .tooltip,
 .infoIconWrapper:focus-within .tooltip,
@@ -106,15 +91,25 @@
 .infoIconWrapper:hover .tooltip {
   visibility: visible;
   opacity: 1;
-  transform: translate(-50%, 10px); /* Leichte Verschiebung bei Sichtbarkeit */
 }
 
-@media (max-width: 600px) {
-  .tooltip {
-    left: auto; /* Tooltip bleibt unter dem Icon */
-    right: 0; /* Sicherstellen, dass der Tooltip nicht über den Bildschirmrand hinausgeht */
-    transform: translate(0, 10px); /* Verschiebung bei kleinen Bildschirmen */
-  }
+.tooltip {
+  position: absolute;
+  top: 100%; /* Tooltip unter dem Icon anzeigen */
+  right: 100%; 
+  background-color: #333;
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 8px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1;
+  font-size: 0.9rem;
+  visibility: hidden;
+  opacity: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optionaler Schatten */
+  overflow: auto;
+  overflow-wrap: break-word; /* Umbrüche bei langen Wörtern */
+  min-width: 300px;
 }
 
 .showcase {
