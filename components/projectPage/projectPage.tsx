@@ -70,12 +70,13 @@ export default async function ProjectPage({ params }: Props) {
     }
     
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.navigationButtons}>
-        <HomeButton />
-        <BackButton />
-      </div>
-      <article className={styles.article}>
+    <>
+      <div className={styles.pageContainer}>
+        <div className={styles.navigationButtons}>
+          <HomeButton />
+          <BackButton />
+        </div>
+        <article className={styles.article}>
         <div className={styles.content}>
           <div className={styles.showcaseAndTitle}>
             <hgroup className={styles.projectTitle}>
@@ -85,7 +86,6 @@ export default async function ProjectPage({ params }: Props) {
                   <FaInfoCircle
                     className={styles.infoIcon}
                     aria-describedby="projectDescription"
-                    tabindex="0"
                   />
                   <span id="projectDescription" className={styles.tooltip}>
                     {project.description}
@@ -114,7 +114,8 @@ export default async function ProjectPage({ params }: Props) {
             )}
           </aside>
         </div>
-      </article>
-    </div>
+        </article>
+      </div>
+    </>
   );
 }
