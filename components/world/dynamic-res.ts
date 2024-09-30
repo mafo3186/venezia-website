@@ -70,7 +70,7 @@ export default function useDynamicRes({ targetFrameRate = 60, minDpr = 0.25, bas
           if (nextDpr !== dpr) {
             // console.log(`delta ${delta.toFixed(2)}, target ${targetFrameTime.current.toFixed(2)}, dpr ${nextDpr}`);
             streak.current = nextDpr > dpr ? streak.current + optimism : optimism;
-            setDpr(() => nextDpr);
+            setDpr(() => Number.parseFloat(nextDpr.toFixed(2)));
           }
         }
       }
