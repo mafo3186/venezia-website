@@ -6,7 +6,7 @@ and https://github.com/pmndrs/drei/blob/71864076c35c3b4f201cd9518da873eff7dc90a1
 import { ForwardRefComponent } from "@react-three/drei/helpers/ts-utils";
 import { EventManager, Object3DNode, useThree } from "@react-three/fiber";
 import { forwardRef, useEffect, useMemo } from "react";
-import { Camera, Controls, Euler, Vector3 } from "three";
+import { Camera, Controls, Euler, Vector2, Vector3 } from "three";
 
 const PI_2 = Math.PI / 2;
 const CHANGE_EVENT: { type: "change" } = { type: "change" };
@@ -15,9 +15,11 @@ export class FirstPersonDragControlsImpl extends Controls<{
   change: { type: "change" };
 }> {
   private looking = false;
+  private onClick: (e: MouseEvent) => void;
   private onPointerDown: (e: PointerEvent) => void;
   private onPointerUp: (e: PointerEvent) => void;
   private onPointerMove: (e: PointerEvent) => void;
+  private start = new Vector2();
   private euler = new Euler(0, 0, 0, "YXZ");
 
   constructor(
@@ -26,16 +28,28 @@ export class FirstPersonDragControlsImpl extends Controls<{
     public minPolarAngle = 0,
     public maxPolarAngle = Math.PI,
     public pointerSpeed = 2.0,
+    /**
+     * Higher values will make it easier to trigger the click event,
+     * lower values prevent the click event from triggering when dragging.
+     */
+    public stopPropagationThreshold = 0.02,
   ) {
     super(camera, domElement);
+    this.onClick = (e) => {
+      if (e.button === 0) {
+        this.stopPropagationIfApplicable(e);
+      }
+    };
     this.onPointerDown = (e: PointerEvent) => {
       if (e.button === 0) {
         this.looking = true;
+        this.start.set(e.screenX, e.screenY);
         this.domElement?.setPointerCapture(e.pointerId);
       }
     };
     this.onPointerUp = (e: PointerEvent) => {
       if (e.button === 0) {
+        this.stopPropagationIfApplicable(e);
         this.domElement?.releasePointerCapture(e.pointerId);
         this.looking = false;
       }
@@ -47,9 +61,12 @@ export class FirstPersonDragControlsImpl extends Controls<{
         const camera = this.object;
         const euler = this.euler;
         euler.setFromQuaternion(camera.quaternion);
-        const baseline = Math.min(this.domElement.clientWidth, this.domElement.clientHeight);
-        euler.y += movementX / baseline * pointerSpeed;
-        euler.x += movementY / baseline * pointerSpeed;
+        const baseline = Math.min(
+          this.domElement.clientWidth,
+          this.domElement.clientHeight,
+        );
+        euler.y += (movementX / baseline) * pointerSpeed;
+        euler.x += (movementY / baseline) * pointerSpeed;
         euler.x = Math.max(
           PI_2 - maxPolarAngle,
           Math.min(PI_2 - minPolarAngle, euler.x),
@@ -63,19 +80,44 @@ export class FirstPersonDragControlsImpl extends Controls<{
     }
   }
 
+  private stopPropagationIfApplicable(event: MouseEvent) {
+    let dist = 0;
+    if (this.domElement) {
+      const baseline = Math.min(
+        this.domElement.clientWidth,
+        this.domElement.clientHeight,
+      );
+      const current = new Vector2(event.screenX, event.screenY);
+      dist = current.sub(this.start).divideScalar(baseline).length();
+    }
+    if (dist > this.stopPropagationThreshold) {
+      event.stopImmediatePropagation();
+    }
+  }
+
   connect() {
     if (this.domElement) {
-      this.domElement.addEventListener("pointermove", this.onPointerMove);
-      this.domElement.addEventListener("pointerdown", this.onPointerDown);
-      this.domElement.addEventListener("pointerup", this.onPointerUp);
+      this.domElement.addEventListener("click", this.onClick, true);
+      this.domElement.addEventListener("pointermove", this.onPointerMove, true);
+      this.domElement.addEventListener("pointerdown", this.onPointerDown, true);
+      this.domElement.addEventListener("pointerup", this.onPointerUp, true);
     }
   }
 
   disconnect() {
     if (this.domElement) {
-      this.domElement.removeEventListener("pointermove", this.onPointerMove);
-      this.domElement.removeEventListener("pointerdown", this.onPointerDown);
-      this.domElement.removeEventListener("pointerup", this.onPointerUp);
+      this.domElement.removeEventListener("click", this.onClick, true);
+      this.domElement.removeEventListener(
+        "pointermove",
+        this.onPointerMove,
+        true,
+      );
+      this.domElement.removeEventListener(
+        "pointerdown",
+        this.onPointerDown,
+        true,
+      );
+      this.domElement.removeEventListener("pointerup", this.onPointerUp, true);
     }
   }
 
