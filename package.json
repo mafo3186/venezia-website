@@ -30,6 +30,7 @@
     "@vercel/speed-insights": "^1.0.12",
     "blurhash-base64": "^0.0.3",
     "embla-carousel-react": "^8.3.0",
+    "framer-motion-3d": "^11.9.0",
     "next": "^14.2.13",
     "next-sanity": "^9.5.0",
     "react": "^18.3.1",

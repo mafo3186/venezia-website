@@ -6,24 +6,15 @@ import { PerspectiveCamera, useGLTF } from "@react-three/drei";
 import { Object3D, Vector3, Quaternion } from "three";
 import { Node, Pathfinding } from "three-pathfinding";
 import { animated, config, useSpring } from "@react-spring/three";
-import { GLTFResult } from "./model";
+import { GLTFResult } from "../model";
 import { FirstPersonDragControls } from "./controls";
+import { Path3D } from "./path";
+import { easeInOut } from "framer-motion";
 
 const ZONE = 'level1';
-const SPEED = 2.0;
 
 const initialRotation = new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), Math.PI * 0.5);
 const maxTeleportDistance = 5;
-
-function pathLength(start: Vector3, path: Vector3[]) {
-  let length = 0;
-  let previous = start;
-  for (const point of path) {
-    length += previous.clone().sub(point).length();
-    previous = point;
-  }
-  return length;
-}
 
 export function Player({
   debug,
@@ -46,9 +37,10 @@ export function Player({
   const rayTarget = useRef<Object3D>(null!);
   const node = useRef<Node | undefined>();
   const camera = useThree(({ camera }) => camera);
+  const [moving, setMoving] = useState(false);
   const [targetVisible, setTargetVisible] = useState(false);
   const targetSpring = useSpring({
-    scale: targetVisible ? 1 : 0,
+    scale: targetVisible && !moving ? 1 : 0,
     config: config.wobbly,
   });
   const [moveForward, setMoveForward] = useState(false);
@@ -57,24 +49,32 @@ export function Player({
   const [moveRight, setMoveRight] = useState(false);
   const [navigatingToTarget, setNavigatingToTarget] = useState(false);
   const [sourceRotation, setSourceRotation] = useState<Quaternion | undefined>();
-  const rotationTimerRef = useRef<number | undefined>();
-  const currentPath = useRef<Vector3[] | undefined>(undefined);
-  const currentPathLength = useRef(0);
+  const motionTimeRef = useRef<number | undefined>();
+  const motionDurationRef = useRef<number | undefined>();
+  const motionPath = useRef<Path3D | undefined>();
   const endNavigation = useCallback(() => {
-    currentPath.current = undefined;
+    setMoving(false);
+    setTargetVisible(false);
+    motionTimeRef.current = undefined;
+    motionDurationRef.current = undefined;
+    motionPath.current = undefined;
     if (navigatingToTarget) {
       setNavigatingToTarget(false);
       onTargetCompleted?.(true);
     }
   }, [navigatingToTarget, onTargetCompleted]);
-  const beginNavigation = useCallback((target: Vector3) => {
-    const groupId = pathFinding.getGroup(ZONE, playerRef.current.position);
-    const path = pathFinding.findPath(playerRef.current.position, target, ZONE, groupId);
+  const beginNavigation = useCallback((target: Vector3, duration: number) => {
+    const start = playerRef.current.position.clone();
+    const groupId = pathFinding.getGroup(ZONE, start);
+    const path = pathFinding.findPath(start, target, ZONE, groupId);
     if (!path || path.length === 0) {
       endNavigation();
     } else {
-      currentPath.current = path;
-      currentPathLength.current = pathLength(playerRef.current.position, path);
+      setMoving(true);
+      motionTimeRef.current = 0;
+      motionDurationRef.current = duration;
+      motionPath.current = new Path3D([start, ...path]);
+      console.log(motionPath.current)
       node.current = undefined;
     }
   }, [endNavigation, pathFinding]);
@@ -139,7 +139,7 @@ export function Player({
   useEffect(() => {
     if (targetPosition) {
       setNavigatingToTarget(true);
-      beginNavigation(targetPosition);
+      beginNavigation(targetPosition, 2.0);
     }
   // intentionally omitting beginNavigation from dependencies
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -147,7 +147,6 @@ export function Player({
   useEffect(() => {
     if (targetRotation) {
       setSourceRotation(camera.quaternion.clone());
-      rotationTimerRef.current = 0;
     } else {
       setSourceRotation(undefined);
     }
@@ -158,7 +157,6 @@ export function Player({
   const frontVector = new Vector3();
   const sideVector = new Vector3();
   const pathFindingNext = new Vector3();
-  const targetDiff = new Vector3();
   const playerNextStep = new Vector3();
   const cameraWorldDirection = new Vector3();
   const axis = new Vector3(0, 1, 0);
@@ -175,24 +173,8 @@ export function Player({
       .multiplyScalar(2.5)
       .applyAxisAngle(axis, theta + Math.PI);
     if (pathFinding) {
-      const path = currentPath.current;
-      if (path) {
-        const target = path[0];
-        targetDiff.subVectors(target, currentPlayer.position);
-        const stepDistance = delta * currentPathLength.current * SPEED;
-        if (targetDiff.length() > stepDistance) {
-          targetDiff.normalize().multiplyScalar(stepDistance);
-          playerNextStep.addVectors(currentPlayer.position, targetDiff);
-          currentPlayer.position.copy(playerNextStep);
-        } else {
-          playerRef.current.position.copy(target);
-          if (path.length > 1) {
-            currentPath.current = path.slice(1);
-          } else {
-            endNavigation();
-          }
-        }
-      } else {
+      const path = motionPath.current;
+      if (!path) {
         pathFindingNext.copy(direction).multiplyScalar(delta * 0.75).add(playerRef.current.position);
         const groupID = pathFinding.getGroup(ZONE, playerRef.current.position);
         if (!node.current) {
@@ -202,15 +184,30 @@ export function Player({
         playerRef.current.position.copy(playerNextStep);
       }
     }
-    const rotationTimer = rotationTimerRef.current;
-    if (sourceRotation && targetRotation && rotationTimer !== undefined) {
-      const currentTime = rotationTimer + delta * SPEED;
-      if (currentTime < 1) {
-        rotationTimerRef.current = currentTime;
-        camera.quaternion.slerpQuaternions(sourceRotation, targetRotation, currentTime);
+    const motionTime = motionTimeRef.current;
+    const motionDuration = motionDurationRef.current;
+    if (motionTime !== undefined && motionDuration !== undefined) {
+      const nextMotionTime = Math.min(motionTime + delta, motionDuration);
+      const progress = motionTime / motionDuration;
+      const progressEasing = easeInOut(progress);
+      if (sourceRotation && targetRotation) {
+        if (progress < 1) {
+          camera.quaternion.slerpQuaternions(sourceRotation, targetRotation, progressEasing);
+        } else {
+          camera.quaternion.copy(targetRotation);
+          setSourceRotation(undefined);
+        }
+      }
+      const path = motionPath.current;
+      if (pathFinding && path) {
+        path.at(progressEasing, playerRef.current.position);
+      }
+      if (nextMotionTime >= motionDuration) {
+        endNavigation();
+        motionTimeRef.current = undefined;
+        motionDurationRef.current = undefined;
       } else {
-        camera.quaternion.copy(targetRotation);
-        setSourceRotation(undefined);
+        motionTimeRef.current = nextMotionTime;
       }
     }
   });
@@ -258,7 +255,7 @@ export function Player({
               onTargetCompleted?.(false);
               setNavigatingToTarget(false);
             }
-            beginNavigation(event.point);
+            beginNavigation(event.point, 0.5);
           }
         }}
       >
