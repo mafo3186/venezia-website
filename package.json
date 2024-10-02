@@ -10,7 +10,9 @@
     "presetup": "echo 'about to setup env variables, follow the guide here: https://github.com/vercel/next.js/tree/canary/examples/cms-sanity#using-the-sanity-cli'",
     "setup": "npx sanity@latest init --env .env.local",
     "postsetup": "echo 'create the read token by following the rest of the guide: https://github.com/vercel/next.js/tree/canary/examples/cms-sanity#creating-a-read-token'",
-    "gltf": "gltfjsx public/assets/venice.glb --root=./public --output=public/assets/model.jsx --shadows --transform --keepmeshes --console > ./components/world/model.jsx",
+    "updatemodel:optimize": "gltf-transform optimize public/assets/venice.glb public/assets/venice-transformed.glb --compress draco --simplify-error 0.00001",
+    "updatemodel:gltfjsx": "gltfjsx public/assets/venice-transformed.glb --root=./public --output=public/assets/model.jsx --shadows --console > ./components/world/model.jsx",
+    "updatemodel": "npm run updatemodel:optimize && npm run updatemodel:gltfjsx",
     "typegen": "sanity schema extract && sanity typegen generate"
   },
   "dependencies": {
@@ -45,6 +47,7 @@
     "typescript": "5.6.2"
   },
   "devDependencies": {
+    "@gltf-transform/cli": "^4.0.10",
     "eslint": "*",
     "eslint-config-next": "^14.2.13",
     "gltfjsx": "^6.5.2"
