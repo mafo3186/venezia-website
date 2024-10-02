@@ -3,13 +3,15 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { PerspectiveCamera, useGLTF } from "@react-three/drei";
-import { Object3D, Vector3, Quaternion } from "three";
+import { Object3D, Vector3, Quaternion, Mesh } from "three";
 import { Node, Pathfinding } from "three-pathfinding";
 import { animated, config, useSpring } from "@react-spring/three";
-import { GLTFResult } from "../model";
 import { FirstPersonDragControls } from "./controls";
 import { Path3D } from "./path";
 import { easeInOut } from "framer-motion";
+
+const metadataPath = "/assets/metadata.glb";
+useGLTF.preload(metadataPath);
 
 const ZONE = 'level1';
 
@@ -27,7 +29,7 @@ export function Player({
   targetRotation?: Quaternion,
   onTargetCompleted?: (success: boolean) => void,
 }) {
-  const navmesh = (useGLTF('/assets/venice.glb') as GLTFResult).nodes.Navmesh.geometry;
+  const navmesh = ((useGLTF(metadataPath)).nodes.Navmesh as Mesh).geometry;
   const [pathFinding] = useMemo(() => {
     const pathFinding = new Pathfinding();
     pathFinding.setZoneData(ZONE, Pathfinding.createZone(navmesh));

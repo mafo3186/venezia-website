@@ -13,8 +13,9 @@ import Stats, { Panel } from "./stats";
 import { CascadedShadowMap } from "./csm/cascaded-shadow-map";
 import { PreDefinedView } from "@/components/types";
 import { ProjectBox } from "./project-box";
+import { Water } from "./water";
 
-const metadataPath = "/assets/metadata.gltf";
+const metadataPath = "/assets/metadata.glb";
 
 useGLTF.preload(metadataPath);
 
@@ -32,7 +33,7 @@ function Scene({
   const metadata = useGLTF(metadataPath);
   const nodes = useMemo(() => {
     return Object.values(metadata.nodes)
-      .filter((node) => node.name !== "Scene")
+      .filter((node) => node.userData.name?.includes("."))
       .map((node) => {
         const [hotspot, numeric] = node.userData.name.split(".");
         return {
@@ -90,6 +91,7 @@ function Scene({
         rotation={node.rotation}
       />
     ))}
+    <Water />
   </>);
 }
 
