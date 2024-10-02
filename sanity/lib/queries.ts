@@ -2,7 +2,7 @@ import { groq } from "next-sanity";
 
 export const settingsQuery = groq`*[_type == "settings"][0]`;
 
-export const projectsQuery = groq`*[_type == "project" && defined(slug.current)] | order(date desc, _updatedAt desc) {
+export const projectsQuery = groq`*[_type == "project" && defined(slug.current)] | order(_createdAt asc, _id asc) {
   content,
   _id,
   "status": select(_originalId in path("drafts.**") => "draft", "published"),

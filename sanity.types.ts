@@ -366,7 +366,7 @@ export type SettingsQueryResult = {
   };
 } | null;
 // Variable: projectsQuery
-// Query: *[_type == "project" && defined(slug.current)] | order(date desc, _updatedAt desc) {  content,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  author,}
+// Query: *[_type == "project" && defined(slug.current)] | order(_createdAt asc, _id asc) {  content,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  author,}
 export type ProjectsQueryResult = Array<{
   content: null;
   _id: string;
@@ -479,7 +479,7 @@ declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"project\"] | order(select($orderBy == \"title\" => title, $orderBy == \"_updatedAt\" => _updatedAt)) {_id, title, _updatedAt, description, \"slug\": slug.current}": ProjectsListQueryResult;
     "*[_type == \"settings\"][0]": SettingsQueryResult;
-    "*[_type == \"project\" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n  content,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  author,\n}": ProjectsQueryResult;
+    "*[_type == \"project\" && defined(slug.current)] | order(_createdAt asc, _id asc) {\n  content,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  author,\n}": ProjectsQueryResult;
     "*[_type == \"project\"]{slug}": ProjectSlugsResult;
     "*[_type == \"project\" && slug.current == $slug] [0] {\n  \"documentation\": documentation[] {\n    ...,\n    _type == \"file\" => {\n      asset->\n    }\n  },\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  \"showcases\": showcase[] {\n    type,\n    type == 'image' => showcaseImage.asset->{\n      \"content\": url,\n      \"blurHash\": metadata.blurHash,\n      \"palette\": metadata.palette,\n      \"location\": metadata.location,\n      \"exif\": metadata.exif,\n      \"dimensions\": metadata.dimensions,\n      mimeType\n    },\n    type == 'audio' => showcaseAudio.asset->{\"content\": url, mimeType},\n    type == 'video' => showcaseVideo.asset->{\"content\": url, mimeType},\n    type == 'text' => @{\"content\": showcaseText},\n    type == 'website' => @{\"content\": showcaseWebsite},\n    description\n  }\n}": ProjectBySlugQueryResult;
   }

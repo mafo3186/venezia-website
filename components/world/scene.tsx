@@ -1,50 +1,23 @@
 "use client";
 
 import { ProjectsQueryResult } from "@/sanity.types";
-import { Canvas, MeshProps, useFrame, useThree } from "@react-three/fiber";
-import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { DepthOfField, EffectComposer, N8AO, Vignette } from "@react-three/postprocessing";
-import { Environment, OrbitControls, useProgress } from "@react-three/drei";
+import { Environment, OrbitControls, useGLTF, useProgress } from "@react-three/drei";
 import styles from "./world.module.css";
-import { Euler, Mesh } from "three";
+import { Euler } from "three";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
 import Stats, { Panel } from "./stats";
 import { CascadedShadowMap } from "./csm/cascaded-shadow-map";
 import { PreDefinedView } from "@/components/types";
+import { ProjectBox } from "./project-box";
+import { Water } from "./water";
 
-function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
-  const router = useRouter()
-  const ref = useRef<Mesh | null>(null)
-  const [hovered, hover] = useState(false)
-  useFrame((_, delta) => {
-    if (ref.current) {
-      ref.current.rotation.y += delta
-      ref.current.rotation.x += 0.5 * delta
-      ref.current.rotation.z += 0.25 * delta
-    }
-  })
-  return (
-    <mesh
-      {...props}
-      ref={ref}
-      scale={hovered ? 1.5 : 1}
-      castShadow
-      receiveShadow
-      onClick={() => router.push(href)}
-      onPointerOver={() => hover(true)}
-      onPointerOut={() => hover(false)}>
-      <icosahedronGeometry args={[0.1]} />
-      <meshPhysicalMaterial
-        attach="material"
-        color="red"
-        transmission={1}
-        thickness={0.5}
-        roughness={0.2} />
-    </mesh>
-  )
-}
+const metadataPath = "/assets/metadata.glb";
+
+useGLTF.preload(metadataPath);
 
 function Scene({
   projects,
@@ -57,6 +30,25 @@ function Scene({
   view?: PreDefinedView,
   onViewReached?: () => void,
 }) {
+  const metadata = useGLTF(metadataPath);
+  const nodes = useMemo(() => {
+    return Object.values(metadata.nodes)
+      .filter((node) => node.userData.name?.includes("."))
+      .map((node) => {
+        const [hotspot, numeric] = node.userData.name.split(".");
+        return {
+          ...node,
+          userData: { ...node.userData, hotspot, index: parseInt(numeric) - 1 },
+        };
+      })
+      .sort((a, b) => {
+        if (a.userData.index !== b.userData.index) {
+          return a.userData.index - b.userData.index;
+        } else {
+          return a.userData.hotspot.localeCompare(b.userData.hotspot);
+        }
+      });
+  }, [metadata.nodes]);
   const [iAmGod, setGod] = useState(false);
   const dpr = useThree(({ viewport }) => viewport.dpr);
   useEffect(() => {
@@ -91,16 +83,15 @@ function Scene({
       targetRotation={view?.rotation}
       onTargetCompleted={onViewReached}
     />
-    {projects.map((project, index) => (
+    {nodes.map((node, index) => (
       <ProjectBox
-        key={project._id}
-        href={`/projects/${project.slug}`}
-        position={[
-          Math.cos((index / projects.length + 0.125) * 2 * Math.PI) * 0.75, 2,
-          Math.sin((index / projects.length + 0.125) * 2 * Math.PI) * 0.75
-        ]}
+        key={node.name}
+        href={projects[index] && `/projects/${projects[index].slug}`}
+        position={node.position}
+        rotation={node.rotation}
       />
     ))}
+    <Water />
   </>);
 }
 
