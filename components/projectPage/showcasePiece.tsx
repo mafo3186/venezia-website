@@ -3,9 +3,7 @@ import { Image } from "next-sanity/image";
 import { blurhashToBase64 } from "blurhash-base64";
 import styles from "./showcasePiece.module.css";
 import { FaExpandArrowsAlt } from 'react-icons/fa';
-import {SanityImagePalette} from "next-sanity";
-
-
+import {SanityImagePalette}  from "@/sanity.types";
 
 interface ShowcasePieceProps {
   showcase: {
