@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { FaInfoCircle } from "react-icons/fa";
 import type { ProjectBySlugQueryResult, ProjectSlugsResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { projectBySlugQuery, projectSlugs, settingsQuery } from "@/sanity/lib/queries";
+import { projectBySlugQuery, projectSlugs } from "@/sanity/lib/queries";
 import { Suspense } from "react";
 import styles from "@/components/projectPage/projectPage.module.css";
 import { EmblaCarousel } from "@/components/projectPage/carousel";
