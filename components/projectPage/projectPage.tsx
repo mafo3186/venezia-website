@@ -2,11 +2,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 import { type PortableTextBlock } from "next-sanity";
 import { notFound } from "next/navigation";
 import { FaInfoCircle } from "react-icons/fa";
-
-import type {
-  ProjectBySlugQueryResult,
-  ProjectSlugsResult
-} from "@/sanity.types";
+import type { ProjectBySlugQueryResult, ProjectSlugsResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { projectBySlugQuery, projectSlugs, settingsQuery } from "@/sanity/lib/queries";
 import { Suspense } from "react";
@@ -15,7 +11,6 @@ import { EmblaCarousel } from "@/components/projectPage/carousel";
 import ShowcasePiece from "@/components/projectPage/showcasePiece";
 import PortableText from "@/components/projectPage/documentation";
 import { BackButton, HomeButton } from "@/components/button";
-import Link from "next/link";
 import Loading from "@/components/loading";
 
 export type Props = {
@@ -54,15 +49,10 @@ export async function generateMetadata(
 }
 
 export default async function ProjectPage({ params }: Props) {
-    const [project, settings] = await Promise.all([
-      sanityFetch<ProjectBySlugQueryResult>({
-    query: projectBySlugQuery,
-    params,
-      }),
-      sanityFetch<SettingsQueryResult>({
-        query: settingsQuery,
-      }),
-    ]);
+    const project = await sanityFetch<ProjectBySlugQueryResult>({
+      query: projectBySlugQuery,
+      params,
+    });
 
     if (!project?._id) {
       return notFound();
