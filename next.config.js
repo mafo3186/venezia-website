@@ -17,13 +17,4 @@ module.exports = {
     });
     return config;
   },
-  async redirects() {
-    return [
-      {
-        source: '/projects', // Die Route, die umgeleitet werden soll
-        destination: '/', // Ziel-URL für die Umleitung
-        permanent: true, // Setze auf true für eine permanente Umleitung (301)
-      },
-    ];
-  },
 };

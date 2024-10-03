@@ -64,7 +64,7 @@ const Menu = ({ projects, onHotspotClick }: MenuProps) => {
                   </li>
                   {projects.map((project) => (
                     <li key={project._id}>
-                      <Link href={`/projects/${project.slug}`} onClick={closeMenu}>
+                      <Link href={`/${project.slug}`} onClick={closeMenu}>
                         {project.title}
                       </Link>
                     </li>
