@@ -3,6 +3,8 @@ import { Image } from "next-sanity/image";
 import { blurhashToBase64 } from "blurhash-base64";
 import styles from "./showcasePiece.module.css";
 import { FaExpandArrowsAlt } from 'react-icons/fa';
+import {SanityImagePalette} from "next-sanity";
+
 
 
 interface ShowcasePieceProps {
@@ -12,7 +14,7 @@ interface ShowcasePieceProps {
     content: string;
     mimeType: string | null;
     blurHash?: string;
-    palette?: string[];
+    palette?: SanityImagePalette;
   };
 }
 
@@ -27,8 +29,8 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`; // Alpha-Wert hinzufügen
   };
 
-  const getDominantColor = (palette: string[] | undefined) => {
-    const dominantBackground = palette?.dominant?.background || "#000000"; // Fallback-Farbe
+  const getDominantColor = (palette: SanityImagePalette | undefined): string => {
+    const dominantBackground = palette?.dominant?.background || "transparent"; // Fallback-Farbe
     return hexToRgba(dominantBackground, 0.2);
   };
 
