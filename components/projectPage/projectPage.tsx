@@ -4,10 +4,8 @@ import { notFound } from "next/navigation";
 import { FaInfoCircle } from "react-icons/fa";
 
 import type {
-  Project,
   ProjectBySlugQueryResult,
-  ProjectSlugsResult,
-  SettingsQueryResult, Showcase,
+  ProjectSlugsResult
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { projectBySlugQuery, projectSlugs, settingsQuery } from "@/sanity/lib/queries";
@@ -18,6 +16,7 @@ import ShowcasePiece from "@/components/projectPage/showcasePiece";
 import PortableText from "@/components/projectPage/documentation";
 import { BackButton, HomeButton } from "@/components/button";
 import Link from "next/link";
+import Loading from "@/components/loading";
 
 export type Props = {
   params: { slug: string };
@@ -57,8 +56,8 @@ export async function generateMetadata(
 export default async function ProjectPage({ params }: Props) {
     const [project, settings] = await Promise.all([
       sanityFetch<ProjectBySlugQueryResult>({
-        query: projectBySlugQuery,
-        params,
+    query: projectBySlugQuery,
+    params,
       }),
       sanityFetch<SettingsQueryResult>({
         query: settingsQuery,
@@ -70,7 +69,7 @@ export default async function ProjectPage({ params }: Props) {
     }
     
   return (
-    <>
+    <Suspense fallback={<Loading />}>
       <div className={styles.pageContainer}>
         <div className={styles.navigationButtons}>
           <HomeButton />
@@ -98,7 +97,7 @@ export default async function ProjectPage({ params }: Props) {
               <EmblaCarousel>
                 {project.showcases && project.showcases.map((showcase, index) => {
                   return (
-                    <Suspense key={index}>
+                    <Suspense key={index} fallback={<Loading/>}>
                       <ShowcasePiece showcase={showcase as any}/>
                     </Suspense>
                   );
@@ -116,6 +115,6 @@ export default async function ProjectPage({ params }: Props) {
         </div>
         </article>
       </div>
-    </>
+    </Suspense>
   );
 }
