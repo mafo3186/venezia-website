@@ -294,7 +294,7 @@ export type Slug = {
 
 export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | Geopoint | Showcase | Project | SanityFileAsset | Settings | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | MediaTag | Slug;
 export declare const internalGroqTypeReferenceTo: unique symbol;
-// Source: ./app/list/page.tsx
+// Source: ./app/projectlist/page.tsx
 // Variable: projectsListQuery
 // Query: *[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}
 export type ProjectsListQueryResult = Array<{

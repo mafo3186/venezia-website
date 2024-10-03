@@ -14,6 +14,7 @@ import { CascadedShadowMap } from "./csm/cascaded-shadow-map";
 import { PreDefinedView } from "@/components/types";
 import { ProjectBox } from "./project-box";
 import { Water } from "./water";
+import { useHotspot } from "@/components/contexts";
 
 const metadataPath = "/assets/metadata.glb";
 
@@ -51,6 +52,8 @@ function Scene({
   }, [metadata.nodes]);
   const [iAmGod, setGod] = useState(false);
   const dpr = useThree(({ viewport }) => viewport.dpr);
+  const { setHotspot } = useHotspot();
+
   useEffect(() => {
     window.addEventListener("keydown", (event) => {
       if (event.key === "g") {
@@ -58,6 +61,12 @@ function Scene({
       }
     });
   }, [iAmGod]);
+
+  useEffect(() => {
+    if (view) {
+      setHotspot(view);
+    }
+  }, [view, setHotspot]);
 
   return (<>
     <color attach="background" args={["#96b0e4"]} />
@@ -86,7 +95,7 @@ function Scene({
     {nodes.map((node, index) => (
       <ProjectBox
         key={node.name}
-        href={projects[index] && `/projects/${projects[index].slug}`}
+        href={projects[index] && `/${projects[index].slug}`}
         position={node.position}
         rotation={node.rotation}
       />
