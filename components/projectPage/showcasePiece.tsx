@@ -2,8 +2,8 @@
 import { Image } from "next-sanity/image";
 import { blurhashToBase64 } from "blurhash-base64";
 import styles from "./showcasePiece.module.css";
-import { FaExpandArrowsAlt } from 'react-icons/fa';  // FontAwesome Icon
-
+import { FaExpandArrowsAlt } from 'react-icons/fa';
+import {SanityImagePalette}  from "@/sanity.types";
 
 interface ShowcasePieceProps {
   showcase: {
@@ -12,16 +12,31 @@ interface ShowcasePieceProps {
     content: string;
     mimeType: string | null;
     blurHash?: string;
-    aspectRatio?: number; // Füge das aspectRatio-Attribut hinzu
+    palette?: SanityImagePalette;
   };
 }
 
 export default function ShowcasePiece(props: ShowcasePieceProps) {
   const { showcase } = props;
 
+  const hexToRgba = (hex: string, alpha: number) => {
+    // Hex-Farbwert in RGB umwandeln
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`; // Alpha-Wert hinzufügen
+  };
+
+  const getDominantColor = (palette: SanityImagePalette | undefined): string => {
+    const dominantBackground = palette?.dominant?.background || "transparent"; // Fallback-Farbe
+    return hexToRgba(dominantBackground, 0.2);
+  };
+
   return (
     <figure className={styles.figure}>
-      <div className={styles.contentContainer}>
+      <div 
+        className={styles.contentContainer}
+      >
         {showcase.type === "image" && (
           <Image
             fill
@@ -30,6 +45,7 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
             src={showcase.content}
             alt={showcase.description ?? ""}
             className={styles.image}
+            style={{ backgroundColor: getDominantColor(showcase.palette) }}
           />
         )}
         {showcase.type === "video" && (
