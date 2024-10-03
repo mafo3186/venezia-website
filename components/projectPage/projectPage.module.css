@@ -135,6 +135,10 @@
 }
 
 @media (max-width: 768px) {
+  .tooltip {
+    max-width: 90vw;
+  }
+  
   .content {
     flex-direction: column;
     overflow: auto;
