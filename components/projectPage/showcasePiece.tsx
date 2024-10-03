@@ -32,8 +32,6 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
     return hexToRgba(dominantBackground, 0.2);
   };
 
-  console.log('Showcase Data:', showcase);
-
   return (
     <figure className={styles.figure}>
       <div 
