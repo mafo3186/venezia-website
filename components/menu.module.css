@@ -76,6 +76,10 @@
     font-weight: bold;
 }
 
+.hotSpot {
+  cursor: pointer;
+}
+
 /* Styling für den separaten Abschnitt der statischen Links */
 .staticLinks {
   margin-top: 10px;
@@ -98,5 +102,40 @@
 
 .staticLinks a {
   color: #29486b;
+}
+
+.navMenu ul li a.visited {
+  color: blue; /* Farbe für besuchte Projekte */
+}
+
+.navMenu ul li a.unvisited {
+  color: lightblue; /* Farbe für unbesuchte Projekte */
+}
+
+.buttonToggleVisited {
+  margin: 10px;
+  padding: 5px;
+  background-color: #ccc;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.buttonToggleVisited:hover {
+  background-color: #bbb;
+}
+
+.buttonClearVisited {
+  margin: 10px;
+  padding: 5px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.buttonClearVisited:hover {
+  background-color: #c0392b;
 }
 
