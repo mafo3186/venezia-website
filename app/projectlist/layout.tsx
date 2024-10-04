@@ -1,14 +1,9 @@
 "use client";
 import '@/app/global.css';
 
-import type { ProjectsQueryResult } from "@/sanity.types";
+import { PropsWithChildren } from "react";
 
-interface LayoutProps {
-  children: React.ReactNode;
-  projects: ProjectsQueryResult;
-}
-
-export default function ProjectListLayout({ children, projects }: LayoutProps) {
+export default function ProjectListLayout({ children }: PropsWithChildren<{}>) {
   return (
     <main>
       {children}

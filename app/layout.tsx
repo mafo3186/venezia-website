@@ -3,9 +3,9 @@ import { draftMode } from "next/headers";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery, projectsQuery } from "@/sanity/lib/queries";
 import AlertBanner from "@/components/alert-banner";
+import type { Metadata } from "next";
 import { toPlainText, VisualEditing } from "next-sanity";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import type { Metadata } from "next";
 import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { HotspotProvider, ProjectsProvider, SettingsProvider } from "@/components/contexts";
@@ -14,10 +14,11 @@ import Menu from "@/components/menu";
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch<SettingsQueryResult>({
     query: settingsQuery,
+    // Metadata should never contain stega
     stega: false,
   });
-  const title = settings?.title || "Fremde überall";
-  const description = settings?.description || "Biennale Venedig 2024 Exkursion";
+  const title = settings?.title;
+  const description = settings?.description;
 
   const ogImage = resolveOpenGraphImage(settings?.ogImage);
   let metadataBase: URL | undefined = undefined;
@@ -28,7 +29,6 @@ export async function generateMetadata(): Promise<Metadata> {
   } catch {
     // ignore
   }
-
   return {
     metadataBase,
     title: {
@@ -41,6 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
   };
 }
+
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const [settings, projects] = await Promise.all([
