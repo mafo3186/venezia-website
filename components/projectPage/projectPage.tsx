@@ -12,6 +12,7 @@ import ShowcasePiece from "@/components/projectPage/showcasePiece";
 import PortableText from "@/components/projectPage/documentation";
 import { BackButton, HomeButton } from "@/components/button";
 import Loading from "@/components/loading";
+import VisitedProjectWrapper from "@/components/projectPage/visitedProjectWrapper";
 
 export type Props = {
   params: { slug: string };
@@ -60,6 +61,7 @@ export default async function ProjectPage({ params }: Props) {
     
   return (
     <Suspense fallback={<Loading />}>
+      <VisitedProjectWrapper slug={params.slug} />
       <div className={styles.pageContainer}>
         <div className={styles.navigationButtons}>
           <HomeButton />
