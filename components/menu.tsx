@@ -37,10 +37,20 @@ const Menu = ({ projects, onHotspotClick }: MenuProps) => {
     const [showAllAsVisited, setShowAllAsVisited] = useState(false);
     const [visitedProjects, setVisitedProjects] = useState<string[]>([]);
 
-    useEffect(() => {
-      const storedVisitedProjects = JSON.parse(localStorage.getItem('visitedProjects') || '[]');
-      setVisitedProjects(storedVisitedProjects);
-    }, []);
+  useEffect(() => {
+    const storedVisitedProjects = JSON.parse(localStorage.getItem('visitedProjects') || '[]');
+    setVisitedProjects(storedVisitedProjects);
+
+    // Listener for the visitedProjectsUpdated event, registration and cleanup on unmount
+    const handleVisitedProjectsUpdate = () => {
+      const updatedVisitedProjects = JSON.parse(localStorage.getItem('visitedProjects') || '[]');
+      setVisitedProjects(updatedVisitedProjects);
+    };
+    window.addEventListener('visitedProjectsUpdated', handleVisitedProjectsUpdate);
+    return () => {
+      window.removeEventListener('visitedProjectsUpdated', handleVisitedProjectsUpdate);
+    };
+  }, []);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);

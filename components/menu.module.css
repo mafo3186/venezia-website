@@ -100,13 +100,12 @@
   color: #29486b;
 }
 
-/* Styling für besuchte/unbesuchte Links */
-.visited {
-  color: blue; /* Standardfarbe für besuchte Projekte */
+.navMenu ul li a.visited {
+  color: blue; /* Farbe für besuchte Projekte */
 }
 
-.unvisited {
-  color: darkgreen; /* Farbe für unbesuchte Projekte */
+.navMenu ul li a.unvisited {
+  color: lightblue; /* Farbe für unbesuchte Projekte */
 }
 
 .buttonToggleVisited {
