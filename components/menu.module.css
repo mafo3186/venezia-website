@@ -100,3 +100,39 @@
   color: #29486b;
 }
 
+/* Styling für besuchte/unbesuchte Links */
+.visited {
+  color: blue; /* Standardfarbe für besuchte Projekte */
+}
+
+.unvisited {
+  color: darkgreen; /* Farbe für unbesuchte Projekte */
+}
+
+.buttonToggleVisited {
+  margin: 10px;
+  padding: 5px;
+  background-color: #ccc;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.buttonToggleVisited:hover {
+  background-color: #bbb;
+}
+
+.buttonClearVisited {
+  margin: 10px;
+  padding: 5px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.buttonClearVisited:hover {
+  background-color: #c0392b;
+}
+

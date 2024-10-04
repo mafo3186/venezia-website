@@ -1,10 +1,9 @@
 'use client';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import styles from './menu.module.css';
 import { ProjectsQueryResult } from '@/sanity.types';
 import IconKompass from "@/components/iconKompass";
-import IconVenedig from "@/components/iconVenedig";
 import { Vector3, Quaternion } from 'three';
 import { PreDefinedView } from './types';
 
@@ -35,6 +34,13 @@ interface MenuProps {
 
 const Menu = ({ projects, onHotspotClick }: MenuProps) => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [showAllAsVisited, setShowAllAsVisited] = useState(false);
+    const [visitedProjects, setVisitedProjects] = useState<string[]>([]);
+
+    useEffect(() => {
+      const storedVisitedProjects = JSON.parse(localStorage.getItem('visitedProjects') || '[]');
+      setVisitedProjects(storedVisitedProjects);
+    }, []);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -42,6 +48,24 @@ const Menu = ({ projects, onHotspotClick }: MenuProps) => {
 
     const closeMenu = () => {
         setMenuOpen(false);
+    };
+
+    const isVisited = (slug: string | null) => {
+      if (!slug) return false;
+      return visitedProjects.includes(slug);
+    };
+  
+    const toggleShowAllAsVisited = () => {
+      setShowAllAsVisited(!showAllAsVisited);
+    };
+  
+    const clearVisitedProjects = () => {
+      setVisitedProjects([]);
+      localStorage.removeItem('visitedProjects');
+    };
+
+    const generateAnagram = (title: string) => {
+      return title.split('').sort(() => Math.random() - 0.5).join('');
     };
 
     return (
@@ -62,20 +86,34 @@ const Menu = ({ projects, onHotspotClick }: MenuProps) => {
                       Fremde entdecken
                     </Link>
                   </li>
-                  {projects.map((project) => (
-                    <li key={project._id}>
-                      <Link href={`/projects/${project.slug}`} onClick={closeMenu}>
-                        {project.title}
-                      </Link>
-                    </li>
-                  ))}
+                  {projects.map((project) => {
+                    const visited = isVisited(project.slug);
+                    const shouldShowAsVisited = showAllAsVisited || visited;
+                    return (
+                      <li key={project._id}>
+                        <Link
+                          href={`/projects/${project.slug}`}
+                          onClick={closeMenu}
+                          className={shouldShowAsVisited ? styles.visited : styles.unvisited}
+                        >
+                          {shouldShowAsVisited ? project.title : generateAnagram(project.title)}
+                        </Link>
+                      </li>
+                    )
+                  })}
                   {hotspots.map((hotspot) => (
                     <li key={hotspot.name} onClick={() => onHotspotClick?.(hotspot.location)}>
                       {hotspot.name}
                     </li>
                   ))}
                 </ul>
-
+                {/* Buttons für besuchte/unbesuchte Projekte */}
+                <button onClick={toggleShowAllAsVisited} className={styles.buttonToggleVisited}>
+                  {showAllAsVisited ? 'Als unbesucht anzeigen' : 'Alle als besucht anzeigen'}
+                </button>
+                <button onClick={clearVisitedProjects} className={styles.buttonClearVisited}>
+                  Alle Besuche zurücksetzen
+                </button>
                 <div className={styles.staticLinks}>
                   <ul>
                     <li>
@@ -95,6 +133,7 @@ const Menu = ({ projects, onHotspotClick }: MenuProps) => {
                     </li>
                   </ul>
                 </div>
+                
               </nav>
             )}
         </header>
