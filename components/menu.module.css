@@ -1,58 +1,57 @@
 .header {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 1000;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
 }
 
 .menu {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.9);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: width 0.2s ease, height 0.2s ease;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: width 0.2s ease, height 0.2s ease;
 }
 
 .menu:hover {
-  width: 80px; 
+  width: 80px;
   height: 80px;
   background-color: rgba(255, 255, 255, 1);
 }
 
 .menu.active {
-  width: 80px; 
+  width: 80px;
   height: 80px;
   background-color: rgba(255, 255, 255, 1);
 }
 
 .navMenu {
-    position: fixed;
-    top: 100px;
-    right: 10px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: max-content;
-    min-width: 15%;
-    max-width: 100%;
-    max-height: 70vh;
-    overflow-y: auto;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+  position: fixed;
+  top: 100px;
+  right: 10px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: max-content;
+  min-width: 15%;
+  max-width: 100%;
+  max-height: 70vh;
+  overflow-y: auto;
+  word-wrap: break-word;
 }
 
 .viewsSection {
-  display: flex; 
-  justify-content: space-between; 
+  display: flex;
+  justify-content: space-between;
   padding: 10px;
   font-weight: bold;
   background-color: #f8f8f8;
-  border-bottom: 1px solid #ddd; 
+  border-bottom: 1px solid #ddd;
 }
 
 .viewsSection a {
@@ -66,61 +65,35 @@
 }
 
 .viewsSection a:hover {
-  color: blue; /*toDo: Linkfarbe ggf. ändern*/
+  color: blue; /* toDo: Linkfarbe ändern */
 }
 
 .projects {
-  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .navMenu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.navMenu li {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-.navMenu li:last-child {
-    border-bottom: none;
-}
-
-.navMenu a {
-    text-decoration: none;
-    color: black;
-}
-
-
-.hotSpot {
-  cursor: pointer;
-  font-weight: bold;
-}
-
-/* Styling für den separaten Abschnitt der statischen Links */
-.staticLinks {
-  margin-top: 10px;
-}
-
-.staticLinks ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.staticLinks li {
+.navMenu li {
   padding: 10px;
   border-bottom: 1px solid #ddd;
 }
 
-.staticLinks li:last-child {
+.navMenu li:last-child {
   border-bottom: none;
 }
 
-.staticLinks a {
-  color: #29486b;
+.navMenu a {
+  text-decoration: none;
+  color: black;
+}
+
+.hotSpot {
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .navMenu ul li a.visited {
@@ -133,7 +106,8 @@
 
 .buttonContainer {
   display: flex;
-  flex-direction: row; /* Buttons untereinander anordnen */
+  flex-direction: row; /* Buttons nebeneinander anordnen */
+  justify-content: center;
   align-items: center;
   margin: 10px;
 }
@@ -153,10 +127,44 @@
 }
 
 .iconButton svg {
-  font-size: 1rem; 
+  font-size: 0.8rem;
   color: #333;
 }
 
+/* Styling für den Abschnitt der statischen Links */
+.staticLinks {
+  margin: 5px 0;
+  display: flex;
+  flex-direction: column; 
+}
+
+.staticLinks a {
+  font-weight: bold; 
+  padding: 10px; 
+  text-decoration: none;
+  color: #29486b;
+  border-bottom: 1px solid #ddd; 
+}
+
+.staticLinks a:last-child {
+  border-bottom: none; 
+}
+
+.legals {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f8f8;
+  padding: 10px;
+}
+
+/* Trennstrich zwischen den Links */
+.separator {
+  width: 1px;
+  height: 20px;
+  background-color: #ddd;
+  margin: 0 10px;
+}
 
 @media (max-width: 600px) {
   .navMenu {

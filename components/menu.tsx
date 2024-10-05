@@ -131,6 +131,12 @@ const Menu = ({ projects }: MenuProps) => {
                     <FaListAlt/> Liste
                   </Link>
                 </div>
+                {/* Statische Seiten */}
+                <div className={styles.staticLinks}>
+                  <Link href={"/fremde"} onClick={closeMenu}>
+                    Fremde überall – Fremde entdecken
+                  </Link>
+                </div>
                 {/* Abschnitt für die Projekte */}
                 <div className={styles.projects}>
                   <ul>
@@ -189,31 +195,16 @@ const Menu = ({ projects }: MenuProps) => {
                     </button>
                   </div>
                 </div>
-                
-                {/* Allgemeines */}
-                <div className={styles.staticLinks}>
-                  <ul>
-                    <li>
-                      <Link href={"/fremde"} onClick={closeMenu}>
-                        Fremde überall – Fremde entdecken
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                <div className={styles.staticLinks}>
-                  <ul>
-                    <li>
-                      <Link href={"/impressum"} onClick={closeMenu}>
-                        Impressum
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href={"/datenschutz"} onClick={closeMenu}>
-                        Datenschutz
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
+                {/* Abschnitt für Datenschutz und Impressum */}
+                  <div className={styles.legals}>
+                    <Link href="/impressum" onClick={closeMenu}>
+                      Impressum
+                    </Link>
+                    <div className={styles.separator} />
+                    <Link href="/datenschutz" onClick={closeMenu}>
+                      Datenschutz
+                    </Link>
+                  </div>
               </nav>
             )}
         </header>
