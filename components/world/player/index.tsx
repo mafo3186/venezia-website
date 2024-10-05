@@ -9,6 +9,7 @@ import { animated, config, useSpring } from "@react-spring/three";
 import { FirstPersonDragControls } from "./controls";
 import { Path3D } from "./path";
 import { easeInOut } from "framer-motion";
+import { LookTutorial } from "./tutorial";
 
 const metadataPath = "/assets/metadata.glb";
 useGLTF.preload(metadataPath);
@@ -49,8 +50,6 @@ export function Player({
   const [moveBackward, setMoveBackward] = useState(false);
   const [moveLeft, setMoveLeft] = useState(false);
   const [moveRight, setMoveRight] = useState(false);
-  const currentPath = useRef<Vector3[] | undefined>(undefined);
-  const currentPathLength = useRef(0);
   const [lookedAround, setLookedAround] = useState(false);
   const [enableLookTutorial, setEnableLookTutorial] = useState(false);
   useEffect(() => {
@@ -241,9 +240,10 @@ export function Player({
         <FirstPersonDragControls
           enabled={!debug}
           makeDefault={!debug}
-          onEnd={() => setLookedAround(true)}
+          onChange={() => setLookedAround(true)}
         />
       </mesh>
+      <LookTutorial enable={enableLookTutorial} completed={lookedAround} />
     </group>
     {navmesh && <>
       <mesh
