@@ -37,19 +37,40 @@
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    min-width: max-content;
+    width: max-content;
+    min-width: 15%;
     max-width: 100%;
+    max-height: 70vh;
+    overflow-y: auto;
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
 
-@media (max-width: 600px) {
-    .navMenu {
-        right: 5px;
-        left: 5px;
-        width: 90%;
-        margin: 0 auto;
-    }
+.viewsSection {
+  display: flex; 
+  justify-content: space-between; 
+  padding: 10px;
+  font-weight: bold;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #ddd; 
+}
+
+.viewsSection a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.viewsSection a svg {
+  margin-right: 8px;
+}
+
+.viewsSection a:hover {
+  color: blue; /*toDo: Linkfarbe ggf. ändern*/
+}
+
+.projects {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .navMenu ul {
@@ -72,12 +93,10 @@
     color: black;
 }
 
-.navMenu li:first-child a {
-    font-weight: bold;
-}
 
 .hotSpot {
   cursor: pointer;
+  font-weight: bold;
 }
 
 /* Styling für den separaten Abschnitt der statischen Links */
@@ -105,11 +124,11 @@
 }
 
 .navMenu ul li a.visited {
-  color: blue; /* Farbe für besuchte Projekte */
+  color: black; /* Farbe für besuchte Projekte */
 }
 
 .navMenu ul li a.unvisited {
-  color: lightblue; /* Farbe für unbesuchte Projekte */
+  color: rgb(145, 151, 232); /* Farbe für unbesuchte Projekte */
 }
 
 .buttonContainer {
@@ -125,7 +144,7 @@
   border-radius: 50%;
   padding: 10px;
   cursor: pointer;
-  margin: 8px; /* Abstand zwischen den Buttons */
+  margin: 8px;
   transition: background-color 0.3s ease;
 }
 
@@ -139,3 +158,15 @@
 }
 
 
+@media (max-width: 600px) {
+  .navMenu {
+    right: 5px;
+    left: 5px;
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .navMenu li {
+    padding: 5px;
+  }
+}
