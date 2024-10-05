@@ -8,8 +8,8 @@ import Link from "next/link";
 
 const projectsListQuery = groq`*[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}`;
 
-export default async function ListProjectsPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
-  const projects = await sanityFetch<ProjectsListQueryResult>({ query: projectsListQuery, params: { orderBy: searchParams["q"] ?? "title" } });
+export default async function ListProjectsPage() {
+  const projects = await sanityFetch<ProjectsListQueryResult>({ query: projectsListQuery, params: { orderBy: "title" } });
 
   return (
     <>
