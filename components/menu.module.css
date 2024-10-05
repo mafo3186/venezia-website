@@ -76,6 +76,10 @@
     font-weight: bold;
 }
 
+.hotSpot {
+  cursor: pointer;
+}
+
 /* Styling für den separaten Abschnitt der statischen Links */
 .staticLinks {
   margin-top: 10px;
