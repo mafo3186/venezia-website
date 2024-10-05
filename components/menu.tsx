@@ -1,34 +1,14 @@
 'use client';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './menu.module.css';
 import { ProjectsQueryResult } from '@/sanity.types';
 import IconKompass from "@/components/iconKompass";
-import {FaEye, FaEyeSlash, FaRedo, FaGlobe, FaListAlt} from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaRedo, FaGlobe, FaListAlt } from 'react-icons/fa';
 import { Vector3, Quaternion } from 'three';
 import { PreDefinedView } from './types';
 import { useHotspot } from '@/components/contexts';
-
-const BUTTON_LABELS = {
-  SHOW_ALL: {
-    true: {
-      aria: 'Fremde überall - Unbekannte Projekte selbst entdecken',
-      title: 'Fremde überall - Unbekannte Projekte selbst entdecken',
-      icon: <FaEye />,
-    },
-    false: {
-      aria: 'Entdeckung - Alle Projekte enthüllen',
-      title: 'Entdeckung - Alle Projekte enthüllen',
-      icon: <FaEyeSlash />,
-    },
-  },
-  RESET: {
-    aria: 'Alle Projekte neu entdecken',
-    title: 'Alle Projekte neu entdecken',
-    icon: <FaRedo />,
-  },
-};
 
 const hotspots: {
   name: string;
@@ -60,7 +40,7 @@ const Menu = ({ projects }: MenuProps) => {
   const pathname = usePathname();
   const [showAllAsVisited, setShowAllAsVisited] = useState(false);
   const [visitedProjects, setVisitedProjects] = useState<string[]>([]);
-  
+
   useEffect(() => {
     const storedVisitedProjects = JSON.parse(localStorage.getItem('visitedProjects') || '[]');
     setVisitedProjects(storedVisitedProjects);
@@ -102,7 +82,6 @@ const Menu = ({ projects }: MenuProps) => {
     return string.split('').sort(() => Math.random() - 0.5).join('');
   };
 
-  //sucks, aber useRouter funktioniert nicht in dieser Komponente
   const getFullPath = (pathname: string, slug: string | null) => {
     if (pathname.includes('/projectlist')) {
       return `/projectlist/${slug}`;
@@ -110,105 +89,107 @@ const Menu = ({ projects }: MenuProps) => {
     return `/${slug}`;
   };
 
-    return (
-        <header className={styles.header}>
-            <div
-              className={`${styles.menu} ${menuOpen ? styles.active : ''}`} 
-              onClick={toggleMenu}
-            >
-              <IconKompass height={'80%'} width={'80%'}/>
-            </div>
+  return (
+    <header className={styles.header}>
+      <div
+        className={`${styles.menu} ${menuOpen ? styles.active : ''}`}
+        onClick={toggleMenu}
+      >
+        <IconKompass height={'80%'} width={'80%'} />
+      </div>
 
-            {/* Dropdown-Menü */}
-            {menuOpen && (
-              <nav className={styles.navMenu}>
-                {/* Abschnitt für die Ansichten-Links */}
-                <div className={styles.viewsSection}>
-                  <Link href="/" onClick={closeMenu} aria-label="Hauptansicht - 3D-Welt" title="Hauptansicht - 3D-Welt">
-                    <FaGlobe/> Welt
-                  </Link>
-                  <Link href="/projectlist" onClick={closeMenu} aria-label="Listenansicht" title="Listenansicht">
-                    <FaListAlt/> Liste
-                  </Link>
-                </div>
-                {/* Statische Seiten */}
-                <div className={styles.staticLinks}>
-                  <Link href={"/fremde"} onClick={closeMenu}>
-                    Fremde überall – Fremde entdecken
-                  </Link>
-                </div>
-                {/* Abschnitt für die Projekte */}
-                <div className={styles.projects}>
-                  <ul>
-                    {projects.map((project) => {
-                      const visited = isVisited(project.slug);
-                        const shouldShowAsVisited = showAllAsVisited || visited;
-    
-                        return (
-                          <li key={project._id}>
-                            <Link
-                              href={getFullPath(pathname, project.slug)}
-                              onClick={closeMenu}
-                              className={shouldShowAsVisited ? styles.visited : styles.unvisited}
-                            >
-                              {shouldShowAsVisited ? project.title : generateAnagram(project.title)}
-                              {project.author && (
-                                <>
-                                  {" – "}
-                                  {shouldShowAsVisited ? project.author : generateAnagram(project.author)}
-                                </>
-                              )}
-                            </Link>
-                          </li>
-                        );
-                      })}
-                      {hotspots.map((hotspot) => (
-                        <li
-                          key={hotspot.name}
-                          className={styles.hotSpot}
-                          onClick={() => {
-                            closeMenu();
-                            setHotspot(hotspot.location);
-                          }}
-                        >
-                          {hotspot.name}
-                        </li>
-                      ))}
-                  </ul>
-                  {/* Buttons für besuchte/unbesuchte Projekte */}
-                  <div className={styles.buttonContainer}>
-                    <button
-                      onClick={toggleShowAllAsVisited}
-                      aria-label={BUTTON_LABELS.SHOW_ALL[showAllAsVisited].aria}
-                      title={BUTTON_LABELS.SHOW_ALL[showAllAsVisited].title}
-                      className={styles.iconButton}
+      {/* Dropdown-Menü */}
+      {menuOpen && (
+        <nav className={styles.navMenu}>
+          {/* Abschnitt für die Ansichten-Links */}
+          <div className={styles.viewsSection}>
+            <Link href="/" onClick={closeMenu} aria-label="Hauptansicht - 3D-Welt" title="Hauptansicht - 3D-Welt">
+              <FaGlobe /> Welt
+            </Link>
+            <Link href="/projectlist" onClick={closeMenu} aria-label="Listenansicht" title="Listenansicht">
+              <FaListAlt /> Liste
+            </Link>
+          </div>
+          {/* Statische Seiten */}
+          <div className={styles.staticLinks}>
+            <Link href={"/fremde"} onClick={closeMenu}>
+              Fremde überall – Fremde entdecken
+            </Link>
+          </div>
+          {/* Abschnitt für die Projekte */}
+          <div className={styles.projects}>
+            <ul>
+              {projects.map((project) => {
+                const visited = isVisited(project.slug);
+                const shouldShowAsVisited = showAllAsVisited || visited;
+
+                return (
+                  <li key={project._id}>
+                    <Link
+                      href={getFullPath(pathname, project.slug)}
+                      onClick={closeMenu}
+                      className={shouldShowAsVisited ? styles.visited : styles.unvisited}
                     >
-                      {BUTTON_LABELS.SHOW_ALL[showAllAsVisited].icon}
-                    </button>
-                    <button
-                      onClick={clearVisitedProjects}
-                      aria-label={BUTTON_LABELS.RESET.aria}
-                      title={BUTTON_LABELS.RESET.title}
-                      className={styles.iconButton}
-                    >
-                      {BUTTON_LABELS.RESET.icon}
-                    </button>
-                  </div>
-                </div>
-                {/* Abschnitt für Datenschutz und Impressum */}
-                  <div className={styles.legals}>
-                    <Link href="/impressum" onClick={closeMenu}>
-                      Impressum
+                      {shouldShowAsVisited ? project.title : generateAnagram(project.title)}
+                      {project.author && (
+                        <>
+                          {" – "}
+                          {shouldShowAsVisited ? project.author : generateAnagram(project.author)}
+                        </>
+                      )}
                     </Link>
-                    <div className={styles.separator} />
-                    <Link href="/datenschutz" onClick={closeMenu}>
-                      Datenschutz
-                    </Link>
-                  </div>
-              </nav>
-            )}
-        </header>
-    );
+                  </li>
+                );
+              })}
+              {hotspots.map((hotspot) => (
+                <li
+                  key={hotspot.name}
+                  className={styles.hotSpot}
+                  onClick={() => {
+                    closeMenu();
+                    setHotspot(hotspot.location);
+                  }}
+                >
+                  {hotspot.name}
+                </li>
+              ))}
+            </ul>
+            {/* Buttons für besuchte/unbesuchte Projekte */}
+            <div className={styles.buttonContainer}>
+              {/* Button für "Alle anzeigen" */}
+              <button
+                onClick={toggleShowAllAsVisited}
+                aria-label={showAllAsVisited ? 'Fremde überall - Unbekannte Projekte selbst entdecken' : 'Entdeckung - Alle Projekte enthüllen'}
+                title={showAllAsVisited ? 'Fremde überall - Unbekannte Projekte selbst entdecken' : 'Entdeckung - Alle Projekte enthüllen'}
+                className={styles.iconButton}
+              >
+                {showAllAsVisited ? <FaEye /> : <FaEyeSlash />}
+              </button>
+              {/* Button für "Alle zurücksetzen" */}
+              <button
+                onClick={clearVisitedProjects}
+                aria-label='Alle Projekte neu entdecken'
+                title='Alle Projekte neu entdecken'
+                className={styles.iconButton}
+              >
+                <FaRedo />
+              </button>
+            </div>
+          </div>
+          {/* Abschnitt für Datenschutz und Impressum */}
+          <div className={styles.legals}>
+            <Link href="/impressum" onClick={closeMenu}>
+              Impressum
+            </Link>
+            <div className={styles.separator} />
+            <Link href="/datenschutz" onClick={closeMenu}>
+              Datenschutz
+            </Link>
+          </div>
+        </nav>
+      )}
+    </header>
+  );
 };
 
 export default Menu;
