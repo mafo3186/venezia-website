@@ -78,7 +78,7 @@ const Menu = ({ projects }: MenuProps) => {
   };
 
   const generateAnagram = (string: string) => {
-    if (string) return string.split('').sort(() => Math.random() - 0.5).join('');
+    return string.split('').sort(() => Math.random() - 0.5).join('');
   };
 
   //sucks, aber useRouter funktioniert nicht in dieser Komponente
