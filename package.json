@@ -10,14 +10,16 @@
     "presetup": "echo 'about to setup env variables, follow the guide here: https://github.com/vercel/next.js/tree/canary/examples/cms-sanity#using-the-sanity-cli'",
     "setup": "npx sanity@latest init --env .env.local",
     "postsetup": "echo 'create the read token by following the rest of the guide: https://github.com/vercel/next.js/tree/canary/examples/cms-sanity#creating-a-read-token'",
-    "gltf": "gltfjsx public/assets/venice.glb --root=./public --output=public/assets/model.tsx --shadows --transform --keepmeshes --console --typed > ./components/world/model.tsx",
+    "updatemodel:optimize": "gltf-transform optimize public/assets/venice.glb public/assets/venice-transformed.glb --compress draco --simplify-error 0.00001",
+    "updatemodel:gltfjsx": "gltfjsx public/assets/venice-transformed.glb --root=./public --output=public/assets/model.jsx --shadows --console > ./components/world/model.jsx",
+    "updatemodel": "npm run updatemodel:optimize && npm run updatemodel:gltfjsx",
     "typegen": "sanity schema extract && sanity typegen generate"
   },
   "dependencies": {
     "@react-spring/three": "^9.7.4",
     "@react-three/drei": "^9.114.0",
     "@react-three/fiber": "^8.17.8",
-    "@react-three/postprocessing": "^2.16.2",
+    "@react-three/postprocessing": "^2.16.3",
     "@sanity/assist": "^3.0.6",
     "@sanity/icons": "^3.4.0",
     "@sanity/image-url": "^1.0.2",
@@ -31,10 +33,12 @@
     "@vercel/speed-insights": "^1.0.12",
     "blurhash-base64": "^0.0.3",
     "embla-carousel-react": "^8.3.0",
+    "framer-motion-3d": "^11.9.0",
     "next": "^14.2.13",
     "next-sanity": "^9.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.3.0",
     "sanity": "^3.58.0",
     "sanity-plugin-asset-source-unsplash": "^3.0.1",
     "sanity-plugin-media": "^2.3.2",
@@ -44,6 +48,7 @@
     "typescript": "5.6.2"
   },
   "devDependencies": {
+    "@gltf-transform/cli": "^4.0.10",
     "eslint": "*",
     "eslint-config-next": "^14.2.13",
     "gltfjsx": "^6.5.2"

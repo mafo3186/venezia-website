@@ -366,7 +366,7 @@ export type SettingsQueryResult = {
   };
 } | null;
 // Variable: projectsQuery
-// Query: *[_type == "project" && defined(slug.current)] | order(date desc, _updatedAt desc) {  content,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  author,}
+// Query: *[_type == "project" && defined(slug.current)] | order(_createdAt asc, _id asc) {  content,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  author,}
 export type ProjectsQueryResult = Array<{
   content: null;
   _id: string;
@@ -376,15 +376,13 @@ export type ProjectsQueryResult = Array<{
   excerpt: null;
   author: string | null;
 }>;
-
-// Source: ./app/(home)/projects/[slug]/page.tsx
 // Variable: projectSlugs
 // Query: *[_type == "project"]{slug}
 export type ProjectSlugsResult = Array<{
   slug: Slug | null;
 }>;
 // Variable: projectBySlugQuery
-// Query: *[_type == "project" && slug.current == $slug] [0] {  "documentation": documentation[] {    ...,    _type == "file" => {      asset->    }  },  description,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  author,  type,  "showcases": showcase[] {    type,    type == 'image' => showcaseImage.asset->{"content": url, "blurHash": metadata.blurHash, mimeType},    type == 'audio' => showcaseAudio.asset->{"content": url, mimeType},    type == 'video' => showcaseVideo.asset->{"content": url, mimeType},    type == 'text' => @{"content": showcaseText},    type == 'website' => @{"content": showcaseWebsite},    description  }}
+// Query: *[_type == "project" && slug.current == $slug] [0] {  "documentation": documentation[] {    ...,    _type == "file" => {      asset->    }  },  description,  _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  author,  type,  "showcases": showcase[] {    type,    type == 'image' => showcaseImage.asset->{      "content": url,      "blurHash": metadata.blurHash,      "palette": metadata.palette,      "location": metadata.location,      "exif": metadata.exif,      "dimensions": metadata.dimensions,      mimeType    },    type == 'audio' => showcaseAudio.asset->{"content": url, mimeType},    type == 'video' => showcaseVideo.asset->{"content": url, mimeType},    type == 'text' => @{"content": showcaseText},    type == 'website' => @{"content": showcaseWebsite},    description  }}
 export type ProjectBySlugQueryResult = {
   documentation: Array<{
     children?: Array<{
@@ -454,6 +452,10 @@ export type ProjectBySlugQueryResult = {
     type: "audio" | "image" | "text" | "video" | "website" | null;
     content: string | null;
     blurHash: string | null;
+    palette: SanityImagePalette | null;
+    location: Geopoint | null;
+    exif: null;
+    dimensions: SanityImageDimensions | null;
     mimeType: string | null;
     description: string | null;
   } | {
@@ -477,8 +479,8 @@ declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"project\"] | order(select($orderBy == \"title\" => title, $orderBy == \"_updatedAt\" => _updatedAt)) {_id, title, _updatedAt, description, \"slug\": slug.current}": ProjectsListQueryResult;
     "*[_type == \"settings\"][0]": SettingsQueryResult;
-    "*[_type == \"project\" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n  content,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  author,\n}": ProjectsQueryResult;
+    "*[_type == \"project\" && defined(slug.current)] | order(_createdAt asc, _id asc) {\n  content,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  excerpt,\n  author,\n}": ProjectsQueryResult;
     "*[_type == \"project\"]{slug}": ProjectSlugsResult;
-    "*[_type == \"project\" && slug.current == $slug] [0] {\n  \"documentation\": documentation[] {\n    ...,\n    _type == \"file\" => {\n      asset->\n    }\n  },\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  \"showcases\": showcase[] {\n    type,\n    type == 'image' => showcaseImage.asset->{\"content\": url, \"blurHash\": metadata.blurHash, mimeType},\n    type == 'audio' => showcaseAudio.asset->{\"content\": url, mimeType},\n    type == 'video' => showcaseVideo.asset->{\"content\": url, mimeType},\n    type == 'text' => @{\"content\": showcaseText},\n    type == 'website' => @{\"content\": showcaseWebsite},\n    description\n  }\n}": ProjectBySlugQueryResult;
+    "*[_type == \"project\" && slug.current == $slug] [0] {\n  \"documentation\": documentation[] {\n    ...,\n    _type == \"file\" => {\n      asset->\n    }\n  },\n  description,\n  _id,\n  \"status\": select(_originalId in path(\"drafts.**\") => \"draft\", \"published\"),\n  \"title\": coalesce(title, \"Untitled\"),\n  \"slug\": slug.current,\n  author,\n  type,\n  \"showcases\": showcase[] {\n    type,\n    type == 'image' => showcaseImage.asset->{\n      \"content\": url,\n      \"blurHash\": metadata.blurHash,\n      \"palette\": metadata.palette,\n      \"location\": metadata.location,\n      \"exif\": metadata.exif,\n      \"dimensions\": metadata.dimensions,\n      mimeType\n    },\n    type == 'audio' => showcaseAudio.asset->{\"content\": url, mimeType},\n    type == 'video' => showcaseVideo.asset->{\"content\": url, mimeType},\n    type == 'text' => @{\"content\": showcaseText},\n    type == 'website' => @{\"content\": showcaseWebsite},\n    description\n  }\n}": ProjectBySlugQueryResult;
   }
 }

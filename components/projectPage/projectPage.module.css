@@ -1,0 +1,150 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  justify-content: center;
+  padding: 10px;
+  margin: auto;
+}
+
+.navigationButtons {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  padding: 1rem;
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.article {
+  display: flex;
+  flex-grow: 1;
+  padding: 1rem;
+  overflow: hidden;
+  background-color: var(--background-color-article);
+  border-radius: var(--border-radius-container);
+}
+
+.content {
+  display: flex;
+  flex-grow: 1;
+  gap: 1rem;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.showcaseAndTitle {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 2;
+  flex-basis: 66%;
+  min-width: 66%;
+  min-height: 100%;
+  max-height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: var(--border-radius-content);
+}
+
+.projectTitle {
+  color: white;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: var(--border-radius-content);
+  flex-shrink: 1;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.projectTitle h1 {
+  font-size: 2em;
+}
+
+.titleWithInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.infoIconWrapper {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  margin-left: 0.5rem;
+}
+
+.infoIcon {
+  font-size: 1.2rem;
+  color: #555;
+  cursor: pointer;
+}
+
+
+.infoIcon:focus + .tooltip,
+.infoIconWrapper:focus-within .tooltip,
+.infoIcon:hover + .tooltip,
+.infoIconWrapper:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip {
+  position: absolute;
+  top: 100%; /* Tooltip unter dem Icon anzeigen */
+  right: 100%; 
+  background-color: #333;
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 8px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1;
+  font-size: 0.9rem;
+  visibility: hidden;
+  opacity: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optionaler Schatten */
+  overflow: auto;
+  overflow-wrap: break-word; /* Umbrüche bei langen Wörtern */
+  min-width: 300px;
+}
+
+.showcase {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  width: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: var(--border-radius-content);
+}
+
+.documentation {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border-radius: var(--border-radius-content);
+}
+
+@media (max-width: 768px) {
+  .tooltip {
+    max-width: 90vw;
+  }
+  
+  .content {
+    flex-direction: column;
+    overflow: auto;
+  }
+
+  .documentation {
+    overflow-y: visible;
+  }
+}

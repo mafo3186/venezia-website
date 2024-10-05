@@ -27,7 +27,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
  *  Too low values can cause the resolution to slowly creep down. 
  * @returns The current dynamic resolution value.
  */
-export default function useDynamicRes({ minDpr = 0.25, baseDpr, maxDpr = 1.2, interval = 7, optimism = 0.1 }: { minDpr?: number, baseDpr?: number, maxDpr?: number, interval?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9, optimism?: number } = {}): number {
+export default function useDynamicRes({ targetFrameRate = 60, minDpr = 0.25, baseDpr, maxDpr = 1.2, interval = 7, optimism = 0.1 }: { targetFrameRate?: number, minDpr?: number, baseDpr?: number, maxDpr?: number, interval?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9, optimism?: number } = {}): number {
+  assert(targetFrameRate > 0, "targetFrameRate must be greater than 0");
   assert(minDpr < maxDpr, "minDpr must be smaller than maxDpr");
   assert(minDpr > 0, "minDpr must be greater than 0");
   assert(maxDpr > 0, "maxDpr must be greater than 0");
@@ -39,8 +40,9 @@ export default function useDynamicRes({ minDpr = 0.25, baseDpr, maxDpr = 1.2, in
   const [dpr, setDpr] = useState<number>(baseDpr ?? (minDpr + maxDpr) / 2);
   const samples = useRef<number[]>([]);
   const counter = useRef<number>(0);
-  const targetFrameTime = useRef<number>(1000.0 / 60.0);
+  const targetFrameTime = 1000.0 / targetFrameRate;
   const previousTimeRef = useRef<number | undefined>(undefined);
+  const streak = useRef<number>(optimism);
 
   useEffect(() => {
     counter.current = 0;
@@ -58,16 +60,17 @@ export default function useDynamicRes({ minDpr = 0.25, baseDpr, maxDpr = 1.2, in
 
         // Update DPR every 10 frames
         if (counter.current === (samples.current.length - 1)) {
-          const median = samples.current.sort((a, b) => a - b)[Math.floor(samples.current.length / 2)] - optimism;
+          const median = samples.current.sort((a, b) => a - b)[Math.floor(samples.current.length / 2)] - streak.current;
 
           const throughput = dpr / median;
 
-          const nextDpr = Math.min(maxDpr, Math.max(targetFrameTime.current * throughput, minDpr));
+          const nextDpr = Math.min(maxDpr, Math.max(targetFrameTime * throughput, minDpr));
 
           // console.log(`median ${median.toFixed(2)}, throughput ${throughput.toFixed(2)}`);
           if (nextDpr !== dpr) {
             // console.log(`delta ${delta.toFixed(2)}, target ${targetFrameTime.current.toFixed(2)}, dpr ${nextDpr}`);
-            setDpr(() => nextDpr);
+            streak.current = nextDpr > dpr ? streak.current + optimism : optimism;
+            setDpr(() => Number.parseFloat(nextDpr.toFixed(2)));
           }
         }
       }
@@ -81,7 +84,7 @@ export default function useDynamicRes({ minDpr = 0.25, baseDpr, maxDpr = 1.2, in
 
     // Cleanup on unmount
     return () => cancelAnimationFrame(animationFrameId);
-  }, [dpr, setDpr, minDpr, maxDpr, optimism]);
+  }, [dpr, setDpr, minDpr, maxDpr, optimism, targetFrameTime]);
 
   return dpr;
 }

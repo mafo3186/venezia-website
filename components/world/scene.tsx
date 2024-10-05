@@ -1,64 +1,56 @@
 "use client";
 
 import { ProjectsQueryResult } from "@/sanity.types";
-import { Canvas, MeshProps, useFrame } from "@react-three/fiber"
-import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useRef, useState } from "react";
-import { DepthOfField, EffectComposer, N8AO, SSAO, ToneMapping, Vignette } from "@react-three/postprocessing";
-import { BakeShadows, ContactShadows, Environment, OrbitControls, PerformanceMonitor, useProgress } from "@react-three/drei";
-import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
+import { Canvas, useThree } from "@react-three/fiber";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { DepthOfField, EffectComposer, N8AO, Vignette } from "@react-three/postprocessing";
+import { Environment, OrbitControls, useGLTF, useProgress } from "@react-three/drei";
 import styles from "./world.module.css";
-import { Euler, Mesh, MOUSE } from "three";
+import { Euler } from "three";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
-import useDynamicRes from "./dynamic-res";
 import Stats, { Panel } from "./stats";
 import { CascadedShadowMap } from "./csm/cascaded-shadow-map";
+import { PreDefinedView } from "@/components/types";
+import { ProjectBox } from "./project-box";
+import { Water } from "./water";
 
-function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
-  const router = useRouter()
-  const ref = useRef<Mesh | null>(null)
-  const [hovered, hover] = useState(false)
-  useFrame((_, delta) => {
-    if (ref.current) {
-      ref.current.rotation.y += delta
-      ref.current.rotation.x += 0.5 * delta
-      ref.current.rotation.z += 0.25 * delta
-    }
-  })
-  return (
-    <mesh
-      {...props}
-      ref={ref}
-      scale={hovered ? 1.5 : 1}
-      castShadow
-      receiveShadow
-      onClick={() => router.push(href)}
-      onPointerOver={() => hover(true)}
-      onPointerOut={() => hover(false)}>
-      <icosahedronGeometry args={[0.1]} />
-      <meshPhysicalMaterial
-        attach="material"
-        color="white"
-        transmission={1}
-        thickness={0.5}
-        roughness={0.2} />
-    </mesh>
-  )
-}
+const metadataPath = "/assets/metadata.glb";
 
-function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
+useGLTF.preload(metadataPath);
+
+function Scene({
+  projects,
+  inBackground,
+  view,
+  onViewReached,
+}: {
+  projects: ProjectsQueryResult,
+  inBackground: boolean,
+  view?: PreDefinedView,
+  onViewReached?: () => void,
+}) {
+  const metadata = useGLTF(metadataPath);
+  const nodes = useMemo(() => {
+    return Object.values(metadata.nodes)
+      .filter((node) => node.userData.name?.includes("."))
+      .map((node) => {
+        const [hotspot, numeric] = node.userData.name.split(".");
+        return {
+          ...node,
+          userData: { ...node.userData, hotspot, index: parseInt(numeric) - 1 },
+        };
+      })
+      .sort((a, b) => {
+        if (a.userData.index !== b.userData.index) {
+          return a.userData.index - b.userData.index;
+        } else {
+          return a.userData.hotspot.localeCompare(b.userData.hotspot);
+        }
+      });
+  }, [metadata.nodes]);
   const [iAmGod, setGod] = useState(false);
-  const controls = useRef<PointerLockControlsImpl | null>(null);
-  useEffect(() => {
-    if (controls.current) {
-      if (inBackground && controls.current.isLocked) {
-        controls.current.unlock();
-      } else if (!inBackground && !controls.current.isLocked) {
-        controls.current.lock();
-      }
-    }
-  }, [controls, inBackground])
+  const dpr = useThree(({ viewport }) => viewport.dpr);
   useEffect(() => {
     window.addEventListener("keydown", (event) => {
       if (event.key === "g") {
@@ -66,37 +58,55 @@ function Scene({ projects, inBackground }: { projects: ProjectsQueryResult, inBa
       }
     });
   }, [iAmGod]);
+
   return (<>
     <color attach="background" args={["#96b0e4"]} />
     <Environment preset="sunset" environmentIntensity={0.8} environmentRotation={new Euler(0, -0.5, 0)} />
-    <CascadedShadowMap lightIntensity={0} shadowMapSize={4096} lightDirection={[-0.5, -1.2, -0.5]} lightMargin={10} maxFar={25}/>
+    <CascadedShadowMap lightIntensity={0} shadowMapSize={4096} lightDirection={[-0.5, -1.2, -0.5]} lightMargin={10} maxFar={25} />
     <fogExp2 attach="fog" color="#96b0e4" density={iAmGod ? 0 : 0.03} />
-    <EffectComposer enableNormalPass enabled={!iAmGod}>
-      <DepthOfField focusDistance={0} focalLength={inBackground ? 0.01 : 0.2} bokehScale={8} />
+    <EffectComposer>
+      <N8AO aoRadius={2} intensity={5} distanceFalloff={.4} depthAwareUpsampling quality="performance" />
+      <DepthOfField
+        focusDistance={0}
+        focalLength={(inBackground ? 0.01 : 0.2)}
+        bokehScale={4 * dpr * dpr}
+      />
       <Vignette technique={0} offset={0.1} darkness={0.75} />
-
     </EffectComposer>
-    
     <OrbitControls enabled={iAmGod} />
 
     <EnvironmentModel />
 
-    <Player position={[0, 3, 0]} debug={iAmGod} />
-    {projects.map((project, index) => (
+    <Player
+      debug={iAmGod}
+      targetPosition={view?.position}
+      targetRotation={view?.rotation}
+      onTargetCompleted={onViewReached}
+    />
+    {nodes.map((node, index) => (
       <ProjectBox
-        key={project._id}
-        href={`/projects/${project.slug}`}
-        position={[
-          Math.cos((index / projects.length + 0.125) * 2 * Math.PI) * 0.75, 2,
-          Math.sin((index / projects.length + 0.125) * 2 * Math.PI) * 0.75
-        ]}
+        key={node.name}
+        href={projects[index] && `/projects/${projects[index].slug}`}
+        position={node.position}
+        rotation={node.rotation}
       />
     ))}
+    <Water />
   </>);
 }
 
-export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQueryResult, inBackground: boolean }) {
-  const dpr = useDynamicRes();
+export function SceneCanvas({
+  projects,
+  inBackground,
+  view,
+  onViewReached,
+}: {
+  projects: ProjectsQueryResult,
+  inBackground: boolean,
+  view?: PreDefinedView,
+  onViewReached?: () => void,
+}) {
+  const dpr = .78;
   const { active, progress } = useProgress();
   return (<>
     <Canvas
@@ -108,7 +118,12 @@ export function SceneCanvas({ projects, inBackground }: { projects: ProjectsQuer
       frameloop={inBackground ? "demand" : "always"}
     >
       <Suspense fallback={null}>
-        <Scene projects={projects} inBackground={inBackground} />
+        <Scene
+          projects={projects}
+          inBackground={inBackground}
+          view={view}
+          onViewReached={onViewReached}
+        />
       </Suspense>
       <Stats>
         <Panel title="cDPR" value={dpr * 100} maxValue={120} />

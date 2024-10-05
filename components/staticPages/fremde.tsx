@@ -17,7 +17,7 @@ export default function Fremde() {
         <p className={styles.bold}>Exkursion</p>
         <p>Im Rahmen unserer Exkursion nach Venedig zur Biennale 2024, deren Thema „Fremde überall“ eine zentrale Rolle
           spielte, tauchten wir tief in die Stadt und ihre Atmosphäre ein. Auf der Insel Lido lebend, erkundeten wir
-          nicht nur die kunstvollen Ausstellungen in Giardini und Arenale, sondern auch die vielfältigen, im gesamten
+          nicht nur die kunstvollen Ausstellungen in Giardini und Arsenale, sondern auch die vielfältigen, im gesamten
           Stadtgebiet verteilten Pavillons und Kunstwerke. Wir genossen die italienische Küche, ließen uns von der
           einzigartigen Stimmung der Stadt faszinieren und reflektierten über die vielen Facetten des Themas Fremde, das
           sich in den ausgestellten Werken auf eindrucksvolle Weise widerspiegelte. Diese Erfahrung eröffnete uns neue
