@@ -16,6 +16,7 @@
     "typegen": "sanity schema extract && sanity typegen generate"
   },
   "dependencies": {
+    "@react-spring/three": "^9.7.4",
     "@react-three/drei": "^9.114.0",
     "@react-three/fiber": "^8.17.8",
     "@react-three/postprocessing": "^2.16.3",
