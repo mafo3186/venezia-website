@@ -119,8 +119,12 @@ const Menu = ({ projects }: MenuProps) => {
                           className={shouldShowAsVisited ? styles.visited : styles.unvisited}
                         >
                           {shouldShowAsVisited ? project.title : generateAnagram(project.title)}
-                          {" – "}
-                          {shouldShowAsVisited ? project.author : generateAnagram(project.author)}
+                          {project.author && (
+                            <>
+                              {" – "}
+                              {shouldShowAsVisited ? project.author : generateAnagram(project.author)}
+                            </>
+                          )}
                         </Link>
                       </li>
                     );
