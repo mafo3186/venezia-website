@@ -77,8 +77,8 @@ const Menu = ({ projects }: MenuProps) => {
     localStorage.removeItem('visitedProjects');
   };
 
-  const generateAnagram = (title: string) => {
-    return title.split('').sort(() => Math.random() - 0.5).join('');
+  const generateAnagram = (string: string) => {
+    if (string) return string.split('').sort(() => Math.random() - 0.5).join('');
   };
 
   //sucks, aber useRouter funktioniert nicht in dieser Komponente
@@ -119,6 +119,8 @@ const Menu = ({ projects }: MenuProps) => {
                           className={shouldShowAsVisited ? styles.visited : styles.unvisited}
                         >
                           {shouldShowAsVisited ? project.title : generateAnagram(project.title)}
+                          {" – "}
+                          {shouldShowAsVisited ? project.author : generateAnagram(project.author)}
                         </Link>
                       </li>
                     );
