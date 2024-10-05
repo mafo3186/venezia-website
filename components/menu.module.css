@@ -112,30 +112,30 @@
   color: lightblue; /* Farbe für unbesuchte Projekte */
 }
 
-.buttonToggleVisited {
+.buttonContainer {
+  display: flex;
+  flex-direction: row; /* Buttons untereinander anordnen */
+  align-items: center;
   margin: 10px;
-  padding: 5px;
-  background-color: #ccc;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
 }
 
-.buttonToggleVisited:hover {
+.iconButton {
+  background-color: #ccc;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  margin: 8px; /* Abstand zwischen den Buttons */
+  transition: background-color 0.3s ease;
+}
+
+.iconButton:hover {
   background-color: #bbb;
 }
 
-.buttonClearVisited {
-  margin: 10px;
-  padding: 5px;
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
+.iconButton svg {
+  font-size: 1rem; 
+  color: #333;
 }
 
-.buttonClearVisited:hover {
-  background-color: #c0392b;
-}
 

@@ -5,9 +5,34 @@ import { usePathname } from 'next/navigation';
 import styles from './menu.module.css';
 import { ProjectsQueryResult } from '@/sanity.types';
 import IconKompass from "@/components/iconKompass";
+import { FaEye, FaEyeSlash, FaRedo, FaGlobe } from 'react-icons/fa'; // Import der Icons aus react-icons/fa
+import { FaEllipsisH } from 'react-icons/fa';
+import { MdMoreVert } from 'react-icons/md';
+import { TbWorldSearch } from 'react-icons/tb'; // Import des TbWorldSearch-Icons
+
 import { Vector3, Quaternion } from 'three';
 import { PreDefinedView } from './types';
 import { useHotspot } from '@/components/contexts';
+
+const BUTTON_LABELS = {
+  SHOW_ALL: {
+    true: {
+      aria: 'Fremde überall - Unbekannte Projekte selbst entdecken',
+      title: 'Fremde überall - Unbekannte Projekte selbst entdecken',
+      icon: <FaEye />,
+    },
+    false: {
+      aria: 'Entdeckung - Alle Projekte enthüllen',
+      title: 'Entdeckung - Alle Projekte enthüllen',
+      icon: <FaEyeSlash />,
+    },
+  },
+  RESET: {
+    aria: 'Alle Projekte neu entdecken',
+    title: 'Alle Projekte neu entdecken',
+    icon: <FaRedo />,
+  },
+};
 
 const hotspots: {
   name: string;
@@ -143,12 +168,24 @@ const Menu = ({ projects }: MenuProps) => {
                   ))}
                 </ul>
                 {/* Buttons für besuchte/unbesuchte Projekte */}
-                <button onClick={toggleShowAllAsVisited} className={styles.buttonToggleVisited}>
-                  {showAllAsVisited ? 'Als unbesucht anzeigen' : 'Alle als besucht anzeigen'}
-                </button>
-                <button onClick={clearVisitedProjects} className={styles.buttonClearVisited}>
-                  Alle Besuche zurücksetzen
-                </button>
+                <div className={styles.buttonContainer}>
+                  <button
+                    onClick={toggleShowAllAsVisited}
+                    aria-label={BUTTON_LABELS.SHOW_ALL[showAllAsVisited].aria}
+                    title={BUTTON_LABELS.SHOW_ALL[showAllAsVisited].title}
+                    className={styles.iconButton}
+                  >
+                    {BUTTON_LABELS.SHOW_ALL[showAllAsVisited].icon}
+                  </button>
+                  <button
+                    onClick={clearVisitedProjects}
+                    aria-label={BUTTON_LABELS.RESET.aria}
+                    title={BUTTON_LABELS.RESET.title}
+                    className={styles.iconButton}
+                  >
+                    {BUTTON_LABELS.RESET.icon}
+                  </button>
+                </div>
                 <div className={styles.staticLinks}>
                   <ul>
                     <li>
