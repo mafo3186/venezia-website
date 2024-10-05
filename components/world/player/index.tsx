@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { OrbitControls, PerspectiveCamera, useGLTF } from "@react-three/drei";
 import { Mesh, MOUSE, Object3D, Vector3 } from "three";
 import { Node, Pathfinding } from "three-pathfinding";
-import { GLTFResult } from "./model";
+import { GLTFResult } from "../model";
 import { LookTutorial } from "./tutorial";
 
 const ZONE = 'level1';
