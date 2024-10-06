@@ -27,11 +27,10 @@ export function HomeButtonList() {
       aria-label="Zurück zur Listenansicht"
       title="Zurück zur Listenansicht"
     >
-      <CiViewList aria-hidden="true" /> {/* Icon ohne Lesetext */}
+      <CiViewList aria-hidden="true" />
     </Link>
   );
 };
-
 
 export function BackButton() {
   const handleBack = () => {
