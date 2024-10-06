@@ -5,7 +5,7 @@ import type { ProjectsListQueryResult } from "@/sanity.types";
 import Link from "next/link";
 import styles from "@/components/projectPage/projectPageList.module.css";
 import {projectsListQuery} from "@/sanity/lib/queries";
-import {BackButton, HomeButton} from "@/components/navigation/button";
+import {BackButton, HomeButton3D} from "@/components/navigation/button";
 
 export default async function ListProjectsPage() {
   const projects = await sanityFetch<ProjectsListQueryResult>({ query: projectsListQuery, params: { orderBy: "title" } });
@@ -14,7 +14,7 @@ export default async function ListProjectsPage() {
     <div className={styles.boxContainer}>
       <div className={styles.textContainer}>
         <div className={styles.navigation}>
-          <HomeButton/>
+          <HomeButton3D/>
           <BackButton/>
         </div>
         <h1>Index of /~venice/projects</h1>

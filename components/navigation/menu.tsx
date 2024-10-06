@@ -5,10 +5,13 @@ import { usePathname } from 'next/navigation';
 import styles from './menu.module.css';
 import { ProjectsQueryResult } from '@/sanity.types';
 import IconKompass from "@/components/navigation/iconKompass";
-import { FaEye, FaEyeSlash, FaRedo, FaGlobe, FaListAlt } from 'react-icons/fa';
+import { FaRedo } from 'react-icons/fa';
+import {CiGlobe, CiRedo, CiViewList} from "react-icons/ci";
+import {PiEye, PiEyeClosed} from "react-icons/pi";
 import { Vector3, Quaternion } from 'three';
 import { PreDefinedView } from '../types';
 import { useHotspot } from '@/components/contexts';
+
 
 const hotspots: {
   name: string;
@@ -103,11 +106,11 @@ const Menu = ({ projects }: MenuProps) => {
         <nav className={styles.navMenu}>
           {/* Abschnitt für die Ansichten-Links */}
           <div className={styles.viewsSection}>
-            <Link href="/public" onClick={closeMenu} aria-label="Hauptansicht - 3D-Welt" title="Hauptansicht - 3D-Welt">
-              <FaGlobe /> Welt
+            <Link href="/" onClick={closeMenu} aria-label="Fremde überall - 3D-Welt" title="Fremde überall - 3D-Welt">
+              <CiGlobe/> Welt
             </Link>
             <Link href="/projectlist" onClick={closeMenu} aria-label="Listenansicht" title="Listenansicht">
-              <FaListAlt /> Liste
+              <CiViewList /> Liste
             </Link>
           </div>
           {/* Statische Seiten */}
@@ -163,7 +166,7 @@ const Menu = ({ projects }: MenuProps) => {
                 title={showAllAsVisited ? 'Fremde überall - Unbekannte Projekte selbst entdecken' : 'Entdeckung - Alle Projekte enthüllen'}
                 className={styles.iconButton}
               >
-                {showAllAsVisited ? <FaEye /> : <FaEyeSlash />}
+                {showAllAsVisited ? <PiEye /> : <PiEyeClosed />}
               </button>
               {/* Button für "Alle zurücksetzen" */}
               <button
@@ -172,7 +175,7 @@ const Menu = ({ projects }: MenuProps) => {
                 title='Alle Projekte neu entdecken'
                 className={styles.iconButton}
               >
-                <FaRedo />
+                <CiRedo />
               </button>
             </div>
           </div>

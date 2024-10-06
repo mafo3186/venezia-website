@@ -44,7 +44,6 @@
   display: flex;
   justify-content: space-between;
   padding: 10px;
-  font-weight: bold;
   background-color: #f8f8f8;
   border-bottom: 1px solid #ddd;
 }
@@ -57,10 +56,11 @@
 
 .viewsSection a svg {
   margin-right: 8px;
+  font-size: 1rem;
 }
 
 .viewsSection a:hover {
-  color: blue; /* toDo: Linkfarbe ändern */
+  color: var(--link-color)
 }
 
 .projects {
@@ -99,7 +99,7 @@
 }
 
 .navMenu ul li a.visited {
-  color: black; /* Farbe für besuchte Projekte */
+ 
 }
 
 .navMenu ul li a.unvisited {
@@ -144,7 +144,6 @@
   font-weight: bold; 
   padding: 10px; 
   text-decoration: none;
-  color: #29486b;
   border-bottom: 1px solid #ddd; 
 }
 
