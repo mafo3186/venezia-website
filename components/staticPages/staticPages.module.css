@@ -67,6 +67,15 @@
   color: rgba(0,0,0,0.95);
 }
 
+.linkContainer {
+  text-decoration: none; /* Entfernt die Standard-Unterstreichung */
+  color: inherit; /* Erbt die Farbe von den umschlossenen Elementen */
+}
+
+.linkContainer:hover {
+  opacity: 0.8; /* Leichter Hover-Effekt */
+}
+
 /* Responsive Design */
 @media (max-width: 800px) {
   .iconWrapper {

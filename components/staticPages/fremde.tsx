@@ -38,30 +38,34 @@ export default function Fremde() {
             <h4 className={styles.iconTitle}>Kompass</h4>
             <p className={styles.iconDescription}>
               Mit dem Kompass kann von überall auf der Webseite zu
-              jedem bekannten oder unbekannten, erwünschten oder unerwünschten Ziel navigiert werden.
+              jedem bekannten oder unbekannten Ziel navigiert werden. Der Kompass ist oben rechts.
             </p>
           </div>
-          <div className={styles.iconContainer}>
-            <div className={styles.circle}>
-              <FaGlobe className={styles.iconColor} size={ "50%"} /> 
+          <Link href="/" className={styles.linkContainer}>
+            <div className={styles.iconContainer}>
+              <div className={styles.circle}>
+                <FaGlobe className={styles.iconColor} size={"50%"} />
+              </div>
+              <h4 className={styles.iconTitle}>Welt</h4>
+              <p className={styles.iconDescription}>
+                Auf einer eigenen Entdeckungsreise durch eine fremde und vielleicht
+                doch vertraute Welt können alle Projekte gefunden und erkundet
+                werden. Der Weg ist das Ziel.
+              </p>
             </div>
-            <h4 className={styles.iconTitle}>Welt</h4>
-            <p className={styles.iconDescription}>
-              Auf einer eigenen Entdeckungsreise durch eine fremde und vielleicht
-              doch vertraute Welt können alle Projekte gefunden und erkundet
-              werden. Der Weg ist das Ziel.
-            </p>
-          </div>
-          <div className={styles.iconContainer}>
-            <div className={styles.circle}>
-              <FaListAlt className={styles.iconColor} size={ "50%"} /> 
+          </Link>
+          <Link href="/projectlist" className={styles.linkContainer}>
+            <div className={styles.iconContainer}>
+              <div className={styles.circle}>
+                <FaListAlt className={styles.iconColor} size={"50%"} />
+              </div>
+              <h4 className={styles.iconTitle}>Liste</h4>
+              <p className={styles.iconDescription}>
+                Der vertraute Weg durch eine einfache Liste führt ebenfalls zu allen
+                Projekten. Der Weg ist nicht immer das Ziel.
+              </p>
             </div>
-            <h4 className={styles.iconTitle}>Liste</h4>
-            <p className={styles.iconDescription}>
-              Der vertraute Weg durch eine einfache Liste führt ebenfalls zu allen
-              Projekten. Der Weg ist nicht immer das Ziel.
-            </p>
-          </div>
+          </Link>
         </div>
       </div>
     </div>
