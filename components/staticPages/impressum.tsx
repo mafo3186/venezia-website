@@ -1,12 +1,13 @@
 import styles from "./staticPages.module.css";
-import {BackButton, HomeButton} from "@/components/button";
+import {BackButton} from "@/components/navigation/button";
+import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
 
 export default function Impressum() {
   return (
     <div className={styles.boxContainer}>
       <div className={styles.textContainer}>
         <div className={styles.navigation}>
-          <HomeButton/>
+          <HomeButtonSwitcher/>
           <BackButton/>
         </div>
         <h1>Impressum</h1>

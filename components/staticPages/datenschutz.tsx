@@ -1,12 +1,13 @@
 import styles from "./staticPages.module.css";
-import { HomeButton, BackButton}  from "@/components/button";
+import { BackButton}  from "@/components/navigation/button";
+import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
 
 export default function Datenschutz() {
   return (
     <div className={styles.boxContainer}>
       <div className={styles.textContainer}>
         <div className={styles.navigation}>
-          <HomeButton/>
+          <HomeButtonSwitcher/>
           <BackButton/>
         </div>
         <h1 className={styles.title}>Datenschutz</h1>

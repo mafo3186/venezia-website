@@ -6,8 +6,8 @@
 }
 
 .menu {
-  width: 70px;
-  height: 70px;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.9);
   display: flex;
@@ -20,8 +20,8 @@
 
 .menu:hover,
 .menu.active {
-  width: 80px;
-  height: 80px;
+  width: 4rem;
+  height: 4rem;
   background-color: rgba(255, 255, 255, 1);
 }
 
@@ -44,7 +44,6 @@
   display: flex;
   justify-content: space-between;
   padding: 10px;
-  font-weight: bold;
   background-color: #f8f8f8;
   border-bottom: 1px solid #ddd;
 }
@@ -57,10 +56,11 @@
 
 .viewsSection a svg {
   margin-right: 8px;
+  font-size: 1.2rem;
 }
 
 .viewsSection a:hover {
-  color: blue; /* toDo: Linkfarbe ändern */
+  color: var(--link-color)
 }
 
 .projects {
@@ -69,6 +69,7 @@
 .hotSpot {
   cursor: pointer;
   font-weight: bold;
+  color: black;
 }
 
 .navMenu ul {
@@ -98,7 +99,7 @@
 }
 
 .navMenu ul li a.visited {
-  color: black; /* Farbe für besuchte Projekte */
+ 
 }
 
 .navMenu ul li a.unvisited {
@@ -114,22 +115,21 @@
 }
 
 .iconButton {
-  background-color: #ccc;
+  background-color: rgba(204, 204, 204, 0.5);
   border: none;
   border-radius: 50%;
-  padding: 10px;
+  padding: 8px;
   cursor: pointer;
   margin: 8px;
   transition: background-color 0.3s ease;
 }
 
 .iconButton:hover {
-  background-color: #bbb;
+  background-color: rgba(187, 187, 187, 0.5);
 }
 
 .iconButton svg {
-  font-size: 0.8rem;
-  color: #333;
+  font-size: 1.2rem;
 }
 
 /* Styling für den Abschnitt der statischen Links */
@@ -143,7 +143,6 @@
   font-weight: bold; 
   padding: 10px; 
   text-decoration: none;
-  color: #29486b;
   border-bottom: 1px solid #ddd; 
 }
 

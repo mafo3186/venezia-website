@@ -10,9 +10,10 @@ import styles from "@/components/projectPage/projectPage.module.css";
 import { EmblaCarousel } from "@/components/projectPage/carousel";
 import ShowcasePiece from "@/components/projectPage/showcasePiece";
 import PortableText from "@/components/projectPage/documentation";
-import { BackButton, HomeButton } from "@/components/button";
+import {BackButton} from "@/components/navigation/button";
 import Loading from "@/components/loading";
 import VisitedProjectWrapper from "@/components/projectPage/visitedProjectWrapper";
+import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
 
 export type Props = {
   params: { slug: string };
@@ -50,6 +51,7 @@ export async function generateMetadata(
 }
 
 export default async function ProjectPage({ params }: Props) {
+    
     const project = await sanityFetch<ProjectBySlugQueryResult>({
       query: projectBySlugQuery,
       params,
@@ -58,53 +60,55 @@ export default async function ProjectPage({ params }: Props) {
     if (!project?._id) {
       return notFound();
     }
+
+  
     
   return (
     <Suspense fallback={<Loading />}>
       <VisitedProjectWrapper slug={params.slug} />
       <div className={styles.pageContainer}>
-        <div className={styles.navigationButtons}>
-          <HomeButton />
-          <BackButton />
-        </div>
         <article className={styles.article}>
-        <div className={styles.content}>
-          <div className={styles.showcaseAndTitle}>
-            <hgroup className={styles.projectTitle}>
-              <div className={styles.titleWithInfo}>
-                <h1>{project.title}</h1>
-                <div className={styles.infoIconWrapper}>
-                  <FaInfoCircle
-                    className={styles.infoIcon}
-                    aria-describedby="projectDescription"
-                  />
-                  <span id="projectDescription" className={styles.tooltip}>
+          <div className={styles.navigationButtons}>
+            {<HomeButtonSwitcher/>}
+            <BackButton/>
+          </div>
+          <div className={styles.content}>
+            <div className={styles.showcaseAndTitle}>
+              <hgroup className={styles.projectTitle}>
+                <div className={styles.titleWithInfo}>
+                  <h1>{project.title}</h1>
+                  <div className={styles.infoIconWrapper}>
+                    <FaInfoCircle
+                      className={styles.infoIcon}
+                      aria-describedby="projectDescription"
+                    />
+                    <span id="projectDescription" className={styles.tooltip}>
                     {project.description}
                   </span>
+                  </div>
                 </div>
-              </div>
-              <p>von {project.author}</p>
-            </hgroup>
-            <main className={styles.showcase}>
-              <EmblaCarousel>
-                {project.showcases && project.showcases.map((showcase, index) => {
-                  return (
-                    <Suspense key={index} fallback={<Loading/>}>
-                      <ShowcasePiece showcase={showcase as any}/>
-                    </Suspense>
-                  );
-                })}
-              </EmblaCarousel>
-            </main>
+                <p>von {project.author}</p>
+              </hgroup>
+              <main className={styles.showcase}>
+                <EmblaCarousel>
+                  {project.showcases && project.showcases.map((showcase, index) => {
+                    return (
+                      <Suspense key={index} fallback={<Loading/>}>
+                        <ShowcasePiece showcase={showcase as any}/>
+                      </Suspense>
+                    );
+                  })}
+                </EmblaCarousel>
+              </main>
+            </div>
+            <aside className={styles.documentation}>
+              {project.documentation?.length && (
+                <PortableText
+                  value={project.documentation as PortableTextBlock[]}
+                />
+              )}
+            </aside>
           </div>
-          <aside className={styles.documentation}>
-            {project.documentation?.length && (
-              <PortableText
-                value={project.documentation as PortableTextBlock[]}
-              />
-            )}
-          </aside>
-        </div>
         </article>
       </div>
     </Suspense>

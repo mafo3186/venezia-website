@@ -1,8 +1,9 @@
 import styles from "./staticPages.module.css";
-import IconKompass from "@/components/iconKompass";
-import {BackButton, HomeButton} from "@/components/button";
+import IconKompass from "@/components/navigation/iconKompass";
+import {BackButton} from "@/components/navigation/button";
 import Link from "next/link";
-import { FaGlobe, FaListAlt } from 'react-icons/fa';
+import {CiGlobe, CiViewList} from "react-icons/ci";
+import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
 
 
 export default function Fremde() {
@@ -10,7 +11,7 @@ export default function Fremde() {
     <div className={styles.boxContainer}>
       <div className={styles.textContainer}>
         <div className={styles.navigation}>
-          <HomeButton/>
+          <HomeButtonSwitcher/>
           <BackButton/>
         </div>
         <h1>Fremde überall</h1>
@@ -44,7 +45,7 @@ export default function Fremde() {
           <Link href="/" className={styles.linkContainer}>
             <div className={styles.iconContainer}>
               <div className={styles.circle}>
-                <FaGlobe className={styles.iconColor} size={"50%"} />
+                <CiGlobe className={styles.iconColor} size={"60%"} />
               </div>
               <h4 className={styles.iconTitle}>Welt</h4>
               <p className={styles.iconDescription}>
@@ -57,7 +58,7 @@ export default function Fremde() {
           <Link href="/projectlist" className={styles.linkContainer}>
             <div className={styles.iconContainer}>
               <div className={styles.circle}>
-                <FaListAlt className={styles.iconColor} size={"50%"} />
+                <CiViewList  className={styles.iconColor} size={"60%"} />
               </div>
               <h4 className={styles.iconTitle}>Liste</h4>
               <p className={styles.iconDescription}>
