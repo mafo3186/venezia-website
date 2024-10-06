@@ -50,26 +50,24 @@ export function EmblaCarousel(props: PropsWithChildren<{
     <div className={styles.emblaWrapper}>
       <div className={styles.embla} ref={emblaRef}>
         <div className={styles.embla__container}>
-          {Children.map(props.children, child =>
+          {Children.map(props.children, child => (
             <div className={styles.embla__slide}>{child}</div>
-          )}
+          ))}
         </div>
-        {canScroll && (
-          <>
-            <button className={`${styles.embla__button} ${styles.prev}`} onClick={scrollPrev}><FaChevronLeft/></button>
-            <button className={`${styles.embla__button} ${styles.next}`} onClick={scrollNext}><FaChevronRight/></button>
-          </>
-        )}
       </div>
       {canScroll && (
-        <div className={styles.embla__dots}>
-          {Array.from({ length: slideCount }).map((_, index) => (
-            <button
-              key={index}
-              className={`${styles.embla__dot} ${index === selectedIndex ? styles.embla__dot__active : ''}`}
-              onClick={() => emblaApi && emblaApi.scrollTo(index)}
-            />
-          ))}
+        <div className={styles.embla__controls}>
+          <button className={styles.embla__button} onClick={scrollPrev}><FaChevronLeft/></button>
+          <div className={styles.embla__dots}>
+            {Array.from({ length: slideCount }).map((_, index) => (
+              <button
+                key={index}
+                className={`${styles.embla__dot} ${index === selectedIndex ? styles.embla__dot__active : ''}`}
+                onClick={() => emblaApi && emblaApi.scrollTo(index)}
+              />
+            ))}
+          </div>
+          <button className={styles.embla__button} onClick={scrollNext}><FaChevronRight/></button>
         </div>
       )}
     </div>
