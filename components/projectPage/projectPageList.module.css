@@ -1,16 +1,32 @@
 /* Styles for ListProjectsPage */
 
+/* Container für das gesamte Layout und die Positionierung */
+.boxContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  background-color: transparent;
+}
+
 /* Root styling, inheriting dark background */
-.pageContainer {
+.textContainer {
   padding: 2rem;
   margin: 2rem auto;
   height: max-content;
   width: max-content;
-  max-width: 90vw;
+  max-width: 1200px;
   justify-content: center;
   border-radius: var(--border-radius-container);
   background-color: rgba(0, 0, 0, 0.8);
   color: var(--text-color);
+}
+
+.navigation {
+  margin-bottom: 20px;
 }
 
 .pageTitle {

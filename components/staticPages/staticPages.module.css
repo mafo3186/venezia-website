@@ -7,6 +7,7 @@
   min-height: 100vh; 
   margin: 0; 
   padding: 20px; 
+  background-color: transparent;
 }
 
 /* Container für die Textformatierung */
@@ -16,7 +17,7 @@
   width: 80%;
   max-width: 1200px;
   text-align: justify; 
-  background-color: rgba(255, 255, 255, 0.05); 
+  background-color: rgba(0,0,0,0.8);
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
   padding: 20px;
   margin: 20px auto;
@@ -25,6 +26,10 @@
 
 .navigation {
   margin-bottom: 20px;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 .iconWrapper {
