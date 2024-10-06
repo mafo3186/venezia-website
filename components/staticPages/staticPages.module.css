@@ -13,15 +13,16 @@
 /* Container für die Textformatierung */
 .textContainer {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
+  padding: 2rem;
+  margin: 2rem auto;
   width: 80%;
   max-width: 1200px;
-  text-align: justify; 
+  text-align: justify;
+  border-radius: var(--border-radius-container);
   background-color: rgba(0,0,0,0.8);
+  color: var(--text-color);
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  margin: 20px auto;
-  border-radius: var(--border-radius-container)
 }
 
 .navigation {

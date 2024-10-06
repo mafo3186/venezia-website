@@ -10,9 +10,10 @@ import styles from "@/components/projectPage/projectPage.module.css";
 import { EmblaCarousel } from "@/components/projectPage/carousel";
 import ShowcasePiece from "@/components/projectPage/showcasePiece";
 import PortableText from "@/components/projectPage/documentation";
-import { BackButton, HomeButton3D } from "@/components/navigation/button";
+import {BackButton} from "@/components/navigation/button";
 import Loading from "@/components/loading";
 import VisitedProjectWrapper from "@/components/projectPage/visitedProjectWrapper";
+import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
 
 export type Props = {
   params: { slug: string };
@@ -50,6 +51,7 @@ export async function generateMetadata(
 }
 
 export default async function ProjectPage({ params }: Props) {
+    
     const project = await sanityFetch<ProjectBySlugQueryResult>({
       query: projectBySlugQuery,
       params,
@@ -58,6 +60,8 @@ export default async function ProjectPage({ params }: Props) {
     if (!project?._id) {
       return notFound();
     }
+
+  
     
   return (
     <Suspense fallback={<Loading />}>
@@ -65,7 +69,7 @@ export default async function ProjectPage({ params }: Props) {
       <div className={styles.pageContainer}>
         <article className={styles.article}>
           <div className={styles.navigationButtons}>
-            <HomeButton3D/>
+            {<HomeButtonSwitcher/>}
             <BackButton/>
           </div>
           <div className={styles.content}>

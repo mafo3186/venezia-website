@@ -5,6 +5,7 @@ import styles from './button.module.css';
 import React from "react";
 import {CiGlobe, CiViewList} from "react-icons/ci";
 import {IoArrowBackOutline} from "react-icons/io5";
+import {usePathname} from "next/navigation";
 
 export function HomeButton3D() {
   return (
@@ -47,4 +48,12 @@ export function BackButton() {
       <IoArrowBackOutline aria-hidden="true" />
     </button>
   );
+};
+
+export default function useHomeButton ()  {
+  const pathname = usePathname();
+  if (pathname.includes('/projectlist')) {
+    return <HomeButtonList />;
+  }
+  return <HomeButton3D />;
 };

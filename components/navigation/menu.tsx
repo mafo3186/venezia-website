@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import styles from './menu.module.css';
 import { ProjectsQueryResult } from '@/sanity.types';
 import IconKompass from "@/components/navigation/iconKompass";
-import { FaRedo } from 'react-icons/fa';
 import {CiGlobe, CiRedo, CiViewList} from "react-icons/ci";
 import {PiEye, PiEyeClosed} from "react-icons/pi";
 import { Vector3, Quaternion } from 'three';

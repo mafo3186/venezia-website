@@ -1,8 +1,9 @@
 import styles from "./staticPages.module.css";
 import IconKompass from "@/components/navigation/iconKompass";
-import {BackButton, HomeButton3D} from "@/components/navigation/button";
+import {BackButton} from "@/components/navigation/button";
 import Link from "next/link";
 import {CiGlobe, CiViewList} from "react-icons/ci";
+import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
 
 
 export default function Fremde() {
@@ -10,7 +11,7 @@ export default function Fremde() {
     <div className={styles.boxContainer}>
       <div className={styles.textContainer}>
         <div className={styles.navigation}>
-          <HomeButton3D/>
+          <HomeButtonSwitcher/>
           <BackButton/>
         </div>
         <h1>Fremde überall</h1>
