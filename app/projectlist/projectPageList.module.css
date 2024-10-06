@@ -10,10 +10,10 @@
   justify-content: center;
   border-radius: var(--border-radius-container);
   background-color: rgba(0, 0, 0, 0.8);
+  color: var(--text-color);
 }
 
 .pageTitle {
-  color: var(--text-color, #fff);
   margin-bottom: 1.5rem;
   text-align: center;
 }
