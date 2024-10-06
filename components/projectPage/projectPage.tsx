@@ -10,7 +10,7 @@ import styles from "@/components/projectPage/projectPage.module.css";
 import { EmblaCarousel } from "@/components/projectPage/carousel";
 import ShowcasePiece from "@/components/projectPage/showcasePiece";
 import PortableText from "@/components/projectPage/documentation";
-import { BackButton, HomeButton } from "@/components/button";
+import { BackButton, HomeButton } from "@/components/navigation/button";
 import Loading from "@/components/loading";
 import VisitedProjectWrapper from "@/components/projectPage/visitedProjectWrapper";
 

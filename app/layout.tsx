@@ -9,7 +9,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { HotspotProvider, ProjectsProvider, SettingsProvider } from "@/components/contexts";
-import Menu from "@/components/menu";
+import Menu from "@/components/navigation/menu";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch<SettingsQueryResult>({

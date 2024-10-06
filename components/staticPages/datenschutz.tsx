@@ -1,5 +1,5 @@
 import styles from "./staticPages.module.css";
-import { HomeButton, BackButton}  from "@/components/button";
+import { HomeButton, BackButton}  from "@/components/navigation/button";
 
 export default function Datenschutz() {
   return (

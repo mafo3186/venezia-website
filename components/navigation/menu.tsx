@@ -4,10 +4,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './menu.module.css';
 import { ProjectsQueryResult } from '@/sanity.types';
-import IconKompass from "@/components/iconKompass";
+import IconKompass from "@/components/navigation/iconKompass";
 import { FaEye, FaEyeSlash, FaRedo, FaGlobe, FaListAlt } from 'react-icons/fa';
 import { Vector3, Quaternion } from 'three';
-import { PreDefinedView } from './types';
+import { PreDefinedView } from '../types';
 import { useHotspot } from '@/components/contexts';
 
 const hotspots: {
@@ -103,7 +103,7 @@ const Menu = ({ projects }: MenuProps) => {
         <nav className={styles.navMenu}>
           {/* Abschnitt für die Ansichten-Links */}
           <div className={styles.viewsSection}>
-            <Link href="/" onClick={closeMenu} aria-label="Hauptansicht - 3D-Welt" title="Hauptansicht - 3D-Welt">
+            <Link href="/public" onClick={closeMenu} aria-label="Hauptansicht - 3D-Welt" title="Hauptansicht - 3D-Welt">
               <FaGlobe /> Welt
             </Link>
             <Link href="/projectlist" onClick={closeMenu} aria-label="Listenansicht" title="Listenansicht">

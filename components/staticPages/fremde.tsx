@@ -1,6 +1,6 @@
 import styles from "./staticPages.module.css";
-import IconKompass from "@/components/iconKompass";
-import {BackButton, HomeButton} from "@/components/button";
+import IconKompass from "@/components/navigation/iconKompass";
+import {BackButton, HomeButton} from "@/components/navigation/button";
 import Link from "next/link";
 import { FaGlobe, FaListAlt } from 'react-icons/fa';
 

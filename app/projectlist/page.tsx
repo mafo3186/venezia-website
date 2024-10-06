@@ -5,7 +5,7 @@ import type { ProjectsListQueryResult } from "@/sanity.types";
 import Link from "next/link";
 import styles from "@/components/projectPage/projectPageList.module.css";
 import {projectsListQuery} from "@/sanity/lib/queries";
-import {BackButton, HomeButton} from "@/components/button";
+import {BackButton, HomeButton} from "@/components/navigation/button";
 
 export default async function ListProjectsPage() {
   const projects = await sanityFetch<ProjectsListQueryResult>({ query: projectsListQuery, params: { orderBy: "title" } });

@@ -1,5 +1,5 @@
 import styles from "./staticPages.module.css";
-import {BackButton, HomeButton} from "@/components/button";
+import {BackButton, HomeButton} from "@/components/navigation/button";
 
 export default function Impressum() {
   return (
