@@ -69,6 +69,7 @@
 .hotSpot {
   cursor: pointer;
   font-weight: bold;
+  color: black;
 }
 
 .navMenu ul {
