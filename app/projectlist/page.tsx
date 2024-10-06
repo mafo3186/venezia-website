@@ -1,13 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { sanityFetch } from "@/sanity/lib/fetch";
-import { groq } from "next-sanity";
 import type { ProjectsListQueryResult } from "@/sanity.types";
 import Link from "next/link";
 import styles from "./projectPageList.module.css";
-
-
-const projectsListQuery = groq`*[_type == "project"] | order(select($orderBy == "title" => title, $orderBy == "_updatedAt" => _updatedAt)) {_id, title, _updatedAt, description, "slug": slug.current}`;
+import {projectsListQuery} from "@/sanity/lib/queries";
 
 export default async function ListProjectsPage() {
   const projects = await sanityFetch<ProjectsListQueryResult>({ query: projectsListQuery, params: { orderBy: "title" } });
@@ -21,7 +18,7 @@ export default async function ListProjectsPage() {
         <tr>
           <th></th>
           <th><Link href="?q=title">Name</Link></th>
-          <th>Autor*in</th>
+          <th><Link href="?q=author">Autor*in</Link></th>
           <th><Link href="?q=_updatedAt">Last modified</Link></th>
           <th>Beschreibung</th>
         </tr>
@@ -34,6 +31,9 @@ export default async function ListProjectsPage() {
           <td>
             <Link href="/">Parent Directory</Link>
           </td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
         {projects.map((project) => (
           <tr key={project._id}>
@@ -41,7 +41,7 @@ export default async function ListProjectsPage() {
               <img src="https://www.apache.org/icons/image2.gif" alt=""/>
             </td>
             <td><Link href={'/projectlist/' + project.slug}>{project.title}</Link></td>
-            <td align="left">toDo</td>
+            <td align="left">{project.author || "unbekannt"}</td>
             <td align="right">{project._updatedAt.replace(/T|Z/g, " ")}</td>
             <td>{project.description}</td>
           </tr>

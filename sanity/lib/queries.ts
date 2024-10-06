@@ -46,3 +46,16 @@ export const projectBySlugQuery = groq`*[_type == "project" && slug.current == $
     description
   }
 }`;
+
+
+export const projectsListQuery = groq`
+  *[_type == "project"] | 
+  order(select($orderBy == "title" => title, $orderBy == "author" => author, $orderBy == "_updatedAt" => _updatedAt)) {
+    _id, 
+    title, 
+    _updatedAt, 
+    description, 
+    "slug": slug.current, 
+    author
+  }
+`;
