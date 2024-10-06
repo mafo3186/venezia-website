@@ -1,39 +1,104 @@
 /* Container für das gesamte Layout und die Positionierung */
 .boxContainer {
   display: flex;
-  flex-direction: column; /* Inhalte untereinander anordnen */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* Der Container nimmt mindestens die Höhe des Viewports ein */
-  margin: 0; /* Kein zusätzlicher Margin */
-  padding: 20px; /* Optionaler Padding für den Container */
+  min-height: 100vh; 
+  margin: 0; 
+  padding: 20px; 
+  background-color: transparent;
 }
 
 /* Container für die Textformatierung */
 .textContainer {
   display: flex;
-  flex-direction: column; /* Inhalte untereinander anordnen */
-  width: 80%; /* Breite des Containers */
-  max-width: 800px; /* Maximale Breite */
-  text-align: justify; /* Blocksatz für den Text */
-  background-color: rgba(169, 169, 169, 0.8);
+  flex-direction: column; 
+  width: 80%;
+  max-width: 1200px;
+  text-align: justify; 
+  background-color: rgba(0,0,0,0.8);
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
   padding: 20px;
-  padding-bottom: 50px; /* Zusätzlicher Abstand zum unteren Rand */
-  margin: 20px auto; /* Zentriert den Container horizontal */
-  border-radius: 10px;
-}
-
-.title {
-  text-align: center; /* Überschrift zentrieren */
-}
-
-.bold {
-  font-weight: bold;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 20px auto;
+  border-radius: var(--border-radius-container)
 }
 
 .navigation {
   margin-bottom: 20px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.iconWrapper {
+  display: grid; /* Verwende Grid für das Layout */
+  grid-template-columns: repeat(3, 1fr); /* Drei gleich große Spalten */
+  gap: 1rem; /* Abstand zwischen den Icon-Containern */
+  margin-top: 2rem;
+}
+
+.iconContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 1rem;
+}
+
+.circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15vh;  
+  height: 15vh; 
+  border-radius: 50%; 
+  background-color: rgba(255, 255, 255, 0.9); 
+}
+
+.iconTitle {
+  margin-top: 0.5rem;
+  font-size: 1.2em; 
+}
+
+.iconDescription {
+  margin-top: 0.5rem;
+  width: 90%; 
+  text-align: justify; 
+}
+
+.iconColor {
+  color: rgba(0,0,0,0.95);
+}
+
+.linkContainer {
+  text-decoration: none; /* Entfernt die Standard-Unterstreichung */
+  color: inherit; /* Erbt die Farbe von den umschlossenen Elementen */
+}
+
+.linkContainer:hover {
+  opacity: 0.8; /* Leichter Hover-Effekt */
+}
+
+/* Responsive Design */
+@media (max-width: 800px) {
+  .iconWrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .iconContainer {
+    margin: 0.5rem 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .textContainer {
+    width: 95vw; 
+  }
+
+  .title {
+    font-size: 1.5em;
+  }
 }

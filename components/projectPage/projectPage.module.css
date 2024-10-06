@@ -1,4 +1,4 @@
-.pageContainer {
+.textContainer {
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -23,7 +23,7 @@
   flex-grow: 1;
   padding: 1rem;
   overflow: hidden;
-  background-color: var(--background-color-article);
+  background-color: rgb(0,0,0,0.6);
   border-radius: var(--border-radius-container);
 }
 

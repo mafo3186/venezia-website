@@ -82,11 +82,11 @@ const Menu = ({ projects }: MenuProps) => {
     return string.split('').sort(() => Math.random() - 0.5).join('');
   };
 
-  const getFullPath = (pathname: string, slug: string | null) => {
+  const getFullPath = (pathname: string, subpath: string | null) => {
     if (pathname.includes('/projectlist')) {
-      return `/projectlist/${slug}`;
+      return `/projectlist/${subpath}`;
     }
-    return `/${slug}`;
+    return `/${subpath}`;
   };
 
   return (
@@ -112,7 +112,7 @@ const Menu = ({ projects }: MenuProps) => {
           </div>
           {/* Statische Seiten */}
           <div className={styles.staticLinks}>
-            <Link href={"/fremde"} onClick={closeMenu}>
+            <Link href={getFullPath(pathname, "fremde")}onClick={closeMenu}>
               Fremde überall – Fremde entdecken
             </Link>
           </div>
@@ -178,11 +178,11 @@ const Menu = ({ projects }: MenuProps) => {
           </div>
           {/* Abschnitt für Datenschutz und Impressum */}
           <div className={styles.legals}>
-            <Link href="/impressum" onClick={closeMenu}>
+            <Link href={getFullPath(pathname, "impressum")} onClick={closeMenu}>
               Impressum
             </Link>
             <div className={styles.separator} />
-            <Link href="/datenschutz" onClick={closeMenu}>
+            <Link href={getFullPath(pathname, "datenschutz")} onClick={closeMenu}>
               Datenschutz
             </Link>
           </div>

@@ -2,8 +2,12 @@
 :root {
   --border-radius-container: 1rem;
   --border-radius-content: calc(var(--border-radius-container) / 2);
-  --background-color-article: rgb(0,0,0,0.6);
+  --link-color: #4a90e2; /* ein etwas gedämpftes Blau */
+  --link-hover-color: #82cfff; /* heller bei Hover */
+  --background-color: #f0f0f0; /* Standard-Hintergrundfarbe im hellen Modus */
+  --text-color: #000000; /* Standard Textfarbe */
 }
+
 
 /* CSS Reset by Josh Comeau
 https://www.joshwcomeau.com/css/custom-css-reset/#eight-root-stacking-context-9
@@ -108,4 +112,38 @@ h5 {
 
 h6 {
   font-size: 1em;
+}
+
+body {
+  background-color: var(--background-color); /* Standard-Hintergrundfarbe */
+  color: var(--text-color); /* Standard-Textfarbe */
+}
+
+/* Links */
+a {
+  color: var(--link-color);
+}
+
+a:hover {
+  color: var(--link-hover-color);
+}
+
+/* Set dark mode as the preferred color scheme */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #121212;
+    --text-color: #ffffff;
+    --link-color: #1a73e8; /* darker blue for links */
+    --border-color: #333333;
+  }
+
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+
+  a {
+    color: var(--link-color);
+  }
+
 }

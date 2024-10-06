@@ -9,7 +9,7 @@ export default function Impressum() {
           <HomeButton/>
           <BackButton/>
         </div>
-        <h1 className={styles.title}>Impressum</h1>
+        <h1>Impressum</h1>
         <div className={styles.bold}>
           <p>Hochschule Düsseldorf</p>
           <p>University of Applied Sciences</p>
