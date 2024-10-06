@@ -6,7 +6,7 @@ import React from "react";
 
 export function HomeButton () {
   return (
-    <Link href="/public" className={styles.button}>
+    <Link href="/" className={styles.button}>
       Home
     </Link>
   );
@@ -24,4 +24,5 @@ export function BackButton() {
     </button>
   );
 };
+
 
