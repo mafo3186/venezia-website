@@ -26,18 +26,48 @@
 .navigation {
   margin-bottom: 20px;
 }
+.iconWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
 
-.icon-container {
+.iconContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1 1 30%;
+  min-width: 200px;
+  margin: 1rem;
+}
+
+.circle {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 20vh; 
-  height: 20vh; 
-  background-color: rgba(255, 255, 255, 0.8); 
-  border-radius: 50%;
-  margin: 2rem auto 1rem;
+  width: 15vh;  
+  height: 15vh; 
+  border-radius: 50%; 
+  background-color: rgba(255, 255, 255, 0.9); 
 }
 
+.iconTitle {
+  margin-top: 0.5rem;
+  font-size: 1.2em; 
+}
+
+.iconDescription {
+  margin-top: 0.5rem;
+  width: 90%; 
+  text-align: justify; 
+}
+
+.iconColor {
+  color: rgba(0,0,0,0.95);
+}
 
 /* Responsive Design */
 @media (max-width: 600px) {
@@ -47,5 +77,15 @@
 
   .title {
     font-size: 1.5em;
+  }
+
+  .iconWrapper {
+    flex-direction: column; 
+    align-items: center; 
+  }
+
+  .iconContainer {
+    margin: 0.5rem 0; 
+    width: 100%; 
   }
 }

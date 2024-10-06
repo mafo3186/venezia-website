@@ -2,6 +2,8 @@ import styles from "./staticPages.module.css";
 import IconKompass from "@/components/iconKompass";
 import {BackButton, HomeButton} from "@/components/button";
 import Link from "next/link";
+import { FaGlobe, FaListAlt } from 'react-icons/fa';
+
 
 export default function Fremde() {
   return (
@@ -24,12 +26,42 @@ export default function Fremde() {
           Perspektiven auf das Gefühl der Fremdheit und bereicherte unser Verständnis für das künstlerische
           Auseinandersetzen mit diesem bedeutenden und aktuellen Thema.</p>
         <h3>Webseite</h3>
-        <p>Diese Webseite dient als Projektdokumentation. Alle Projekte beschäftigen sich mit dem Thema der Biennale &apos;Fremde überall&apos;. Die Erkundung der Projekte auf dieser Webseite verschreibt sich ebenfalls der Fremde.</p>
+        <p>Diese Webseite dient als Projektdokumentation. Alle Projekte beschäftigen sich mit dem Thema der
+          Biennale &apos;Fremde überall&apos;. Die Erkundung der Projekte auf dieser Webseite verschreibt sich ebenfalls
+          der Fremde.</p>
         <h3>Navigation</h3>
-        <p>Zu den Projekten kann entweder mit dem Kompass navigiert werden, oder durch eine eigene Entdeckungsreise durch eine fremde und
-          vielleicht doch vertraute Welt, oder über eine Liste.</p>
-        <div className={styles["icon-container"]}>
-          <IconKompass height={'90%'} width={'90%'}/>
+        <div className={styles.iconWrapper}>
+          <div className={styles.iconContainer}>
+            <div className={styles.circle}>
+              <IconKompass height={'80%'} width={'80%'}/>
+            </div>
+            <h4 className={styles.iconTitle}>Kompass</h4>
+            <p className={styles.iconDescription}>
+              Mit dem Kompass kann von überall auf der Webseite zu
+              jedem bekannten oder unbekannten, erwünschten oder unerwünschten Ziel navigiert werden.
+            </p>
+          </div>
+          <div className={styles.iconContainer}>
+            <div className={styles.circle}>
+              <FaGlobe className={styles.iconColor} size={ "50%"} /> 
+            </div>
+            <h4 className={styles.iconTitle}>Welt</h4>
+            <p className={styles.iconDescription}>
+              Auf einer eigenen Entdeckungsreise durch eine fremde und vielleicht
+              doch vertraute Welt können alle Projekte gefunden und erkundet
+              werden. Der Weg ist das Ziel.
+            </p>
+          </div>
+          <div className={styles.iconContainer}>
+            <div className={styles.circle}>
+              <FaListAlt className={styles.iconColor} size={ "50%"} /> 
+            </div>
+            <h4 className={styles.iconTitle}>Liste</h4>
+            <p className={styles.iconDescription}>
+              Der vertraute Weg durch eine einfache Liste führt ebenfalls zu allen
+              Projekten. Der Weg ist nicht immer das Ziel.
+            </p>
+          </div>
         </div>
       </div>
     </div>
