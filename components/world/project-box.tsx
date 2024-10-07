@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useRef, useState } from "react";
 import { Mesh } from "three";
 
-export function ProjectBox({ href, ...props }: { href: string } & MeshProps) {
+export function ProjectBox({ href, ...props }: { href?: string } & MeshProps) {
   const router = useRouter();
   const ref = useRef<Mesh | null>(null);
   const [hovered, setHovered] = useState(false);

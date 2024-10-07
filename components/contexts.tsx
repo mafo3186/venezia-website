@@ -1,8 +1,13 @@
 // contexts.tsx
 "use client";
-import React, { createContext, useContext, useState } from "react";
-import { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
-import { PreDefinedView } from "./types";
+import React, { createContext, useContext, useMemo, useState } from "react";
+import { SettingsQueryResult } from "@/sanity.types";
+import {
+  AllSpotsWithProjects,
+  HotspotsWithProjects,
+  PreDefinedView,
+  Spot,
+} from "./types";
 
 // Typ für Hotspot-Kontext
 interface HotspotContextType {
@@ -11,7 +16,10 @@ interface HotspotContextType {
 }
 
 // Erstelle die Kontexte
-const ProjectsContext = createContext<ProjectsQueryResult | null>(null);
+const ProjectsContext = createContext<AllSpotsWithProjects>({
+  projects: [],
+  emptySpots: [],
+});
 const SettingsContext = createContext<SettingsQueryResult | null>(null);
 const HotspotContext = createContext<HotspotContextType | undefined>(undefined);
 
@@ -44,8 +52,18 @@ export const useHotspot = () => {
 };
 
 // Provider für Projekte
-export const ProjectsProvider = ({ children, projects }: { children: React.ReactNode; projects: ProjectsQueryResult }) => (
-  <ProjectsContext.Provider value={projects}>
+export const ProjectsProvider = ({
+  children,
+  projects,
+  emptySpots,
+}: {
+  children: React.ReactNode;
+  projects: HotspotsWithProjects;
+  emptySpots: Spot[];
+}) => (
+  <ProjectsContext.Provider
+    value={useMemo(() => ({ projects, emptySpots }), [projects, emptySpots])}
+  >
     {children}
   </ProjectsContext.Provider>
 );

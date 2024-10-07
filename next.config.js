@@ -13,7 +13,7 @@ module.exports = {
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push({
       test: /\.gltf$/,
-      type: "asset/resource"
+      type: "json"
     });
     return config;
   },

@@ -1,55 +1,39 @@
 "use client";
 
-import { ProjectsQueryResult } from "@/sanity.types";
 import { Canvas, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { DepthOfField, EffectComposer, N8AO, Vignette } from "@react-three/postprocessing";
-import { Environment, OrbitControls, useGLTF, useProgress } from "@react-three/drei";
+import { Environment, OrbitControls, useProgress } from "@react-three/drei";
 import styles from "./world.module.css";
 import { Euler } from "three";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
 import Stats, { Panel } from "./stats";
 import { CascadedShadowMap } from "./csm/cascaded-shadow-map";
-import { PreDefinedView } from "@/components/types";
+import { HotspotsWithProjects, PreDefinedView, Spot } from "@/components/types";
 import { ProjectBox } from "./project-box";
 import { Water } from "./water";
 import { useHotspot } from "@/components/contexts";
 
-const metadataPath = "/assets/metadata.glb";
-
-useGLTF.preload(metadataPath);
-
-function Scene({
-  projects,
-  inBackground,
-  view,
-  onViewReached,
-}: {
-  projects: ProjectsQueryResult,
+type BaseProps = {
+  projects: HotspotsWithProjects,
+  emptySpots: Spot[],
   inBackground: boolean,
   view?: PreDefinedView,
   onViewReached?: () => void,
-}) {
-  const metadata = useGLTF(metadataPath);
-  const nodes = useMemo(() => {
-    return Object.values(metadata.nodes)
-      .filter((node) => node.userData.name?.includes("."))
-      .map((node) => {
-        const [hotspot, numeric] = node.userData.name.split(".");
-        return {
-          ...node,
-          userData: { ...node.userData, hotspot, index: parseInt(numeric) - 1 },
-        };
-      })
-      .sort((a, b) => {
-        if (a.userData.index !== b.userData.index) {
-          return a.userData.index - b.userData.index;
-        } else {
-          return a.userData.hotspot.localeCompare(b.userData.hotspot);
-        }
-      });
-  }, [metadata.nodes]);
+};
+
+function Scene({
+  projects,
+  emptySpots,
+  inBackground,
+  view,
+  onViewReached,
+}: BaseProps) {
+  const nodes = useMemo(
+    () => projects.flatMap((hotspot) => hotspot.projects),
+    [projects],
+  );
   const [iAmGod, setGod] = useState(false);
   const dpr = useThree(({ viewport }) => viewport.dpr);
   const { setHotspot } = useHotspot();
@@ -88,16 +72,22 @@ function Scene({
 
     <Player
       debug={iAmGod}
-      targetPosition={view?.position}
-      targetRotation={view?.rotation}
-      onTargetCompleted={onViewReached}
+      view={view}
+      onViewReached={onViewReached}
     />
-    {nodes.map((node, index) => (
+    {nodes.map((node) => (
+      <ProjectBox
+        key={node.spot.name}
+        href={`/${node.project.slug}`}
+        position={node.spot.translation}
+        quaternion={node.spot.rotation}
+      />
+    ))}
+    {emptySpots.map((node) => (
       <ProjectBox
         key={node.name}
-        href={projects[index] && `/${projects[index].slug}`}
-        position={node.position}
-        rotation={node.rotation}
+        position={node.translation}
+        quaternion={node.rotation}
       />
     ))}
     <Water />
@@ -106,15 +96,11 @@ function Scene({
 
 export function SceneCanvas({
   projects,
+  emptySpots,
   inBackground,
   view,
   onViewReached,
-}: {
-  projects: ProjectsQueryResult,
-  inBackground: boolean,
-  view?: PreDefinedView,
-  onViewReached?: () => void,
-}) {
+}: BaseProps) {
   const dpr = .78;
   const { active, progress } = useProgress();
   return (<>
@@ -129,6 +115,7 @@ export function SceneCanvas({
       <Suspense fallback={null}>
         <Scene
           projects={projects}
+          emptySpots={emptySpots}
           inBackground={inBackground}
           view={view}
           onViewReached={onViewReached}

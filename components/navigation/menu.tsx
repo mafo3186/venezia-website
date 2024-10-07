@@ -3,37 +3,14 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './menu.module.css';
-import { ProjectsQueryResult } from '@/sanity.types';
 import IconKompass from "@/components/navigation/iconKompass";
-import {CiGlobe, CiRedo, CiViewList} from "react-icons/ci";
-import {PiEye, PiEyeClosed} from "react-icons/pi";
-import { Vector3, Quaternion } from 'three';
-import { PreDefinedView } from '../types';
+import { CiGlobe, CiRedo, CiViewList } from "react-icons/ci";
+import { PiEye, PiEyeClosed } from "react-icons/pi";
+import { HotspotsWithProjects } from "@/components/types";
 import { useHotspot } from '@/components/contexts';
 
-
-const hotspots: {
-  name: string;
-  location: PreDefinedView;
-}[] = [
-  {
-    name: "Ort 1",
-    location: {
-      position: new Vector3(-9.109529454242123, 2.2, 5.858578021419353),
-      rotation: new Quaternion(0.006220933713422264, 0.9334824322569065, 0.016211870364617766, -0.35820249009567745),
-    },
-  },
-  {
-    name: "Ort 2",
-    location: {
-      position: new Vector3(1.065526115270215, 1.1711130832595043, -0.7411182563298189),
-      rotation: new Quaternion(-0.015218747421268157, 0.8901484421997149, 0.029810209439842337, 0.45443975617181787),
-    },
-  },
-];
-
 interface MenuProps {
-  projects: ProjectsQueryResult;
+  projects: HotspotsWithProjects;
 }
 
 const Menu = ({ projects }: MenuProps) => {
@@ -121,38 +98,47 @@ const Menu = ({ projects }: MenuProps) => {
           {/* Abschnitt für die Projekte */}
           <div className={styles.projects}>
             <ul>
-              {projects.map((project) => {
-                const visited = isVisited(project.slug);
-                const shouldShowAsVisited = showAllAsVisited || visited;
-
-                return (
-                  <li key={project._id}>
-                    <Link
-                      href={getFullPath(pathname, project.slug)}
-                      onClick={closeMenu}
-                      className={shouldShowAsVisited ? styles.visited : styles.unvisited}
-                    >
-                      {shouldShowAsVisited ? project.title : generateAnagram(project.title)}
-                      {project.author && (
-                        <>
-                          {" – "}
-                          {shouldShowAsVisited ? project.author : generateAnagram(project.author)}
-                        </>
-                      )}
-                    </Link>
-                  </li>
-                );
-              })}
-              {hotspots.map((hotspot) => (
-                <li
-                  key={hotspot.name}
-                  className={styles.hotSpot}
-                  onClick={() => {
-                    closeMenu();
-                    setHotspot(hotspot.location);
-                  }}
-                >
-                  {hotspot.name}
+              {projects.map((hotspot) => (
+                <li key={hotspot.hotspotId} className={styles.hotSpot}>
+                  <a
+                    onClick={() => {
+                      closeMenu();
+                      setHotspot(hotspot.hotspot.location);
+                    }}
+                  >
+                    {hotspot.hotspot.title}
+                  </a>
+                  <ul>
+                    {hotspot.projects.map(({ project }) => {
+                      const visited = isVisited(project.slug);
+                      const shouldShowAsVisited = showAllAsVisited || visited;
+                      return (
+                        <li key={project._id}>
+                          <Link
+                            href={getFullPath(pathname, project.slug)}
+                            onClick={closeMenu}
+                            className={
+                              shouldShowAsVisited
+                                ? styles.visited
+                                : styles.unvisited
+                            }
+                          >
+                            {shouldShowAsVisited
+                              ? project.title
+                              : generateAnagram(project.title)}
+                            {project.author && (
+                              <>
+                                {" – "}
+                                {shouldShowAsVisited
+                                  ? project.author
+                                  : generateAnagram(project.author)}
+                              </>
+                            )}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </li>
               ))}
             </ul>
