@@ -10,6 +10,7 @@ import { FirstPersonDragControls } from "./controls";
 import { Path3D } from "./path";
 import { easeInOut } from "framer-motion";
 import { LookTutorial } from "./tutorial";
+import { PreDefinedView } from "@/components/types";
 
 const metadataPath = "/assets/metadata.glb";
 useGLTF.preload(metadataPath);
@@ -21,14 +22,12 @@ const maxTeleportDistance = 5;
 
 export function Player({
   debug,
-  targetPosition,
-  targetRotation,
-  onTargetCompleted,
+  view,
+  onViewReached,
 }: {
   debug?: boolean,
-  targetPosition?: Vector3,
-  targetRotation?: Quaternion,
-  onTargetCompleted?: (success: boolean) => void,
+  view?: PreDefinedView,
+  onViewReached?: (success: boolean) => void,
 }) {
   const navmesh = ((useGLTF(metadataPath)).nodes.Navmesh as Mesh).geometry;
   const [pathFinding] = useMemo(() => {
@@ -59,11 +58,13 @@ export function Player({
     };
   }, []);
   const [navigatingToTarget, setNavigatingToTarget] = useState(false);
-  const [sourceRotation, setSourceRotation] = useState<Quaternion | undefined>();
+  const sourceRotation = useMemo(() => new Quaternion(), []);
+  const targetRotation = useMemo(() => new Quaternion(), []);
   const motionTimeRef = useRef<number | undefined>();
   const motionDurationRef = useRef<number | undefined>();
   const motionPath = useRef<Path3D | undefined>();
   const endNavigation = useCallback(() => {
+    camera.quaternion.copy(targetRotation);
     setMoving(false);
     setTargetVisible(false);
     motionTimeRef.current = undefined;
@@ -71,23 +72,23 @@ export function Player({
     motionPath.current = undefined;
     if (navigatingToTarget) {
       setNavigatingToTarget(false);
-      onTargetCompleted?.(true);
+      onViewReached?.(true);
     }
-  }, [navigatingToTarget, onTargetCompleted]);
+  }, [camera.quaternion, navigatingToTarget, onViewReached, targetRotation]);
   const beginNavigation = useCallback((target: Vector3, duration: number) => {
     const start = playerRef.current.position.clone();
     const groupId = pathFinding.getGroup(ZONE, start);
-    const path = pathFinding.findPath(start, target, ZONE, groupId);
+    let path = pathFinding.findPath(start, target, ZONE, groupId);
     if (!path || path.length === 0) {
-      endNavigation();
-    } else {
-      setMoving(true);
-      motionTimeRef.current = 0;
-      motionDurationRef.current = duration;
-      motionPath.current = new Path3D([start, ...path]);
-      node.current = undefined;
+      path = [target];
     }
-  }, [endNavigation, pathFinding]);
+    setMoving(true);
+    motionTimeRef.current = 0;
+    motionDurationRef.current = duration;
+    motionPath.current = new Path3D([start, ...path]);
+    sourceRotation.copy(camera.quaternion);
+    node.current = undefined;
+  }, [camera.quaternion, pathFinding, sourceRotation]);
   // set initial camera rotation
   useLayoutEffect(() => {
     camera.quaternion.copy(initialRotation);
@@ -147,22 +148,15 @@ export function Player({
     }
   }, [camera]);
   useEffect(() => {
-    if (targetPosition) {
+    if (view) {
       setNavigatingToTarget(true);
-      beginNavigation(targetPosition, 2.0);
+      sourceRotation.copy(camera.quaternion);
+      targetRotation.fromArray(view.rotation);
+      beginNavigation(new Vector3().fromArray(view.position), 2.0);
     }
-  // intentionally omitting beginNavigation from dependencies
+  // intentionally omitting everything else from dependencies
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [targetPosition]);
-  useEffect(() => {
-    if (targetRotation) {
-      setSourceRotation(camera.quaternion.clone());
-    } else {
-      setSourceRotation(undefined);
-    }
-  // intentionally omitting camera from dependencies
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [targetRotation]);
+  }, [view]);
   const direction = new Vector3();
   const frontVector = new Vector3();
   const sideVector = new Vector3();
@@ -172,7 +166,6 @@ export function Player({
   const axis = new Vector3(0, 1, 0);
   const rayTargetDiff = new Vector3();
   useFrame(({ camera }, delta) => {
-    const currentPlayer = playerRef.current;
     frontVector.set(0, 0, (moveBackward ? 1 : 0) - (moveForward ? 1 : 0));
     sideVector.set((moveLeft ? 1 : 0) - (moveRight ? 1 : 0), 0, 0);
     camera.getWorldDirection(cameraWorldDirection);
@@ -200,18 +193,11 @@ export function Player({
       const nextMotionTime = Math.min(motionTime + delta, motionDuration);
       const progress = motionTime / motionDuration;
       const progressEasing = easeInOut(progress);
-      if (sourceRotation && targetRotation) {
-        if (progress < 1) {
-          camera.quaternion.slerpQuaternions(sourceRotation, targetRotation, progressEasing);
-        } else {
-          camera.quaternion.copy(targetRotation);
-          setSourceRotation(undefined);
-        }
-      }
       const path = motionPath.current;
       if (pathFinding && path) {
         path.at(progressEasing, playerRef.current.position);
       }
+      camera.quaternion.slerpQuaternions(sourceRotation, targetRotation, progressEasing);
       if (nextMotionTime >= motionDuration) {
         endNavigation();
         motionTimeRef.current = undefined;
@@ -264,9 +250,10 @@ export function Player({
           rayTargetDiff.subVectors(event.point, playerRef.current.position);
           if (rayTargetDiff.length() <= maxTeleportDistance) {
             if (navigatingToTarget) {
-              onTargetCompleted?.(false);
+              onViewReached?.(false);
               setNavigatingToTarget(false);
             }
+            targetRotation.copy(camera.quaternion);
             beginNavigation(event.point, 0.5);
           }
         }}

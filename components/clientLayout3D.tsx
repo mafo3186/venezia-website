@@ -5,10 +5,9 @@ import { CanvasContainer } from "./world";
 import { useProjects } from "@/components/contexts";
 
 export function ClientLayout3D({ children }: PropsWithChildren) {
-  const projects = useProjects() || [];
-
+  const { projects, emptySpots } = useProjects();
   return (
-    <CanvasContainer projects={projects}>
+    <CanvasContainer projects={projects} emptySpots={emptySpots}>
       {children}
     </CanvasContainer>
   );

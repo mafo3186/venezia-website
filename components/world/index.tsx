@@ -2,27 +2,33 @@
 
 import { usePathname } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
-import { ProjectsQueryResult } from "@/sanity.types";
 import { SceneCanvas } from "./scene";
 import styles from "./world.module.css";
-import { PreDefinedView } from "../types";
+import { HotspotsWithProjects, PreDefinedView, Spot } from "@/components/types";
 import { useHotspot } from "@/components/contexts";
 
-function Content({ onChildPage, children }: PropsWithChildren<{ onChildPage: boolean }>) {
-  return <main className={onChildPage ? styles.mainVisible : styles.mainHidden}>
-    {children}
-  </main>;
+function Content({
+  onChildPage,
+  children,
+}: PropsWithChildren<{ onChildPage: boolean }>) {
+  return (
+    <main className={onChildPage ? styles.mainVisible : styles.mainHidden}>
+      {children}
+    </main>
+  );
 }
 
 export function CanvasContainer({
   projects,
+  emptySpots,
   view,
   onViewReached,
   children,
 }: PropsWithChildren<{
-  projects: ProjectsQueryResult,
-  view?: PreDefinedView,
-  onViewReached?: () => void,
+  projects: HotspotsWithProjects;
+  emptySpots: Spot[];
+  view?: PreDefinedView;
+  onViewReached?: () => void;
 }>) {
   const pathname = usePathname();
   const onChildPage = pathname !== "/";
@@ -39,6 +45,7 @@ export function CanvasContainer({
       <div className={styles.home}>
         <SceneCanvas
           projects={projects}
+          emptySpots={emptySpots}
           inBackground={onChildPage}
           view={hotspot}
           onViewReached={() => setHotspot(undefined)}
