@@ -85,7 +85,6 @@ export function Player({
       motionTimeRef.current = 0;
       motionDurationRef.current = duration;
       motionPath.current = new Path3D([start, ...path]);
-      console.log(motionPath.current)
       node.current = undefined;
     }
   }, [endNavigation, pathFinding]);

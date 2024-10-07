@@ -25,7 +25,6 @@ export function Water() {
   const ref = useRef<WaterImpl>(null!);
   const normalMap0 = useTexture(water1MNormal.src);
   const normalMap1 = useTexture(water2MNormal.src);
-  console.log(water1MNormal);
   normalMap0.wrapS = normalMap0.wrapT = RepeatWrapping;
   normalMap1.wrapS = normalMap1.wrapT = RepeatWrapping;
   const geometry = useMemo(() => new PlaneGeometry(1000, 1000), []);

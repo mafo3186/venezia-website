@@ -15,7 +15,6 @@ export default function VisitedProjectWrapper ({ slug }: VisitedProjectWrapperPr
 
         // Dispatch event AFTER updating localStorage
         window.dispatchEvent(new Event('visitedProjectsUpdated'));
-        console.log("visitedProjectsUpdated Event für " + slug);
       }
     }
   }, [slug]);
