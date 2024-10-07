@@ -1,15 +1,10 @@
 "use client";
 
-import { ProjectsQueryResult } from "@/sanity.types";
 import { PropsWithChildren } from "react";
 import { CanvasContainer } from "./world";
 import { useProjects } from "@/components/contexts";
 
-type Props = PropsWithChildren<{
-  projects: ProjectsQueryResult;
-}>;
-
-export function ClientLayout3D({ children }: Props) {
+export function ClientLayout3D({ children }: PropsWithChildren) {
   const projects = useProjects() || [];
 
   return (
