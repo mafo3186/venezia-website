@@ -3,7 +3,8 @@ import { Image } from "next-sanity/image";
 import { blurhashToBase64 } from "blurhash-base64";
 import styles from "./showcasePiece.module.css";
 import { FaExpandArrowsAlt } from 'react-icons/fa';
-import {SanityImagePalette}  from "@/sanity.types";
+import { SanityImagePalette } from "@/sanity.types";
+import { useMemo } from "react";
 
 interface ShowcasePieceProps {
   showcase: {
@@ -32,9 +33,18 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
     return hexToRgba(dominantBackground, 0.2);
   };
 
+
+  let youtubeId: string | null = null;
+  if (showcase.type === "website") {
+    let match = (/(?:https?:)?(?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/gim).exec(showcase.content);
+    if (match) {
+      youtubeId = match[1];
+    }
+  }
+
   return (
     <figure className={styles.figure}>
-      <div 
+      <div
         className={styles.contentContainer}
       >
         {showcase.type === "image" && (
@@ -50,13 +60,13 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
         )}
         {showcase.type === "video" && (
           <video controls autoPlay muted loop className={styles.video}>
-            <source src={showcase.content} type={showcase.mimeType!}/>
+            <source src={showcase.content} type={showcase.mimeType!} />
           </video>
         )}
         {showcase.type === "audio" && (
           <div className={styles.audio}>
             <audio controls>
-              <source src={showcase.content} type={showcase.mimeType!}/>
+              <source src={showcase.content} type={showcase.mimeType!} />
             </audio>
           </div>
         )}
@@ -65,23 +75,35 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
         )}
         {showcase.type === "website" && (
           <div className={styles.websiteContainer}>
-            <iframe
-              className={styles.iFrame}
-              src={showcase.content}
-              title={showcase.description ?? "Website"}
-              scrolling="yes"
-            />
-            <button
-              className={styles.expandButton}
-              onClick={() => window.open(showcase.content, "_blank", "noopener noreferrer")}
-              aria-label={"Öffne Webseite auf neuer Seite"}
-            >
-              <FaExpandArrowsAlt/>
-            </button>
+            {
+              youtubeId ? (
+                <iframe
+                  className={styles.iFrame}
+                  src={"https://www.youtube-nocookie.com/embed/" + youtubeId}
+                  title="YouTube video player" frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen>
+                </iframe>
+              ) : (<>
+                <iframe
+                  className={styles.iFrame}
+                  src={showcase.content}
+                  title={showcase.description ?? "Website"}
+                  scrolling="yes"
+                />
+                <button
+                  className={styles.expandButton}
+                  onClick={() => window.open(showcase.content, "_blank", "noopener noreferrer")}
+                  aria-label={"Öffne Webseite auf neuer Seite"}
+                >
+                  <FaExpandArrowsAlt />
+                </button>
+              </>)
+            }
           </div>
         )}
       </div>
-        {showcase.description && <figcaption className={styles.description}>{showcase.description}</figcaption>}
+      {showcase.description && <figcaption className={styles.description}>{showcase.description}</figcaption>}
     </figure>
-);
+  );
 }
