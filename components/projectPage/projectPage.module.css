@@ -7,6 +7,8 @@
   justify-content: flex-start;
   padding: 10px;
   margin: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
 }
 
 .article {
@@ -15,7 +17,6 @@
   flex-grow: 1;
   padding: 1rem;
   overflow: hidden;
-  background-color: rgb(0,0,0,0.6);
   border-radius: var(--border-radius-container);
 }
 
@@ -48,14 +49,13 @@
   min-width: 66%;
   min-height: 100%;
   max-height: 100%;
-  background: rgba(0, 0, 0, 0.6);
   border-radius: var(--border-radius-content);
 }
 
 .projectTitle {
   color: white;
   padding: 1rem;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: var(--border-radius-content);
   flex-shrink: 1;
   width: 100%;
@@ -82,7 +82,7 @@
 
 .infoIcon {
   font-size: 1.2rem;
-  color: #555;
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
 }
 

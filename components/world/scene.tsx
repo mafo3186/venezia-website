@@ -61,7 +61,7 @@ function Scene({
       <N8AO aoRadius={2} intensity={5} distanceFalloff={.4} depthAwareUpsampling quality="performance" />
       <DepthOfField
         focusDistance={0}
-        focalLength={(inBackground ? 0.01 : 0.2)}
+        focalLength={(inBackground ? 0.001 : 0.2)}
         bokehScale={4 * dpr * dpr}
       />
       <Vignette technique={0} offset={0.1} darkness={0.75} />

@@ -29,8 +29,9 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
   };
 
   const getDominantColor = (palette: SanityImagePalette | undefined): string => {
-    const dominantBackground = palette?.dominant?.background || "transparent"; // Fallback-Farbe
-    return hexToRgba(dominantBackground, 0.2);
+    const dominantBackground = palette?.dominant?.background;
+    if (!dominantBackground) return "rgba(0, 0, 0, 0.4)";
+    return hexToRgba(dominantBackground, 0.4);
   };
 
 
