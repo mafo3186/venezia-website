@@ -1,6 +1,14 @@
 // contexts.tsx
 "use client";
-import React, { createContext, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  PropsWithChildren,
+  SetStateAction,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { SettingsQueryResult } from "@/sanity.types";
 import {
   AllSpotsWithProjects,
@@ -8,12 +16,17 @@ import {
   PreDefinedView,
   Spot,
 } from "./types";
+import { useLocalStorage } from "./hooks/local-storage";
 
 // Typ für Hotspot-Kontext
 interface HotspotContextType {
   hotspot: PreDefinedView | undefined;
-  setHotspot: React.Dispatch<React.SetStateAction<PreDefinedView | undefined>>;
+  setHotspot: Dispatch<SetStateAction<PreDefinedView | undefined>>;
 }
+
+type VisitedContextType = Readonly<
+  [string[], setVisited: Dispatch<SetStateAction<string[]>>]
+>;
 
 // Erstelle die Kontexte
 const ProjectsContext = createContext<AllSpotsWithProjects>({
@@ -22,7 +35,7 @@ const ProjectsContext = createContext<AllSpotsWithProjects>({
 });
 const SettingsContext = createContext<SettingsQueryResult | null>(null);
 const HotspotContext = createContext<HotspotContextType | undefined>(undefined);
-
+const VisitedContext = createContext<VisitedContextType>([[], () => {}]);
 
 // Hook zum Abrufen von Projekten
 export const useProjects = () => {
@@ -51,16 +64,23 @@ export const useHotspot = () => {
   return context;
 };
 
+export const useVisited = () => {
+  const context = useContext(VisitedContext);
+  if (context === undefined) {
+    throw new Error("useVisited must be used within a VisitedProvider");
+  }
+  return context;
+};
+
 // Provider für Projekte
 export const ProjectsProvider = ({
   children,
   projects,
   emptySpots,
-}: {
-  children: React.ReactNode;
+}: PropsWithChildren<{
   projects: HotspotsWithProjects;
   emptySpots: Spot[];
-}) => (
+}>) => (
   <ProjectsContext.Provider
     value={useMemo(() => ({ projects, emptySpots }), [projects, emptySpots])}
   >
@@ -69,18 +89,32 @@ export const ProjectsProvider = ({
 );
 
 // Provider für Einstellungen
-export const SettingsProvider = ({ children, settings }: { children: React.ReactNode; settings: SettingsQueryResult }) => (
+export const SettingsProvider = ({
+  children,
+  settings,
+}: PropsWithChildren<{ settings: SettingsQueryResult }>) => (
   <SettingsContext.Provider value={settings}>
     {children}
   </SettingsContext.Provider>
 );
 
 // Provider für Hotspots
-export const HotspotProvider = ({ children }: { children: React.ReactNode }) => {
+export const HotspotProvider = ({ children }: PropsWithChildren) => {
   const [hotspot, setHotspot] = useState<PreDefinedView | undefined>(undefined);
   return (
     <HotspotContext.Provider value={{ hotspot, setHotspot }}>
       {children}
     </HotspotContext.Provider>
+  );
+};
+
+const fallback: string[] = [];
+
+export const VisitedProvider = ({ children }: PropsWithChildren) => {
+  const visited = useLocalStorage<string[]>("visitedProjects", fallback);
+  return (
+    <VisitedContext.Provider value={visited}>
+      {children}
+    </VisitedContext.Provider>
   );
 };

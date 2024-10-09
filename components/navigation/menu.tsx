@@ -7,7 +7,7 @@ import IconKompass from "@/components/navigation/iconKompass";
 import { CiGlobe, CiRedo, CiViewList } from "react-icons/ci";
 import { PiEye, PiEyeClosed } from "react-icons/pi";
 import { HotspotsWithProjects } from "@/components/types";
-import { useHotspot } from '@/components/contexts';
+import { useHotspot, useVisited } from '@/components/contexts';
 
 interface MenuProps {
   projects: HotspotsWithProjects;
@@ -18,22 +18,7 @@ const Menu = ({ projects }: MenuProps) => {
   const { setHotspot } = useHotspot();
   const pathname = usePathname();
   const [showAllAsVisited, setShowAllAsVisited] = useState(false);
-  const [visitedProjects, setVisitedProjects] = useState<string[]>([]);
-
-  useEffect(() => {
-    const storedVisitedProjects = JSON.parse(localStorage.getItem('visitedProjects') || '[]');
-    setVisitedProjects(storedVisitedProjects);
-
-    // Listener for the visitedProjectsUpdated event, registration and cleanup on unmount
-    const handleVisitedProjectsUpdate = () => {
-      const updatedVisitedProjects = JSON.parse(localStorage.getItem('visitedProjects') || '[]');
-      setVisitedProjects(updatedVisitedProjects);
-    };
-    window.addEventListener('visitedProjectsUpdated', handleVisitedProjectsUpdate);
-    return () => {
-      window.removeEventListener('visitedProjectsUpdated', handleVisitedProjectsUpdate);
-    };
-  }, []);
+  const [visitedProjects, setVisitedProjects] = useVisited();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
