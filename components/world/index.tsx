@@ -1,11 +1,11 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren, useEffect, useMemo } from "react";
 import { SceneCanvas } from "./scene";
 import styles from "./world.module.css";
 import { HotspotsWithProjects, PreDefinedView, Spot } from "@/components/types";
-import { useHotspot } from "@/components/contexts";
+import { useHotspot, useVisited } from "@/components/contexts";
 
 function Content({
   onChildPage,
@@ -21,25 +21,32 @@ function Content({
 export function CanvasContainer({
   projects,
   emptySpots,
-  view,
-  onViewReached,
   children,
 }: PropsWithChildren<{
   projects: HotspotsWithProjects;
   emptySpots: Spot[];
-  view?: PreDefinedView;
-  onViewReached?: () => void;
 }>) {
   const pathname = usePathname();
   const onChildPage = pathname !== "/";
   const { hotspot, setHotspot } = useHotspot();
-
-  useEffect(() => {
-    if (view) {
-      setHotspot(view);
-    }
-  }, [view, setHotspot]);
-
+  const [visited] = useVisited();
+  const allSlugs = useMemo(
+    () =>
+      projects.flatMap((hotspot) =>
+        hotspot.projects.map((spot) => spot.project.slug),
+      ),
+    [projects],
+  );
+  const foreignness = useMemo(
+    () =>
+      1 -
+      visited.filter(
+        (value, index, array) =>
+          array.indexOf(value) === index && allSlugs.includes(value),
+      ).length /
+        allSlugs.length,
+    [allSlugs, visited],
+  );
   return (
     <>
       <div className={styles.home}>
@@ -49,6 +56,7 @@ export function CanvasContainer({
           inBackground={onChildPage}
           view={hotspot}
           onViewReached={() => setHotspot(undefined)}
+          foreignness={foreignness}
         />
       </div>
       <Content onChildPage={onChildPage}>{children}</Content>

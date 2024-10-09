@@ -1,17 +1,14 @@
 "use client";
-import '@/app/global.css'
+import "@/app/global.css";
+import { useProjects } from "@/components/contexts";
+import { CanvasContainer } from "@/components/world";
+import { PropsWithChildren } from "react";
 
-import type { ProjectsQueryResult } from "@/sanity.types";
-
-import { ClientLayout3D } from '@/components/clientLayout3D';
-
-export default function ProjectLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-
+export default function ProjectLayout({ children }: PropsWithChildren) {
+  const { projects, emptySpots } = useProjects();
   return (
-    <ClientLayout3D>{children}</ClientLayout3D>
+    <CanvasContainer projects={projects} emptySpots={emptySpots}>
+      {children}
+    </CanvasContainer>
   );
 }
