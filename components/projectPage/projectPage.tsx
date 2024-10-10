@@ -87,7 +87,7 @@ export default async function ProjectPage({ params }: Props) {
                   </span>
                   </div>
                 </div>
-                <p>von {project.author}</p>
+                <div>von {project.author}</div>
               </hgroup>
               <main className={styles.showcase}>
                 <EmblaCarousel>

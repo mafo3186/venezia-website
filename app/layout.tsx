@@ -8,9 +8,14 @@ import { toPlainText, VisualEditing } from "next-sanity";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
-import { HotspotProvider, ProjectsProvider, SettingsProvider } from "@/components/contexts";
+import {
+  HotspotProvider,
+  ProjectsProvider,
+  SettingsProvider,
+  VisitedProvider,
+} from "@/components/contexts";
 import Menu from "@/components/navigation/menu";
-import { Hotspot, PreDefinedView, Spot } from '@/components/types';
+import { Hotspot, Spot } from "@/components/types";
 import spotsGltf from "@/data/spots.gltf";
 import hotspotsRaw from "@/data/hotspots.json";
 
@@ -115,8 +120,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         emptySpots={emptySpots}
       >
         <HotspotProvider>
-          <Menu projects={projectsAtHotspots} />
-          <section>{children}</section>
+          <VisitedProvider>
+            <Menu projects={projectsAtHotspots} />
+            <section>{children}</section>
+          </VisitedProvider>
         </HotspotProvider>
       </ProjectsProvider>
     </SettingsProvider>

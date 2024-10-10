@@ -18,11 +18,13 @@ export type Spot = {
   rotation: [number, number, number, number];
 };
 
+export type Project = ProjectsQueryResult[number];
+
 export type HotspotWithProjects = {
   hotspotId: string;
   hotspot: Hotspot;
   projects: {
-    project: ProjectsQueryResult[number];
+    project: Project;
     spot: Spot;
   }[];
 };
