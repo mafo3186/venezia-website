@@ -18,7 +18,6 @@ import {
   Spot,
 } from "./types";
 import { useLocalStorage } from "./hooks/local-storage";
-import { useSearchParams } from "next/navigation";
 
 // Typ für Hotspot-Kontext
 interface HotspotContextType {
@@ -109,8 +108,6 @@ export const HotspotProvider = ({ children }: PropsWithChildren) => {
   const [viewAndCallback, setViewAndCallback] = useState<
     [PreDefinedView, ((success: boolean) => void) | undefined] | undefined
   >(undefined);
-  const searchParams = useSearchParams();
-  const hotspotName = searchParams.get("hotspot");
   const [view, callback] = viewAndCallback ?? [undefined, undefined];
   const onViewReached = useCallback(
     (success: boolean) => {
