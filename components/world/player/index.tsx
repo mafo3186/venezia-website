@@ -3,7 +3,7 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { PerspectiveCamera, useGLTF } from "@react-three/drei";
-import { Object3D, Vector3, Quaternion, Mesh } from "three";
+import { Object3D, Vector3, Quaternion, Mesh, MathUtils } from "three";
 import { Node, Pathfinding } from "three-pathfinding";
 import { animated, config, useSpring } from "@react-spring/three";
 import { FirstPersonDragControls } from "./controls";
@@ -11,6 +11,7 @@ import { Path3D } from "./path";
 import { easeInOut } from "framer-motion";
 import { LookTutorial } from "./tutorial";
 import { PreDefinedView } from "@/components/types";
+import { PerspectiveCamera as PerspectiveCameraImpl } from "three";
 
 const metadataPath = "/assets/metadata.glb";
 useGLTF.preload(metadataPath);
@@ -57,41 +58,60 @@ export function Player({
       clearTimeout(timeout);
     };
   }, []);
-  const [navigatingToTarget, setNavigatingToTarget] = useState(false);
   const sourceRotation = useMemo(() => new Quaternion(), []);
   const targetRotation = useMemo(() => new Quaternion(), []);
   const motionTimeRef = useRef<number | undefined>();
   const motionDurationRef = useRef<number | undefined>();
   const motionPath = useRef<Path3D | undefined>();
-  const endNavigation = useCallback(() => {
-    camera.quaternion.copy(targetRotation);
+  const endNavigation = useCallback((success = true) => {
     setMoving(false);
     setTargetVisible(false);
     motionTimeRef.current = undefined;
     motionDurationRef.current = undefined;
     motionPath.current = undefined;
-    if (navigatingToTarget) {
-      setNavigatingToTarget(false);
-      onViewReached?.(true);
-    }
-  }, [camera.quaternion, navigatingToTarget, onViewReached, targetRotation]);
-  const beginNavigation = useCallback((target: Vector3, duration: number) => {
-    const start = playerRef.current.position.clone();
-    const groupId = pathFinding.getGroup(ZONE, start);
-    let path = pathFinding.findPath(start, target, ZONE, groupId);
-    if (!path || path.length === 0) {
-      path = [target];
-    }
-    setMoving(true);
-    motionTimeRef.current = 0;
-    motionDurationRef.current = duration;
-    motionPath.current = new Path3D([start, ...path]);
-    sourceRotation.copy(camera.quaternion);
-    node.current = undefined;
-  }, [camera.quaternion, pathFinding, sourceRotation]);
+    onViewReached?.(success);
+  }, [onViewReached]);
+  const beginNavigation = useCallback(
+    (target: Vector3, rotation: Quaternion) => {
+      if (moving) {
+        endNavigation(false);
+      }
+      const start = playerRef.current.position.clone();
+      const groupId = pathFinding.getGroup(ZONE, start);
+      let pathNodes = pathFinding.findPath(start, target, ZONE, groupId);
+      if (!pathNodes || pathNodes.length === 0) {
+        pathNodes = [target];
+      }
+      setMoving(true);
+      motionTimeRef.current = 0;
+      const path = new Path3D([start, ...pathNodes]);
+      motionPath.current = path;
+      sourceRotation.copy(camera.quaternion);
+      targetRotation.copy(rotation);
+      const rotationDistance = sourceRotation.angleTo(targetRotation);
+      const duration = Math.min(
+        Math.max(path.length / 8, rotationDistance / Math.PI),
+        4,
+      );
+      motionDurationRef.current = duration;
+      node.current = undefined;
+      if (duration < 0.01) {
+        camera.quaternion.copy(targetRotation);
+        endNavigation();
+      }
+    },
+    [camera.quaternion, endNavigation, moving, pathFinding, sourceRotation, targetRotation],
+  );
   // set initial camera rotation
   useLayoutEffect(() => {
-    camera.quaternion.copy(initialRotation);
+    if (view) {
+      camera.quaternion.fromArray(view.rotation);
+      playerRef.current.position.fromArray(view.position);
+    } else {
+      camera.quaternion.copy(initialRotation);
+    }
+  // should only run once the camera is set up properly
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [camera]);
   useEffect(() => {
     const keyDown = (event: KeyboardEvent) => {
@@ -146,13 +166,12 @@ export function Player({
       window.removeEventListener("keydown", keyDown);
       window.removeEventListener("keyup", keyUp);
     }
-  }, [camera]);
+  }, []);
   useEffect(() => {
     if (view) {
-      setNavigatingToTarget(true);
-      sourceRotation.copy(camera.quaternion);
-      targetRotation.fromArray(view.rotation);
-      beginNavigation(new Vector3().fromArray(view.position), 2.0);
+      const position = new Vector3().fromArray(view.position);
+      const rotation = new Quaternion().fromArray(view.rotation);
+      beginNavigation(position, rotation);
     }
   // intentionally omitting everything else from dependencies
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -199,6 +218,7 @@ export function Player({
       }
       camera.quaternion.slerpQuaternions(sourceRotation, targetRotation, progressEasing);
       if (nextMotionTime >= motionDuration) {
+        camera.quaternion.copy(targetRotation);
         endNavigation();
         motionTimeRef.current = undefined;
         motionDurationRef.current = undefined;
@@ -249,12 +269,7 @@ export function Player({
         onClick={(event) => {
           rayTargetDiff.subVectors(event.point, playerRef.current.position);
           if (rayTargetDiff.length() <= maxTeleportDistance) {
-            if (navigatingToTarget) {
-              onViewReached?.(false);
-              setNavigatingToTarget(false);
-            }
-            targetRotation.copy(camera.quaternion);
-            beginNavigation(event.point, 0.5);
+            beginNavigation(event.point, camera.quaternion);
           }
         }}
       >

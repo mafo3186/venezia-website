@@ -1,10 +1,10 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { PropsWithChildren, useEffect, useMemo } from "react";
+import { PropsWithChildren, useMemo } from "react";
 import { SceneCanvas } from "./scene";
 import styles from "./world.module.css";
-import { HotspotsWithProjects, PreDefinedView, Spot } from "@/components/types";
+import { HotspotsWithProjects, Spot } from "@/components/types";
 import { useHotspot, useVisited } from "@/components/contexts";
 
 function Content({
@@ -28,7 +28,7 @@ export function CanvasContainer({
 }>) {
   const pathname = usePathname();
   const onChildPage = pathname !== "/";
-  const { hotspot, setHotspot } = useHotspot();
+  const { view, onViewReached } = useHotspot();
   const [visited] = useVisited();
   const allSlugs = useMemo(
     () =>
@@ -54,8 +54,8 @@ export function CanvasContainer({
           projects={projects}
           emptySpots={emptySpots}
           inBackground={onChildPage}
-          view={hotspot}
-          onViewReached={() => setHotspot(undefined)}
+          view={view}
+          onViewReached={onViewReached}
           foreignness={foreignness}
         />
       </div>
