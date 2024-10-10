@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import styles from './menu.module.css';
 import IconKompass from "@/components/navigation/iconKompass";
 import { CiGlobe, CiRedo, CiViewList } from "react-icons/ci";
@@ -15,10 +15,12 @@ interface MenuProps {
 
 const Menu = ({ projects }: MenuProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { setHotspot } = useHotspot();
+  const { showView } = useHotspot();
   const pathname = usePathname();
+  const router = useRouter();
   const [showAllAsVisited, setShowAllAsVisited] = useState(false);
   const [visitedProjects, setVisitedProjects] = useVisited();
+  const listView = pathname.includes('/projectlist');
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -86,9 +88,11 @@ const Menu = ({ projects }: MenuProps) => {
               {projects.map((hotspot) => (
                 <li key={hotspot.hotspotId} className={styles.hotSpot}>
                   <a
-                    onClick={() => {
+                    onClick={(event) => {
+                      event.preventDefault();
                       closeMenu();
-                      setHotspot(hotspot.hotspot.location);
+                      router.push('/')
+                      showView(hotspot.hotspot.location);
                     }}
                   >
                     {hotspot.hotspot.title}
@@ -101,7 +105,17 @@ const Menu = ({ projects }: MenuProps) => {
                         <li key={project._id}>
                           <Link
                             href={getFullPath(pathname, project.slug)}
-                            onClick={closeMenu}
+                            onClick={(event) => {
+                              closeMenu();
+                              if (!listView) {
+                                event.preventDefault();
+                                showView(hotspot.hotspot.location, (success) => {
+                                  if (success) {
+                                    router.push(getFullPath(pathname, project.slug));
+                                  }
+                                });
+                              }
+                            }}
                             className={
                               shouldShowAsVisited
                                 ? styles.visited

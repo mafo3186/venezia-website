@@ -1,11 +1,11 @@
 "use client";
 
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { DepthOfField, EffectComposer, N8AO, Vignette } from "@react-three/postprocessing";
-import { Environment, OrbitControls, useProgress, useTexture } from "@react-three/drei";
+import { Environment, OrbitControls, useProgress } from "@react-three/drei";
 import styles from "./world.module.css";
-import { Color, Euler, FogExp2, MathUtils, ReinhardToneMapping } from "three";
+import { Color, Euler, FogExp2, MathUtils } from "three";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
 import Stats, { Panel } from "./stats";
@@ -13,14 +13,13 @@ import { CascadedShadowMap } from "./csm/cascaded-shadow-map";
 import { HotspotsWithProjects, PreDefinedView, Spot } from "@/components/types";
 import { ProjectBox } from "./project-box";
 import { Water } from "./water";
-import { useHotspot } from "@/components/contexts";
 
 type BaseProps = {
   projects: HotspotsWithProjects,
   emptySpots: Spot[],
   inBackground: boolean,
   view?: PreDefinedView,
-  onViewReached?: () => void,
+  onViewReached?: (success: boolean) => void,
   foreignness: number,
 };
 
@@ -58,8 +57,8 @@ const environments = [
   {
     file: "/assets/overcast_soil_puresky_1k.hdr",
     intensity: 0.3,
-    fogFrom: new Color("#969697"),
-    fogTo: new Color("#676665"),
+    fogFrom: new Color("#6c6b6a"),
+    fogTo: new Color("#4b4a4a"),
   },
 ];
 
@@ -77,7 +76,6 @@ function Scene({
   );
   const [iAmGod, setGod] = useState(false);
   const dpr = useThree(({ viewport }) => viewport.dpr);
-  const { setHotspot } = useHotspot();
   const [overrideForeignness, setOverrideForeignness] = useState<number | undefined>(undefined);
   const foreignness = overrideForeignness ?? originalForeignness;
 
@@ -108,12 +106,6 @@ function Scene({
       }
     });
   }, [iAmGod]);
-
-  useEffect(() => {
-    if (view) {
-      setHotspot(view);
-    }
-  }, [view, setHotspot]);
   const environmentIndex = MathUtils.clamp(Math.floor(foreignness * environments.length), 0, environments.length - 1);
   const environment = environments[environmentIndex];
   const fog = useRef<FogExp2>(null!);

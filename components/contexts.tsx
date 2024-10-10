@@ -5,6 +5,7 @@ import {
   Dispatch,
   PropsWithChildren,
   SetStateAction,
+  useCallback,
   useContext,
   useMemo,
   useState,
@@ -17,11 +18,16 @@ import {
   Spot,
 } from "./types";
 import { useLocalStorage } from "./hooks/local-storage";
+import { useSearchParams } from "next/navigation";
 
 // Typ für Hotspot-Kontext
 interface HotspotContextType {
-  hotspot: PreDefinedView | undefined;
-  setHotspot: Dispatch<SetStateAction<PreDefinedView | undefined>>;
+  view: PreDefinedView | undefined;
+  onViewReached: (success: boolean) => void;
+  showView: (
+    view: PreDefinedView,
+    callback?: (success: boolean) => void,
+  ) => void;
 }
 
 type VisitedContextType = Readonly<
@@ -100,11 +106,31 @@ export const SettingsProvider = ({
 
 // Provider für Hotspots
 export const HotspotProvider = ({ children }: PropsWithChildren) => {
-  const [hotspot, setHotspot] = useState<PreDefinedView | undefined>(undefined);
+  const [viewAndCallback, setViewAndCallback] = useState<
+    [PreDefinedView, ((success: boolean) => void) | undefined] | undefined
+  >(undefined);
+  const searchParams = useSearchParams();
+  const hotspotName = searchParams.get("hotspot");
+  const [view, callback] = viewAndCallback ?? [undefined, undefined];
+  const onViewReached = useCallback(
+    (success: boolean) => {
+      setViewAndCallback(undefined);
+      callback?.(success);
+    },
+    [callback],
+  );
+  const showView = useCallback(
+    (view: PreDefinedView, callback?: (success: boolean) => void) => {
+      setViewAndCallback([view, callback]);
+    },
+    [],
+  );
+  const value = useMemo(
+    () => ({ view, onViewReached, showView }),
+    [view, onViewReached, showView],
+  );
   return (
-    <HotspotContext.Provider value={{ hotspot, setHotspot }}>
-      {children}
-    </HotspotContext.Provider>
+    <HotspotContext.Provider value={value}>{children}</HotspotContext.Provider>
   );
 };
 
