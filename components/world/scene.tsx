@@ -1,11 +1,12 @@
 "use client";
 
-import { Canvas, useThree } from "@react-three/fiber";
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Canvas, useLoader, useThree } from "@react-three/fiber";
+import { startTransition, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { DepthOfField, EffectComposer, N8AO, Vignette } from "@react-three/postprocessing";
 import { Environment, OrbitControls, useProgress } from "@react-three/drei";
 import styles from "./world.module.css";
 import { Color, Euler, FogExp2, MathUtils } from "three";
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
 import Stats, { Panel } from "./stats";
@@ -62,6 +63,10 @@ const environments = [
   },
 ];
 
+for (const environment of environments) {
+  useLoader.preload(RGBELoader, environment.file);
+}
+
 function Scene({
   projects,
   emptySpots,
@@ -106,13 +111,22 @@ function Scene({
       }
     });
   }, [iAmGod]);
-  const environmentIndex = MathUtils.clamp(Math.floor(foreignness * environments.length), 0, environments.length - 1);
+  const desiredEnvironmentIndex = MathUtils.clamp(Math.floor(foreignness * environments.length), 0, environments.length - 1);
+  const [environmentIndex, setEnvironmentIndex] = useState(desiredEnvironmentIndex);
+  useEffect(() => {
+    if (desiredEnvironmentIndex !== environmentIndex) {
+      startTransition(() => {
+        setEnvironmentIndex(desiredEnvironmentIndex);
+      });
+    }
+  }, [desiredEnvironmentIndex, environmentIndex]);
   const environment = environments[environmentIndex];
   const fog = useRef<FogExp2>(null!);
   useEffect(() => {
     fog.current.color.lerpColors(environment.fogFrom, environment.fogTo, foreignness)
   }, [environment, foreignness]);
   return (<>
+    <Suspense fallback={null}>
     <Environment
       files={environment.file}
       environmentIntensity={
@@ -131,6 +145,7 @@ function Scene({
       ) * 0.8 * environment.intensity}
       background
     />
+    </Suspense>
     <CascadedShadowMap lightIntensity={0} shadowMapSize={4096} lightDirection={[-0.2, MathUtils.lerp(-0.4, -2.5, foreignness ** 2), -0.5]} lightMargin={10} maxFar={25} />
     <fogExp2 ref={fog} attach="fog" density={iAmGod ? 0 : MathUtils.lerp(0.03, 0.1, foreignness ** 2)} />
     <EffectComposer>
@@ -171,15 +186,24 @@ function Scene({
 }
 
 export function SceneCanvas(props: BaseProps) {
+  const [initialLoad, setInitialLoad] = useState(true);
   const { inBackground } = props;
   const dpr = .78;
-  const { active, progress } = useProgress();
+  const active = useProgress((state) => state.active);
+  const progress = useProgress((state) => state.progress);
+  useEffect(() => {
+    if (!active) {
+      const timeout = setTimeout(() => setInitialLoad(false), 300);
+      return () => clearTimeout(timeout);
+    }
+  }, [active, progress]);
+  const show = initialLoad;
   return (<>
     <Canvas
       id="canvas-instance"
       style={{ width: "100%", height: "100vh" }}
       shadows="soft"
-      className={styles.scene}
+      className={`${styles.scene } ` + (show ? styles.sceneLoading : styles.sceneLoaded)}
       dpr={dpr}
       frameloop={inBackground ? "demand" : "always"}
     >
@@ -190,11 +214,16 @@ export function SceneCanvas(props: BaseProps) {
         <Panel title="cDPR" value={dpr * 100} maxValue={120} />
       </Stats>
     </Canvas>
-    <div className={active ? styles.loaderPlaceholderActive : styles.loaderPlaceholder} />
-    <div className={active ? styles.loaderActive : styles.loader}>
-      <div className={styles.progress} style={{ opacity: 1 - (progress / 100) ** 2 }}>
-        <div className={styles.bar} style={{ scale: progress / 100 }} />
-      </div>
+    <div
+      className={
+        styles.loaderPlaceholder +
+        (!show ? ` ${styles.loaderPlaceholderInactive}` : "")
+      }
+    />
+    <div
+      className={styles.progress + (show ? ` ${styles.progressActive}` : "")}
+    >
+      <div className={styles.bar} style={{ scale: `${progress / 100} 1` }} />
     </div>
   </>);
 }

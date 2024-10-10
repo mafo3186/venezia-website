@@ -166,7 +166,7 @@ export function Player({
       window.removeEventListener("keydown", keyDown);
       window.removeEventListener("keyup", keyUp);
     }
-  }, []);
+  }, [camera.quaternion]);
   useEffect(() => {
     if (view) {
       const position = new Vector3().fromArray(view.position);
