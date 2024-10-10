@@ -114,6 +114,10 @@ h6 {
   font-size: 1em;
 }
 
+p {
+  margin-bottom: 1.5rem; /* Abstand unterhalb von Absätzen */
+}
+
 body {
   background-color: var(--background-color); /* Standard-Hintergrundfarbe */
   color: var(--text-color); /* Standard-Textfarbe */
