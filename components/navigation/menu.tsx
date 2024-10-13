@@ -42,6 +42,7 @@ const Menu = ({ projects }: MenuProps) => {
   const clearVisitedProjects = () => {
     setVisitedProjects([]);
     localStorage.removeItem('visitedProjects');
+    setShowAllAsVisited(false);
   };
 
   const generateAnagram = (string: string) => {
