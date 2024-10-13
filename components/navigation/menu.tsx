@@ -6,7 +6,7 @@ import styles from './menu.module.css';
 import IconKompass from "@/components/navigation/iconKompass";
 import { CiGlobe, CiRedo, CiViewList } from "react-icons/ci";
 import { PiEye, PiEyeClosed } from "react-icons/pi";
-import { HotspotsWithProjects } from "@/components/types";
+import {HotspotsWithProjects, PreDefinedView} from "@/components/types";
 import { useHotspot, useVisited } from '@/components/contexts';
 
 interface MenuProps {
@@ -56,6 +56,30 @@ const Menu = ({ projects }: MenuProps) => {
     return `/${subpath}`;
   };
 
+  const handleNavigationAndView = (
+    event: React.MouseEvent,
+    hotspotLocation: PreDefinedView,
+    projectSlug: string | null = null
+  ) => {
+    event.preventDefault();
+    closeMenu();
+    router.push("/");
+    showView(hotspotLocation, (success) => {
+      if (success && projectSlug) {
+        router.push(getFullPath(pathname, projectSlug));
+      }
+    });
+  };
+
+  const handleProjectClick = (event: React.MouseEvent, projectSlug: string | null, hotspotLocation: PreDefinedView) => {
+    closeMenu();
+    if (listView) {
+      router.push(getFullPath(pathname, projectSlug));
+    } else {
+      handleNavigationAndView(event, hotspotLocation, projectSlug);
+    }
+  };
+
   return (
     <header className={styles.header}>
       <div
@@ -89,12 +113,7 @@ const Menu = ({ projects }: MenuProps) => {
               {projects.map((hotspot) => (
                 <li key={hotspot.hotspotId} className={styles.hotSpot}>
                   <a
-                    onClick={(event) => {
-                      event.preventDefault();
-                      closeMenu();
-                      router.push('/')
-                      showView(hotspot.hotspot.location);
-                    }}
+                    onClick={(event) => handleNavigationAndView(event, hotspot.hotspot.location)}
                   >
                     {hotspot.hotspot.title}
                   </a>
@@ -106,17 +125,7 @@ const Menu = ({ projects }: MenuProps) => {
                         <li key={project._id}>
                           <Link
                             href={getFullPath(pathname, project.slug)}
-                            onClick={(event) => {
-                              closeMenu();
-                              if (!listView) {
-                                event.preventDefault();
-                                showView(hotspot.hotspot.location, (success) => {
-                                  if (success) {
-                                    router.push(getFullPath(pathname, project.slug));
-                                  }
-                                });
-                              }
-                            }}
+                            onClick={(event) => handleProjectClick(event, project.slug, hotspot.hotspot.location)}
                             className={
                               shouldShowAsVisited
                                 ? styles.visited
