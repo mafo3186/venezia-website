@@ -34,9 +34,14 @@ export default async function ProjectList() {
       <div className={listStyles.projectContainer}>
         {projectPositions.map((project) => (
           <div key={project.slug} className={listStyles.projectPointContainer}>
-            <Link href={`/projectlist/${project.slug}`} className={listStyles.projectTitle}>
+            <Link href={`/projectlist/${project.slug}`} key={project.slug} className={listStyles.projectPointContainer}>
               <div className={listStyles.projectPoint}></div>
-              {project.title} – {project.author}
+              <div className={listStyles.projectTitle}>
+                {project.title}
+              </div>
+              <div className={listStyles.projectAuthor}>
+                {project.author}
+              </div>
             </Link>
           </div>
         ))}

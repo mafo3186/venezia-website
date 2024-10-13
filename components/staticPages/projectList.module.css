@@ -29,7 +29,7 @@
   max-width: 90vw;
   text-align: justify;
   border-radius: var(--border-radius-container);
-  background-color: rgb(3, 45, 93, 0.1);
+  background-color: rgba(4, 78, 162, 0.5);
   color: var(--text-color);
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
@@ -39,6 +39,9 @@
   flex-direction: column;
   align-items: center;
   margin: 3rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-color); /* Textfarbe */
 }
 
 .projectPoint {
@@ -56,15 +59,19 @@
 .projectPoint:hover {
   transform: scale(1.2);
   cursor: pointer;
+  background-color: var(--link-color)
 }
 
 .projectTitle {
   margin-top: 1rem;
-  text-align: center;
-  text-decoration: none;
-  color: var(--text-color); /* Standardfarbe */
   font-size: 1rem;
   font-weight: bold;
+  text-align: center;
+}
+
+.projectAuthor {
+  font-size: 0.85rem; /* Kleinere Schrift für den Autor */
+  margin-top: 0.5rem;
 }
 
 .wave {
@@ -72,7 +79,7 @@
   bottom: 0;
   left: 0;
   width: 200%;
-  height:200%;
+  height:100%;
   background: url('/icons/wave.svg');
   animation: wave 30s linear infinite;
   opacity: 0.03;
