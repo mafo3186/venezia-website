@@ -13,12 +13,10 @@ import Link from "next/link";
 export default async function ProjectList() {
   const projects = await sanityFetch<ProjectsListQueryResult>({ query: projectsListQuery, params: { orderBy: "title" } });
 
-  // Hier definieren wir die Positionen der Projekte, um sie im Raster anzuzeigen
   const projectPositions = projects.map((project, index) => ({
     title: project.title,
     slug: project.slug,
     author: project.author || "unbekannt",
-    updatedAt: project._updatedAt.replace(/T|Z/g, " "),
     description: project.description,
   }));
 
@@ -39,7 +37,6 @@ export default async function ProjectList() {
           </div>
         ))}
       </div>
-      <div className={listStyles.wave}></div>
     </div>
   );
 }
