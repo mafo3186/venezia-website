@@ -1,15 +1,14 @@
 import styles from "./staticPages.module.css";
-import {BackButton} from "@/components/navigation/button";
 import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
 
 export default function Impressum() {
   return (
-    <div className={styles.boxContainer}>
+    <div className={styles.pageContainer}>
+      <div className={styles.navigationButtons}>
+        <HomeButtonSwitcher/>
+      </div>
       <div className={styles.textContainer}>
-        <div className={styles.navigation}>
-          <HomeButtonSwitcher/>
-          <BackButton/>
-        </div>
+
         <h1>Impressum</h1>
         <div className={styles.bold}>
           <p>Hochschule Düsseldorf</p>

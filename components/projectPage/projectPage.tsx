@@ -10,7 +10,6 @@ import styles from "@/components/projectPage/projectPage.module.css";
 import { EmblaCarousel } from "@/components/projectPage/carousel";
 import ShowcasePiece from "@/components/projectPage/showcasePiece";
 import PortableText from "@/components/projectPage/documentation";
-import {BackButton} from "@/components/navigation/button";
 import Loading from "@/components/loading";
 import VisitedProjectWrapper from "@/components/projectPage/visitedProjectWrapper";
 import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
@@ -67,11 +66,10 @@ export default async function ProjectPage({ params }: Props) {
     <Suspense fallback={<Loading />}>
       <VisitedProjectWrapper slug={params.slug} />
       <div className={styles.pageContainer}>
+        <div className={styles.navigationButtons}>
+          {<HomeButtonSwitcher/>}
+        </div>
         <article className={styles.article}>
-          <div className={styles.navigationButtons}>
-            {<HomeButtonSwitcher/>}
-            <BackButton/>
-          </div>
           <div className={styles.content}>
             <div className={styles.showcaseAndTitle}>
               <hgroup className={styles.projectTitle}>

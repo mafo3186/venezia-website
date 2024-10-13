@@ -1,15 +1,14 @@
 import styles from "./staticPages.module.css";
-import { BackButton}  from "@/components/navigation/button";
 import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
 
 export default function Datenschutz() {
   return (
-    <div className={styles.boxContainer}>
+    <div className={styles.pageContainer}>
+      <div className={styles.navigationButtons}>
+        <HomeButtonSwitcher/>
+      </div>
       <div className={styles.textContainer}>
-        <div className={styles.navigation}>
-          <HomeButtonSwitcher/>
-          <BackButton/>
-        </div>
+
         <h1 className={styles.title}>Datenschutz</h1>
         <p className={styles.bold}>
           Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst und möchten, dass Sie wissen, wann wir welche Daten

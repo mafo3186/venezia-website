@@ -1,6 +1,5 @@
 import styles from "./staticPages.module.css";
 import IconKompass from "@/components/navigation/iconKompass";
-import {BackButton} from "@/components/navigation/button";
 import Link from "next/link";
 import {CiGlobe, CiViewList} from "react-icons/ci";
 import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
@@ -8,12 +7,11 @@ import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
 
 export default function Fremde() {
   return (
-    <div className={styles.boxContainer}>
+    <div className={styles.pageContainer}>
+      <div className={styles.navigationButtons}>
+        <HomeButtonSwitcher/>
+      </div>
       <div className={styles.textContainer}>
-        <div className={styles.navigation}>
-          <HomeButtonSwitcher/>
-          <BackButton/>
-        </div>
         <h1>Fremde überall</h1>
         <h2>Exkursion zur 60. Kunst-Biennale in Venedig 2024</h2>
         <br/>
@@ -45,7 +43,7 @@ export default function Fremde() {
           <Link href="/" className={styles.linkContainer}>
             <div className={styles.iconContainer}>
               <div className={styles.circle}>
-                <CiGlobe className={styles.iconColor} size={"60%"} />
+                <CiGlobe className={styles.iconColor} size={"60%"}/>
               </div>
               <h4 className={styles.iconTitle}>Welt</h4>
               <p className={styles.iconDescription}>
@@ -58,7 +56,7 @@ export default function Fremde() {
           <Link href="/projectlist" className={styles.linkContainer}>
             <div className={styles.iconContainer}>
               <div className={styles.circle}>
-                <CiViewList  className={styles.iconColor} size={"60%"} />
+                <CiViewList className={styles.iconColor} size={"60%"}/>
               </div>
               <h4 className={styles.iconTitle}>Liste</h4>
               <p className={styles.iconDescription}>
