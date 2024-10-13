@@ -5,11 +5,12 @@ import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
 export default function Impressum() {
   return (
     <div className={styles.boxContainer}>
+      <div className={styles.navigation}>
+        <HomeButtonSwitcher/>
+        <BackButton/>
+      </div>
       <div className={styles.textContainer}>
-        <div className={styles.navigation}>
-          <HomeButtonSwitcher/>
-          <BackButton/>
-        </div>
+
         <h1>Impressum</h1>
         <div className={styles.bold}>
           <p>Hochschule Düsseldorf</p>
