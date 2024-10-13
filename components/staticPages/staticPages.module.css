@@ -4,7 +4,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 20px;
+  padding: 10px;
   margin: auto;
   background-color: rgba(0,0,0,0.4);
   backdrop-filter: blur(4px);
@@ -17,7 +17,7 @@
   position: sticky;
   top: 1.25rem;
   width: 100%;
-  padding: 0 2.25rem 1.25rem 0;
+  padding: 0 3rem 1.25rem 0;
 }
 
 /* Container für die Textformatierung */

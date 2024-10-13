@@ -67,10 +67,10 @@ export default async function ProjectPage({ params }: Props) {
     <Suspense fallback={<Loading />}>
       <VisitedProjectWrapper slug={params.slug} />
       <div className={styles.pageContainer}>
+        <div className={styles.navigationButtons}>
+          {<HomeButtonSwitcher/>}
+        </div>
         <article className={styles.article}>
-          <div className={styles.navigationButtons}>
-            {<HomeButtonSwitcher/>}
-          </div>
           <div className={styles.content}>
             <div className={styles.showcaseAndTitle}>
               <hgroup className={styles.projectTitle}>
