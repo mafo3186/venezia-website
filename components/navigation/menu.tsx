@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import styles from './menu.module.css';
@@ -126,11 +126,7 @@ const Menu = ({ projects }: MenuProps) => {
                           <Link
                             href={getFullPath(pathname, project.slug)}
                             onClick={(event) => handleProjectClick(event, project.slug, hotspot.hotspot.location)}
-                            className={
-                              shouldShowAsVisited
-                                ? styles.visited
-                                : styles.unvisited
-                            }
+                            className={!shouldShowAsVisited ? styles.unvisited : ''}
                           >
                             {shouldShowAsVisited
                               ? project.title
