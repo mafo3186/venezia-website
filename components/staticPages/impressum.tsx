@@ -5,7 +5,7 @@ export default function Impressum() {
   return (
     <div className={styles.pageContainer}>
       <div className={styles.navigationButtons}>
-        <HomeButtonSwitcher />
+        <HomeButtonSwitcher/>
       </div>
       <div className={styles.textContainer}>
         <h1>Impressum</h1>
