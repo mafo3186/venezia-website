@@ -1,5 +1,4 @@
 import styles from "./staticPages.module.css";
-import {BackButton} from "@/components/navigation/button";
 import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
 
 export default function Impressum() {

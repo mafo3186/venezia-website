@@ -1,6 +1,5 @@
 import styles from "./staticPages.module.css";
 import IconKompass from "@/components/navigation/iconKompass";
-import {BackButton} from "@/components/navigation/button";
 import Link from "next/link";
 import {CiGlobe, CiViewList} from "react-icons/ci";
 import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
