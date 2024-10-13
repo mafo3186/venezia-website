@@ -22,8 +22,8 @@
 .projectContainer {
   position: relative;
   display: flex;
-  flex-wrap: wrap; 
-  justify-content: center; 
+  flex-wrap: wrap;
+  justify-content: center;
   padding: 2rem;
   margin: auto;
   max-width: 90vw;
@@ -34,13 +34,45 @@
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 
+.projectPointContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 3rem;
+}
+
+.projectPoint {
+  width: 2rem;
+  height: 2rem;
+  background-color: rgba(255, 255, 255, 0.8); /* Transparente Punkte */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6); /* Glühen für den Punkt */
+}
+
+.projectPoint:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.projectTitle {
+  margin-top: 1rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-color); /* Standardfarbe */
+  font-size: 1rem;
+  font-weight: bold;
+}
 
 .wave {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 200%;
-  height:80vh;
+  height:200%;
   background: url('/icons/wave.svg');
   animation: wave 30s linear infinite;
   opacity: 0.03;
@@ -54,24 +86,4 @@
   100% {
     transform: translateX(-50%);
   }
-}
-
-.projectPoint {
-  position: relative;
-  width: 10rem; /* Breite der Punkte */
-  height: 10rem; /* Höhe der Punkte */
-  margin: 3rem;
-  background-color: rgba(255, 255, 255, 0.8); /* Transparente Punkte */
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  transition: transform 0.2s;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6); /* Glühen für den Punkt */
-}
-
-.projectPoint:hover {
-  transform: scale(1.2);
-  cursor: pointer;
 }

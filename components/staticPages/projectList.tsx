@@ -25,28 +25,23 @@ export default async function ProjectList() {
       y: Math.floor(index / 5) * 150 + 100, // Angepasste Y-Position für mehr Platz
     },
   }));
-  
-  return (
 
+  return (
     <div className={listStyles.pageContainer}>
       <div className={listStyles.navigationButtons}>
-        <HomeButton3D/>
+        <HomeButton3D />
       </div>
-      <h1>Fremde überall – Projekte</h1> {/* H1-Überschrift */}
       <div className={listStyles.projectContainer}>
         {projectPositions.map((project) => (
-          <div
-            key={project.slug}
-            className={listStyles.projectPoint}
-          >
-            <Link href={`/projectlist/${project.slug}`} className={listStyles.link}>
-              {project.title}
+          <div key={project.slug} className={listStyles.projectPointContainer}>
+            <Link href={`/projectlist/${project.slug}`} className={listStyles.projectTitle}>
+              <div className={listStyles.projectPoint}></div>
+              {project.title} – {project.author}
             </Link>
           </div>
         ))}
       </div>
       <div className={listStyles.wave}></div>
-      {/* Welle */}
     </div>
   );
 }
