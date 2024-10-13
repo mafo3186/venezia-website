@@ -4,6 +4,6 @@ export {
   generateStaticParams,
 } from "@/components/projectPage/projectPage";
 
-export default async function ListPage({ params }: Props) {
+export default async function ProjectPageList({ params }: Props) {
   return <ProjectPage params={params} />;
 }
