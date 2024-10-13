@@ -6,7 +6,15 @@
   min-height: 100vh;
   padding: 10px;
   margin: auto;
-  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+.backgroundMap {
+  background-image: url('/icons/Karte_auf_weiss_klein-01.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.2;
 }
 
 .navigationButtons {
@@ -14,7 +22,7 @@
   flex-direction: row;
   justify-content: flex-end;
   position: sticky;
-  top: 1.25rem;
+  top: 0.5rem;
   width: 100%;
   padding: 0 3rem 1.25rem 0;
 }
@@ -24,12 +32,12 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 2rem;
-  margin: auto;
-  max-width: 90vw;
+  padding: 1rem;
+  margin: 2rem;
+  max-width: 80vw;
   text-align: justify;
   border-radius: var(--border-radius-container);
-  background-color: rgba(4, 78, 162, 0.5);
+  /*background-color: rgba(4, 78, 162, 0.5);*/
   color: var(--text-color);
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
@@ -41,19 +49,19 @@
   margin: 3rem;
   text-align: center;
   text-decoration: none;
-  color: var(--text-color); /* Textfarbe */
+  color: var(--text-color);
 }
 
 .projectPoint {
   width: 2rem;
   height: 2rem;
-  background-color: rgba(255, 255, 255, 0.8); /* Transparente Punkte */
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.2s;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6); /* Glühen für den Punkt */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
 .projectPoint:hover {
@@ -70,7 +78,7 @@
 }
 
 .projectAuthor {
-  font-size: 0.85rem; /* Kleinere Schrift für den Autor */
+  font-size: 0.85rem;
   margin-top: 0.5rem;
 }
 
@@ -82,7 +90,7 @@
   height:100%;
   background: url('/icons/wave.svg');
   animation: wave 30s linear infinite;
-  opacity: 0.03;
+  opacity: 0.1;
   pointer-events: none;
 }
 
@@ -94,3 +102,18 @@
     transform: translateX(-50%);
   }
 }
+
+.backgroundImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/icons/Karte_auf_weiss_klein-01.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.1; 
+  z-index: -1; 
+}
+

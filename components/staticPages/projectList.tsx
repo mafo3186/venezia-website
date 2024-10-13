@@ -20,28 +20,21 @@ export default async function ProjectList() {
     author: project.author || "unbekannt",
     updatedAt: project._updatedAt.replace(/T|Z/g, " "),
     description: project.description,
-    position: {
-      x: (index % 5) * 150 + 50, // Beispielposition
-      y: Math.floor(index / 5) * 150 + 100, // Angepasste Y-Position für mehr Platz
-    },
   }));
 
   return (
     <div className={listStyles.pageContainer}>
+      <div className={listStyles.backgroundImage}></div>
       <div className={listStyles.navigationButtons}>
         <HomeButton3D />
       </div>
       <div className={listStyles.projectContainer}>
         {projectPositions.map((project) => (
           <div key={project.slug} className={listStyles.projectPointContainer}>
-            <Link href={`/projectlist/${project.slug}`} key={project.slug} className={listStyles.projectPointContainer}>
+            <Link href={`/projectlist/${project.slug}`} className={listStyles.projectPointContainer}>
               <div className={listStyles.projectPoint}></div>
-              <div className={listStyles.projectTitle}>
-                {project.title}
-              </div>
-              <div className={listStyles.projectAuthor}>
-                {project.author}
-              </div>
+              <div className={listStyles.projectTitle}>{project.title}</div>
+              <div className={listStyles.projectAuthor}>{project.author}</div>
             </Link>
           </div>
         ))}
