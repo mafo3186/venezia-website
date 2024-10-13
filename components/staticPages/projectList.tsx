@@ -4,60 +4,49 @@
 
 import { sanityFetch } from "@/sanity/lib/fetch";
 import type { ProjectsListQueryResult } from "@/sanity.types";
-import Link from "next/link";
-import styles from "@/components/staticPages/staticPages.module.css";
-import listStyles from "@/components/projectPage/projectPageList.module.css";
+
+import listStyles from "@/components/staticPages/projectList.module.css";
 import { projectsListQuery } from "@/sanity/lib/queries";
 import { HomeButton3D } from "@/components/navigation/button";
+import Link from "next/link";
 
 export default async function ProjectList() {
   const projects = await sanityFetch<ProjectsListQueryResult>({ query: projectsListQuery, params: { orderBy: "title" } });
 
+  // Hier definieren wir die Positionen der Projekte, um sie im Raster anzuzeigen
+  const projectPositions = projects.map((project, index) => ({
+    title: project.title,
+    slug: project.slug,
+    author: project.author || "unbekannt",
+    updatedAt: project._updatedAt.replace(/T|Z/g, " "),
+    description: project.description,
+    position: {
+      x: (index % 5) * 150 + 50, // Beispielposition
+      y: Math.floor(index / 5) * 150 + 100, // Angepasste Y-Position für mehr Platz
+    },
+  }));
+  
   return (
-    <div className={listStyles.background}>
-      <div className={styles.pageContainer}>
-        <div className={styles.navigationButtons}>
-          <HomeButton3D />
-        </div>
-        <div className={styles.textContainer}>
-          <h1>Index of /~venice/projects</h1>
-          <table className={listStyles.projectTable}>
-            <thead>
-            <tr>
-              <th></th>
-              <th><Link href="?q=title">Name</Link></th>
-              <th><Link href="?q=author">Autor*in</Link></th>
-              <th><Link href="?q=_updatedAt">Last modified</Link></th>
-              <th>Beschreibung</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td valign="top">
-                <img src="https://www.apache.org/icons/back.png" alt=""/>
-              </td>
-              <td>
-                <Link href="/">Parent Directory</Link>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            {projects.map((project) => (
-              <tr key={project._id}>
-                <td valign="top">
-                  <img src="https://www.apache.org/icons/image2.gif" alt=""/>
-                </td>
-                <td><Link href={'/projectlist/' + project.slug}>{project.title}</Link></td>
-                <td align="left">{project.author || "unbekannt"}</td>
-                <td align="right">{project._updatedAt.replace(/T|Z/g, " ")}</td>
-                <td>{project.description}</td>
-              </tr>
-            ))}
-            </tbody>
-          </table>
-        </div>
+
+    <div className={listStyles.pageContainer}>
+      <div className={listStyles.navigationButtons}>
+        <HomeButton3D/>
       </div>
+      <h1>Fremde überall – Projekte</h1> {/* H1-Überschrift */}
+      <div className={listStyles.projectContainer}>
+        {projectPositions.map((project) => (
+          <div
+            key={project.slug}
+            className={listStyles.projectPoint}
+          >
+            <Link href={`/projectlist/${project.slug}`} className={listStyles.link}>
+              {project.title}
+            </Link>
+          </div>
+        ))}
+      </div>
+      <div className={listStyles.wave}></div>
+      {/* Welle */}
     </div>
   );
 }

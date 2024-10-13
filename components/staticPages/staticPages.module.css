@@ -22,7 +22,7 @@
 }
 
 /* Container für die Textformatierung */
-.textContainer {
+.projectContainer {
   display: flex;
   flex-direction: column;
   padding: 2rem;

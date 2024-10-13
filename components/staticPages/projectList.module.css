@@ -1,0 +1,77 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 100vh;
+  padding: 10px;
+  margin: auto;
+  height: 100vh;
+}
+
+.navigationButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  position: sticky;
+  top: 1.25rem;
+  width: 100%;
+  padding: 0 3rem 1.25rem 0;
+}
+
+.projectContainer {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: center; 
+  padding: 2rem;
+  margin: auto;
+  max-width: 90vw;
+  text-align: justify;
+  border-radius: var(--border-radius-container);
+  background-color: rgb(3, 45, 93, 0.1);
+  color: var(--text-color);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height:80vh;
+  background: url('/icons/wave.svg');
+  animation: wave 30s linear infinite;
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+@keyframes wave {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.projectPoint {
+  position: relative;
+  width: 10rem; /* Breite der Punkte */
+  height: 10rem; /* Höhe der Punkte */
+  margin: 3rem;
+  background-color: rgba(255, 255, 255, 0.8); /* Transparente Punkte */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: transform 0.2s;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6); /* Glühen für den Punkt */
+}
+
+.projectPoint:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
