@@ -1,46 +1,12 @@
 /* Styles for ListProjectsPage */
-
-/* Container für das gesamte Layout und die Positionierung */
-.boxContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-  padding: 20px;
-  background-color: transparent;
-}
-
-/* Root styling, inheriting dark background */
-.textContainer {
-  padding: 2rem;
-  margin: 2rem auto;
-  height: max-content;
-  width: max-content;
-  max-width: 1200px;
-  justify-content: center;
-  border-radius: var(--border-radius-container);
-  background-color: rgba(0, 0, 0, 0.8);
-  color: var(--text-color);
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-}
-
-.navigation {
-  display: flex;
-  flex-direction: row;
-  justify-content: right;
-}
-
-.pageTitle {
-  margin-bottom: 1.5rem;
-  text-align: center;
+.background {
+  background-color: rgba(26, 115, 232, 0.5);
 }
 
 /* Table Styling */
 .projectTable {
   width: 100%;
-  border-collapse: separate; 
+  border-collapse: separate;
   border-spacing: 0.5rem;
   background-color: rgba(255,255,255,0.05);
   border-radius: var(--border-radius-content);
@@ -64,7 +30,7 @@
 
 /* Remove padding for the first column (icons) */
 .projectTable td:first-child {
-  padding: 0.2rem; 
+  padding: 0.2rem;
 }
 
 /* Ensure icons fill the cell */
@@ -92,4 +58,3 @@
   padding-left: 1rem;
   padding-right: 1rem;
 }
-
