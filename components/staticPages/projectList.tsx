@@ -24,7 +24,7 @@ export default async function ProjectList() {
     <div className={listStyles.pageContainer}>
       <div className={listStyles.backgroundImage}></div>
       <div className={listStyles.navigationButtons}>
-        <HomeButton3D />
+        <HomeButton3D/>
       </div>
       <div className={listStyles.projectContainer}>
         {projectPositions.map((project) => (
@@ -37,6 +37,7 @@ export default async function ProjectList() {
           </div>
         ))}
       </div>
+      <div className={listStyles.wave}></div>
     </div>
   );
 }
