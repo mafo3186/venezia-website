@@ -1,14 +1,23 @@
 /* Container für das gesamte Layout und die Positionierung */
-.boxContainer {
+.pageContainer {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  min-height: 100vh; 
-  margin: 0; 
   padding: 20px;
-  background-color: rgba(0,0,0,0.3);
-  position: relative;
+  margin: auto;
+  background-color: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+}
+
+.navigationButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  position: sticky;
+  top: 1.25rem;
+  width: 100%;
+  padding: 0 2.25rem 1.25rem 0;
 }
 
 /* Container für die Textformatierung */
@@ -21,20 +30,10 @@
   max-width: 90vw;
   text-align: justify;
   border-radius: var(--border-radius-container);
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0,0,0,0.3);
   color: var(--text-color);
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
   align-self: center;
-}
-
-.navigation {
-  display: flex; 
-  flex-direction: row;
-  justify-content: flex-end;
-  position: sticky;
-  top: 1.25rem;
-  width: 100%;
-  padding: 0 2.25rem 1.25rem 0;
 }
 
 .bold {

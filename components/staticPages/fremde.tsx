@@ -8,8 +8,8 @@ import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
 
 export default function Fremde() {
   return (
-    <div className={styles.boxContainer}>
-      <div className={styles.navigation}>
+    <div className={styles.pageContainer}>
+      <div className={styles.navigationButtons}>
         <HomeButtonSwitcher/>
       </div>
       <div className={styles.textContainer}>

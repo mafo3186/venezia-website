@@ -13,8 +13,8 @@ export default async function ListProjectsPage() {
 
   return (
     <div className={listStyles.background}>
-      <div className={styles.boxContainer}>
-        <div className={styles.navigation}>
+      <div className={styles.pageContainer}>
+        <div className={styles.navigationButtons}>
           <HomeButton3D/>
         </div>
         <div className={styles.textContainer}>
