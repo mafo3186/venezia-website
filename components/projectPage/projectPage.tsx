@@ -70,7 +70,6 @@ export default async function ProjectPage({ params }: Props) {
         <article className={styles.article}>
           <div className={styles.navigationButtons}>
             {<HomeButtonSwitcher/>}
-            <BackButton/>
           </div>
           <div className={styles.content}>
             <div className={styles.showcaseAndTitle}>

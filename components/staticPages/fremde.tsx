@@ -11,7 +11,6 @@ export default function Fremde() {
     <div className={styles.boxContainer}>
       <div className={styles.navigation}>
         <HomeButtonSwitcher/>
-        <BackButton/>
       </div>
       <div className={styles.textContainer}>
         <h1>Fremde überall</h1>

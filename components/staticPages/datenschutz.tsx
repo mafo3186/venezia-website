@@ -7,7 +7,6 @@ export default function Datenschutz() {
     <div className={styles.boxContainer}>
       <div className={styles.navigation}>
         <HomeButtonSwitcher/>
-        <BackButton/>
       </div>
       <div className={styles.textContainer}>
 
