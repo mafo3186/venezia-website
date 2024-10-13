@@ -111,7 +111,9 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optionaler Schatten */
   overflow: auto;
   overflow-wrap: break-word; /* Umbrüche bei langen Wörtern */
-  min-width: 300px;
+  width: fit-content;
+  max-width: 100%;
+  min-width: 30vw;
 }
 
 .showcase {
@@ -138,7 +140,8 @@
 
 @media (max-width: 768px) {
   .tooltip {
-    max-width: 80vw;
+    max-width: 60vw;
+    min-width: unset;
   }
   
   .content {
