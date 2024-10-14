@@ -4,7 +4,8 @@ import { blurhashToBase64 } from "blurhash-base64";
 import styles from "./showcasePiece.module.css";
 import { FaExpandArrowsAlt } from 'react-icons/fa';
 import { SanityImagePalette } from "@/sanity.types";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import Kaleidoscope from "../kaleidoscope/kaleidoscope";
 
 interface ShowcasePieceProps {
   showcase: {
@@ -43,6 +44,8 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
     }
   }
 
+  const [isPlaying, setIsPlaying] = useState(false);
+
   return (
     <figure className={styles.figure}>
       <div
@@ -66,7 +69,8 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
         )}
         {showcase.type === "audio" && (
           <div className={styles.audio}>
-            <audio controls>
+            <Kaleidoscope speed={isPlaying ? .33 : 0.02} />
+            <audio onPlay={() => setIsPlaying(true)} onPause={() => setIsPlaying(false)} controls>
               <source src={showcase.content} type={showcase.mimeType!} />
             </audio>
           </div>
