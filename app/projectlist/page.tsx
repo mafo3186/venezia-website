@@ -1,4 +1,4 @@
-import ProjectList from "@/components/staticPages/projectList";
+import ProjectList from "@/components/list/projectList";
 
 
 export default async function ListPage() {
