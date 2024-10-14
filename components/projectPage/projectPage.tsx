@@ -50,65 +50,64 @@ export async function generateMetadata(
 }
 
 export default async function ProjectPage({ params }: Props) {
-    
-    const project = await sanityFetch<ProjectBySlugQueryResult>({
-      query: projectBySlugQuery,
-      params,
-    });
+  const project = await sanityFetch<ProjectBySlugQueryResult>({
+    query: projectBySlugQuery,
+    params,
+  });
 
-    if (!project?._id) {
-      return notFound();
-    }
+  if (!project?._id) {
+    return notFound();
+  }
 
-  
-    
   return (
-    <Suspense fallback={<Loading />}>
+    <>
       <VisitedProjectWrapper slug={params.slug} />
       <div className={styles.pageContainer}>
         <div className={styles.navigationButtons}>
-          {<HomeButtonSwitcher/>}
+          {<HomeButtonSwitcher />}
         </div>
         <article className={styles.article}>
-          <div className={styles.content}>
-            <div className={styles.showcaseAndTitle}>
-              <hgroup className={styles.projectTitle}>
-                <div className={styles.titleWithInfo}>
-                  <h1>{project.title}</h1>
-                  <div className={styles.infoIconWrapper}>
-                    <FaInfoCircle
-                      className={styles.infoIcon}
-                      aria-describedby="projectDescription"
-                    />
-                    <span id="projectDescription" className={styles.tooltip}>
-                    {project.description}
-                  </span>
+          <Suspense fallback={<Loading />}>
+            <div className={styles.content}>
+              <div className={styles.showcaseAndTitle}>
+                <hgroup className={styles.projectTitle}>
+                  <div className={styles.titleWithInfo}>
+                    <h1>{project.title}</h1>
+                    <div className={styles.infoIconWrapper}>
+                      <FaInfoCircle
+                        className={styles.infoIcon}
+                        aria-describedby="projectDescription"
+                      />
+                      <span id="projectDescription" className={styles.tooltip}>
+                        {project.description}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div>von {project.author}</div>
-              </hgroup>
-              <main className={styles.showcase}>
-                <EmblaCarousel>
-                  {project.showcases && project.showcases.map((showcase, index) => {
-                    return (
-                      <Suspense key={index} fallback={<Loading/>}>
-                        <ShowcasePiece showcase={showcase as any}/>
-                      </Suspense>
-                    );
-                  })}
-                </EmblaCarousel>
-              </main>
+                  <div>von {project.author}</div>
+                </hgroup>
+                <main className={styles.showcase}>
+                  <EmblaCarousel>
+                    {project.showcases && project.showcases.map((showcase, index) => {
+                      return (
+                        <Suspense key={index} fallback={<Loading />}>
+                          <ShowcasePiece showcase={showcase as any} />
+                        </Suspense>
+                      );
+                    })}
+                  </EmblaCarousel>
+                </main>
+              </div>
+              <aside className={styles.documentation}>
+                {project.documentation?.length && (
+                  <PortableText
+                    value={project.documentation as PortableTextBlock[]}
+                  />
+                )}
+              </aside>
             </div>
-            <aside className={styles.documentation}>
-              {project.documentation?.length && (
-                <PortableText
-                  value={project.documentation as PortableTextBlock[]}
-                />
-              )}
-            </aside>
-          </div>
+          </Suspense>
         </article>
       </div>
-    </Suspense>
+    </>
   );
 }
