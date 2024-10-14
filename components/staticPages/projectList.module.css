@@ -42,13 +42,11 @@
   margin: 3rem;
   text-align: center;
   text-decoration: none;
-  color: var(--text-color);
 }
 
 .projectPoint {
-  width: 2rem;
-  height: 2rem;
-  background-color: rgba(255, 255, 255, 0.6);
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -83,7 +81,7 @@
   height:100%;
   background: url('/icons/wave.svg');
   animation: wave 30s linear infinite;
-  opacity: 0.05;
+  opacity: 0.03;
   pointer-events: none;
 }
 
