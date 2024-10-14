@@ -109,13 +109,12 @@
 }
 
 .title {
-  position: absolute; /* Positioniere den Titel absolut */
-  bottom: 2rem; /* Abstand vom unteren Rand (kann angepasst werden) */
-  left: 50%; /* Horizontal zentrieren */
-  transform: translateX(-50%); /* Zentrieren relativ zur Breite */
-  color: var(--text-color); /* Textfarbe, optional anpassen */
-  font-size: 1rem; /* Schriftgröße, optional anpassen */
-  text-align: center; /* Text zentrieren */
-  z-index: 1; /* Über anderen Inhalten anzeigen */
+  position: absolute; 
+  bottom: 2rem; 
+  left: 50%; 
+  transform: translateX(-50%);
+  color: var(--text-color); 
+  font-size: 1rem; 
+  text-align: center;
 }
 
