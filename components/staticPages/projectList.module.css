@@ -48,6 +48,7 @@
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
+  /*border-radius: 50% 50% 0 0;*/ /*Tor statt Punkt*/
   display: flex;
   align-items: center;
   justify-content: center;
