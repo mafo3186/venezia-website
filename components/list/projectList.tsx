@@ -7,7 +7,6 @@ import type { ProjectsListQueryResult } from "@/sanity.types";
 
 import listStyles from "@/components/list/projectList.module.css";
 import { projectsListQuery } from "@/sanity/lib/queries";
-import { HomeButton3D } from "@/components/navigation/button";
 import Link from "next/link";
 
 export default async function ProjectList() {
