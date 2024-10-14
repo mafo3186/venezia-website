@@ -22,9 +22,11 @@ export default async function ProjectList() {
 
   return (
     <div className={listStyles.pageContainer}>
-      <div className={listStyles.backgroundImage}></div>
+      <div className={listStyles.backgroundImage}>
+        <div className={listStyles.title}>Fremde überall - Exkursion zur Kunst-Biennale Venedig 2024</div>
+      </div>
       <div className={listStyles.navigationButtons}>
-        <HomeButton3D/>
+      <HomeButton3D/>
       </div>
       <div className={listStyles.projectContainer}>
         {projectPositions.map((project) => (
