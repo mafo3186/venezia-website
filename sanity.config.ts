@@ -51,7 +51,7 @@ export default defineConfig({
       resolve: {
         mainDocuments: defineDocuments([
           {
-            route: "/projects/:slug",
+            route: "/:slug",
             filter: `_type == "project" && slug.current == $slug`,
           },
         ]),
