@@ -186,6 +186,16 @@ function Scene({
 }
 
 export function SceneCanvas(props: BaseProps) {
+  const [showStats, setShowStats] = useState(false);
+  useEffect(() => {
+    const listener = (event: KeyboardEvent) => {
+      if (event.key === "f") {
+        setShowStats(!showStats);
+      }
+    };
+    window.addEventListener("keydown", listener);
+    return () => window.removeEventListener("keydown", listener);
+  }, [showStats]);
   const [initialLoad, setInitialLoad] = useState(true);
   const { inBackground } = props;
   const dpr = .78;
@@ -210,7 +220,7 @@ export function SceneCanvas(props: BaseProps) {
       <Suspense fallback={null}>
         <Scene {...props} />
       </Suspense>
-      <Stats>
+      <Stats showPanel={showStats ? 0 : -1}>
         <Panel title="cDPR" value={dpr * 100} maxValue={120} />
       </Stats>
     </Canvas>
