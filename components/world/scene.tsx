@@ -9,6 +9,7 @@ import { Color, Euler, FogExp2, MathUtils } from "three";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
+import { Model as PiecesModel } from "./pieces-model";
 import Stats, { Panel } from "./stats";
 import { CascadedShadowMap } from "./csm/cascaded-shadow-map";
 import { HotspotsWithProjects, PreDefinedView, Spot } from "@/components/types";
@@ -160,6 +161,7 @@ function Scene({
     <OrbitControls enabled={iAmGod} />
 
     <EnvironmentModel />
+    <PiecesModel />
 
     <Player
       debug={iAmGod}

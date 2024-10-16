@@ -13,6 +13,7 @@
     "updatemodel:optimize": "gltf-transform optimize public/assets/venice.glb public/assets/venice-transformed.glb --compress draco --simplify-error 0.00001",
     "updatemodel:gltfjsx": "gltfjsx public/assets/venice-transformed.glb --root=./public --output=public/assets/model.jsx --shadows --console > ./components/world/model.jsx",
     "updatemodel": "npm run updatemodel:optimize && npm run updatemodel:gltfjsx",
+    "updatepieces": "gltfjsx public/assets/pieces.glb --root=./public --output=public/assets/pieces-model.jsx --shadows --console > ./components/world/pieces-model.jsx",
     "typegen": "sanity schema extract && sanity typegen generate"
   },
   "dependencies": {
