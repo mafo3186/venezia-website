@@ -60,12 +60,12 @@ const Menu = ({ projects }: MenuProps) => {
   ) => {
     event.preventDefault();
     closeMenu();
-    router.push("/");
-    showView(hotspotLocation, (success) => {
-      if (success && projectSlug) {
-        router.push(getFullPath(pathname, projectSlug));
-      }
-    });
+    if (projectSlug) {
+      router.push(getFullPath(pathname, projectSlug));
+    } else {
+      router.push("/");
+    }
+    showView(hotspotLocation);
   }, [closeMenu, pathname, router, showView]);
 
   const handleProjectClick = useCallback((event: React.MouseEvent, projectSlug: string | null, hotspotLocation: PreDefinedView) => {

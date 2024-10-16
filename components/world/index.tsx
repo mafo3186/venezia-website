@@ -27,8 +27,8 @@ export function CanvasContainer({
   emptySpots: Spot[];
 }>) {
   const pathname = usePathname();
-  const onChildPage = pathname !== "/";
   const { view, onViewReached } = useHotspot();
+  const onChildPage = pathname !== "/" && !view;
   const [visited] = useVisited();
   const allSlugs = useMemo(
     () =>
