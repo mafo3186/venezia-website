@@ -15,6 +15,10 @@ module.exports = {
       test: /\.gltf$/,
       type: "json"
     });
+    config.module.rules.push({
+      test: /\.wav$/,
+      type: "asset/resource"
+    });
     return config;
   },
 };
