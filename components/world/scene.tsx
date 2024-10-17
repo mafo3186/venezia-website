@@ -5,7 +5,7 @@ import { startTransition, Suspense, useEffect, useMemo, useRef, useState } from 
 import { DepthOfField, EffectComposer, N8AO, Vignette } from "@react-three/postprocessing";
 import { Environment, OrbitControls, useProgress } from "@react-three/drei";
 import styles from "./world.module.css";
-import { Color, Euler, FogExp2, MathUtils } from "three";
+import { AudioContext, Color, Euler, FogExp2, MathUtils, PositionalAudio as PositionalAudioImpl } from "three";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
@@ -14,6 +14,12 @@ import { CascadedShadowMap } from "./csm/cascaded-shadow-map";
 import { HotspotsWithProjects, PreDefinedView, Spot } from "@/components/types";
 import { ProjectBox } from "./project-box";
 import { Water } from "./water";
+import { DebugProvider } from "./debug";
+import { PositionalAudio } from "./positional-audio";
+import wind from "./ambience/527281__dlgebert__monologue-wind.wav";
+import shore from "./ambience/58408__sinatra314__shore1001.wav";
+import birds from "./ambience/345852__hargissssound__spring-birds-loop-with-low-cut-new-jersey.wav";
+import meow from "./ambience/412017__skymary__cat-meow-short.wav";
 
 type BaseProps = {
   projects: HotspotsWithProjects,
@@ -23,6 +29,9 @@ type BaseProps = {
   onViewReached?: (success: boolean) => void,
   foreignness: number,
 };
+
+const baseShoreVolume = 0.5;
+const baseBirdsVolume = 1.5;
 
 const environments = [
   {
@@ -75,6 +84,8 @@ function Scene({
   onViewReached,
   foreignness: originalForeignness,
 }: BaseProps) {
+  const cat1Ref = useRef<PositionalAudioImpl | null>(null);
+  const cat2Ref = useRef<PositionalAudioImpl | null>(null);
   const nodes = useMemo(
     () => projects.flatMap((hotspot) => hotspot.projects),
     [projects],
@@ -83,9 +94,8 @@ function Scene({
   const dpr = useThree(({ viewport }) => viewport.dpr);
   const [overrideForeignness, setOverrideForeignness] = useState<number | undefined>(undefined);
   const foreignness = overrideForeignness ?? originalForeignness;
-
   useEffect(() => {
-    window.addEventListener("keydown", (event) => {
+    const listener = (event: KeyboardEvent) => {
       if (event.key === "g") {
         setGod(!iAmGod);
       } else if (event.key === "1") {
@@ -109,7 +119,11 @@ function Scene({
       } else if (event.key === "0") {
         setOverrideForeignness(undefined);
       }
-    });
+    };
+    window.addEventListener("keydown", listener);
+    return () => {
+      window.removeEventListener("keydown", listener);
+    };
   }, [iAmGod]);
   const desiredEnvironmentIndex = MathUtils.clamp(Math.floor(foreignness * environments.length), 0, environments.length - 1);
   const [environmentIndex, setEnvironmentIndex] = useState(desiredEnvironmentIndex);
@@ -125,7 +139,22 @@ function Scene({
   useEffect(() => {
     fog.current.color.lerpColors(environment.fogFrom, environment.fogTo, foreignness)
   }, [environment, foreignness]);
-  return (<>
+  const foreignVolume = MathUtils.lerp(0.2, 1.0, foreignness);
+  const familiarVolume = MathUtils.lerp(1.0, 0.0, foreignness);
+  useEffect(() => {
+    let timeout: any;
+    function doMeow() {
+      const cat = Math.random() < 0.5 ? cat1Ref.current : cat2Ref.current;
+      cat?.setDetune(MathUtils.randFloat(-1000, 1000));
+      cat?.play();
+      timeout = setTimeout(doMeow, MathUtils.randFloat(MathUtils.lerp(0, 10000, foreignness), MathUtils.lerp(20000, 30000, foreignness)));
+    }
+    doMeow();
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [foreignness]);
+  return (<><DebugProvider debug={iAmGod}>
     <Suspense fallback={null}>
     <Environment
       files={environment.file}
@@ -182,7 +211,95 @@ function Scene({
       />
     ))}
     <Water />
-  </>);
+    {/* middle wind */}
+    <PositionalAudio
+      url={wind}
+      loop
+      autoplay
+      distance={3}
+      position={[-0.5, 2, 0]}
+      volume={foreignVolume}
+    />
+    <PositionalAudio
+      url={wind}
+      loop
+      autoplay
+      distance={3}
+      position={[12, 2, 2]}
+      volume={foreignVolume}
+    />
+    {/* birds */}
+    <PositionalAudio
+      url={birds}
+      loop
+      autoplay
+      distance={4}
+      position={[-11, 8, 3]}
+      volume={baseBirdsVolume * familiarVolume}
+    />
+    <PositionalAudio
+      url={birds}
+      loop
+      autoplay
+      distance={4}
+      position={[-10, 10, 16]}
+      volume={baseBirdsVolume * familiarVolume}
+    />
+    {/* shore middle */}
+    <PositionalAudio
+      url={shore}
+      loop
+      autoplay
+      distance={1}
+      position={[-3, 0, 27]}
+      volume={baseShoreVolume}
+    />
+    {/* shore */}
+    <PositionalAudio
+      url={shore}
+      loop
+      autoplay
+      distance={1}
+      position={[-3, 0, 21]}
+      volume={baseShoreVolume}
+    />
+    {/* shore */}
+    <PositionalAudio
+      url={shore}
+      loop
+      autoplay
+      distance={1}
+      position={[6, 0, 28]}
+      volume={baseShoreVolume}
+    />
+    {/* stairs shore */}
+    <PositionalAudio
+      url={shore}
+      loop
+      autoplay
+      distance={1}
+      position={[-15, 0, 11]}
+      volume={baseShoreVolume}
+    />
+    {/* cat stairs */}
+    <PositionalAudio
+      ref={cat1Ref}
+      url={meow}
+      distance={1}
+      position={[-12.5, 1, 7.5]}
+      volume={1}
+      loop={false}
+    />
+    {/* cat water */}
+    <PositionalAudio
+      ref={cat2Ref}
+      url={meow}
+      distance={1}
+      position={[8, 1, 6]}
+      volume={1}
+      loop={false}
+    />
+  </DebugProvider></>);
 }
 
 export function SceneCanvas(props: BaseProps) {
@@ -207,6 +324,21 @@ export function SceneCanvas(props: BaseProps) {
       return () => clearTimeout(timeout);
     }
   }, [active, progress]);
+  useEffect(() => {
+    // work around disabled autoplay
+    const listener = () => {
+      const context = AudioContext.getContext();
+      if (context.state !== "running") {
+        context.resume();
+      }
+    };
+    document.addEventListener("pointerdown", listener, true);
+    document.addEventListener("keydown", listener, true);
+    return () => {
+      document.removeEventListener("pointerdown", listener, true);
+      document.removeEventListener("keydown", listener, true);
+    };
+  }, []);
   const show = initialLoad;
   return (<>
     <Canvas

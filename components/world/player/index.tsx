@@ -3,7 +3,7 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { PerspectiveCamera, useGLTF } from "@react-three/drei";
-import { Object3D, Vector3, Quaternion, Mesh, MathUtils } from "three";
+import { Object3D, Vector3, Quaternion, Mesh, PositionalAudio as PositionalAudioImpl, MathUtils } from "three";
 import { Node, Pathfinding } from "three-pathfinding";
 import { animated, config, useSpring } from "@react-spring/three";
 import { FirstPersonDragControls } from "./controls";
@@ -12,6 +12,8 @@ import { easeInOut } from "framer-motion";
 import { LookTutorial } from "./tutorial";
 import { PreDefinedView } from "@/components/types";
 import { PerspectiveCamera as PerspectiveCameraImpl } from "three";
+import step from "./step-concrete-1.wav";
+import { PositionalAudio } from "../positional-audio";
 
 const metadataPath = "/assets/metadata.glb";
 useGLTF.preload(metadataPath);
@@ -38,6 +40,7 @@ export function Player({
   }, [navmesh]);
   const playerRef = useRef<Object3D>(null!);
   const rayTarget = useRef<Object3D>(null!);
+  const audioRef = useRef<PositionalAudioImpl | null>(null);
   const node = useRef<Node | undefined>();
   const camera = useThree(({ camera }) => camera);
   const [moving, setMoving] = useState(false);
@@ -63,6 +66,9 @@ export function Player({
   const motionTimeRef = useRef<number | undefined>();
   const motionDurationRef = useRef<number | undefined>();
   const motionPath = useRef<Path3D | undefined>();
+  const lastStepPosition = useMemo(() => new Vector3(), []);
+  const lastStepTime = useRef(0);
+  const stepLength = useRef(0.5);
   const endNavigation = useCallback((success = true) => {
     setMoving(false);
     setTargetVisible(false);
@@ -185,6 +191,7 @@ export function Player({
   const axis = new Vector3(0, 1, 0);
   const rayTargetDiff = new Vector3();
   useFrame(({ camera }, delta) => {
+    const player = playerRef.current;
     frontVector.set(0, 0, (moveBackward ? 1 : 0) - (moveForward ? 1 : 0));
     sideVector.set((moveLeft ? 1 : 0) - (moveRight ? 1 : 0), 0, 0);
     camera.getWorldDirection(cameraWorldDirection);
@@ -226,6 +233,27 @@ export function Player({
         motionTimeRef.current = nextMotionTime;
       }
     }
+    lastStepTime.current += delta;
+    if (lastStepTime.current > 1) {
+      lastStepPosition.copy(player.position);
+      lastStepTime.current = 0;
+      stepLength.current = 0.5;
+    }
+    if (player.position.distanceToSquared(lastStepPosition) > stepLength.current ** 2) {
+      lastStepPosition.copy(player.position);
+      audioRef.current?.stop();
+      audioRef.current?.setPlaybackRate(
+        MathUtils.clamp(0.5 / lastStepTime.current, 0.75, 2.0),
+      );
+      audioRef.current?.setDetune(MathUtils.randFloat(-1000, 1000));
+      audioRef.current?.play();
+      stepLength.current = MathUtils.lerp(
+        stepLength.current,
+        MathUtils.clamp((0.5 / lastStepTime.current) * stepLength.current, 0.5, 2.0),
+        0.5,
+      );
+      lastStepTime.current = 0;
+    }
   });
   return <>
     <group ref={playerRef as any}>
@@ -249,6 +277,12 @@ export function Player({
         />
       </mesh>
       <LookTutorial enable={enableLookTutorial} completed={lookedAround} />
+      <PositionalAudio
+        ref={audioRef}
+        url={step}
+        loop={false}
+        volume={0.1}
+      />
     </group>
     {navmesh && <>
       <mesh
