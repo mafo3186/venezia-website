@@ -13,6 +13,32 @@ function catmullRom(t: number, p0: number, p1: number, p2: number, p3: number) {
   );
 }
 
+function catmullRom3d(p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, t: number, destination: Vector3) {
+  destination.set(
+    catmullRom(t, p0.x, p1.x, p2.x, p3.x),
+    catmullRom(t, p0.y, p1.y, p2.y, p3.y),
+    catmullRom(t, p0.z, p1.z, p2.z, p3.z),
+  );
+}
+
+function sampleCatmullRom(points: Vector3[], steps: number): Vector3[] {
+  const destination: Vector3[] = [];
+  for (let i = 1; i < points.length; i++) {
+    const start = points[i - 1];
+    const end = points[i];
+    for (let j = 0; j < steps; j++) {
+      const t = j / steps;
+      const p0 = points[Math.max(i - 2, 0)];
+      const p3 = points[Math.min(i + 1, points.length - 1)];
+      const p = new Vector3();
+      catmullRom3d(p0, start, end, p3, t, p);
+      destination.push(p);
+    }
+  }
+  destination.push(points.at(-1)!);
+  return destination;
+}
+
 export class Path3D {
   public length: number;
   private segmentLengths: number[];
@@ -22,12 +48,14 @@ export class Path3D {
     public points: Vector3[],
     public smooth: boolean = true,
   ) {
-    this.points = this.points.map((p) => p.clone());
+    this.points = smooth
+      ? sampleCatmullRom(this.points, 8)
+      : this.points.map((p) => p.clone());
     this.segmentLengths = [];
     let length = 0;
-    let previous = points[0].clone();
-    for (let i = 1; i < points.length; i++) {
-      const point = points[i];
+    let previous = this.points[0].clone();
+    for (let i = 1; i < this.points.length; i++) {
+      const point = this.points[i];
       const segmentLength = previous.distanceTo(point);
       this.segmentLengths.push(segmentLength);
       length += segmentLength;
@@ -49,11 +77,7 @@ export class Path3D {
         const p0 = this.points[Math.max(i - 2, 0)];
         const p3 = this.points[Math.min(i + 1, this.points.length - 1)];
         if (this.smooth) {
-          destination.set(
-            catmullRom(segmentT, p0.x, segmentStart.x, segmentEnd.x, p3.x),
-            catmullRom(segmentT, p0.y, segmentStart.y, segmentEnd.y, p3.y),
-            catmullRom(segmentT, p0.z, segmentStart.z, segmentEnd.z, p3.z),
-          );
+          catmullRom3d(p0, segmentStart, segmentEnd, p3, segmentT, destination);
         } else {
           destination.copy(segmentStart).lerp(segmentEnd, segmentT);
         }
