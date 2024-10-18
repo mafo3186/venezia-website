@@ -7,8 +7,6 @@ export {
 
 export default async function ProjectPage3D({ params }: Props) {
   return (
-    /*<Link href="/">*/
       <ProjectPage params={params} />
-    /*</Link>*/
   )
 }
