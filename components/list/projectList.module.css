@@ -29,9 +29,9 @@
   max-width: 80vw;
   text-align: justify;
   border-radius: var(--border-radius-container);
-  /*background-color: rgba(101, 133, 169, 0.1);*/
   color: var(--text-color);
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  /*background-color: rgba(101, 133, 169, 0.1);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);*/
 }
 
 .projectPointContainer {
