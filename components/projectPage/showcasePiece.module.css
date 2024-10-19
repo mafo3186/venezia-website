@@ -42,10 +42,14 @@
 }
 
 .text {
-  font-size: 1.1rem;
-  padding: 1rem;
+  line-height: 1.5;
+  font-size: 1.25em;
+  font-weight: var(--font-weight-light);
+  font-family: var(--primary-font);
+  padding: 2rem;
+  margin: 2rem;
   white-space: pre-wrap;
-  background-color: rgba(0, 0, 0, 0.95);
+  background-color: rgba(0, 0, 0, 0.8);
   color: white;
   border-radius: var(--border-radius-content);
   max-width: 100%;
