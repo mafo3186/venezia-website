@@ -18,6 +18,7 @@ import Menu from "@/components/navigation/menu";
 import { Hotspot, Spot } from "@/components/types";
 import spotsGltf from "@/data/spots.gltf";
 import hotspotsRaw from "@/data/hotspots.json";
+import { GlobalAudioProvider } from '@/components/global-audio';
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch<SettingsQueryResult>({
@@ -121,8 +122,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       >
         <HotspotProvider>
           <VisitedProvider>
-            <Menu projects={projectsAtHotspots} />
-            <section>{children}</section>
+            <GlobalAudioProvider>
+              <Menu projects={projectsAtHotspots} />
+              <section>{children}</section>
+            </GlobalAudioProvider>
           </VisitedProvider>
         </HotspotProvider>
       </ProjectsProvider>

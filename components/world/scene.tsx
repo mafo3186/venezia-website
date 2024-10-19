@@ -15,11 +15,12 @@ import { HotspotsWithProjects, PreDefinedView, Spot } from "@/components/types";
 import { ProjectBox } from "./project-box";
 import { Water } from "./water";
 import { DebugProvider } from "./debug";
-import { PositionalAudio } from "./positional-audio";
+import { PositionalAudio } from "./audio/positional-audio";
 import wind from "./ambience/527281__dlgebert__monologue-wind.wav";
 import shore from "./ambience/58408__sinatra314__shore1001.wav";
 import birds from "./ambience/345852__hargissssound__spring-birds-loop-with-low-cut-new-jersey.wav";
 import meow from "./ambience/412017__skymary__cat-meow-short.wav";
+import { AudioListenerProvider } from "./audio/audio";
 
 type BaseProps = {
   projects: HotspotsWithProjects,
@@ -28,6 +29,7 @@ type BaseProps = {
   view?: PreDefinedView,
   onViewReached?: (success: boolean) => void,
   foreignness: number,
+  volume?: number,
 };
 
 const baseShoreVolume = 0.5;
@@ -324,21 +326,6 @@ export function SceneCanvas(props: BaseProps) {
       return () => clearTimeout(timeout);
     }
   }, [active, progress]);
-  useEffect(() => {
-    // work around disabled autoplay
-    const listener = () => {
-      const context = AudioContext.getContext();
-      if (context.state !== "running") {
-        context.resume();
-      }
-    };
-    document.addEventListener("pointerdown", listener, true);
-    document.addEventListener("keydown", listener, true);
-    return () => {
-      document.removeEventListener("pointerdown", listener, true);
-      document.removeEventListener("keydown", listener, true);
-    };
-  }, []);
   const show = initialLoad;
   return (<>
     <Canvas
@@ -349,9 +336,11 @@ export function SceneCanvas(props: BaseProps) {
       dpr={dpr}
       frameloop={inBackground ? "demand" : "always"}
     >
-      <Suspense fallback={null}>
-        <Scene {...props} />
-      </Suspense>
+      <AudioListenerProvider volume={inBackground ? 0 : 1}>
+        <Suspense fallback={null}>
+          <Scene {...props} />
+        </Suspense>
+      </AudioListenerProvider>
       <Stats showPanel={showStats ? 0 : -1}>
         <Panel title="cDPR" value={dpr * 100} maxValue={120} />
       </Stats>

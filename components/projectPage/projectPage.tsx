@@ -90,7 +90,7 @@ export default async function ProjectPage({ params }: Props) {
                     {project.showcases && project.showcases.map((showcase, index) => {
                       return (
                         <Suspense key={index} fallback={<Loading />}>
-                          <ShowcasePiece showcase={showcase as any} />
+                          <ShowcasePiece showcase={showcase as any} author={project.author} />
                         </Suspense>
                       );
                     })}
