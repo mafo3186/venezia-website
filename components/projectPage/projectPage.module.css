@@ -63,7 +63,9 @@
 }
 
 .projectTitle h1 {
-  font-size: 2em;
+  font-size: 64px;
+  font-family: var(--font-jacquard-24);
+  line-height: 90%;
 }
 
 .titleWithInfo {

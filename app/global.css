@@ -86,8 +86,9 @@ h6 {
    Customizations
    ==================== */
 :root {
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-kotta-one), system-ui, sans-serif;
   font-weight: normal;
+  line-height: 100%;
 }
 
 h1 {
@@ -114,9 +115,37 @@ h6 {
   font-size: 1em;
 }
 
-p {
-  margin-bottom: 1.5rem; /* Abstand unterhalb von Absätzen */
+h1, h2, h3, h4, h5, h6, b, strong, i, em {
+  font-family: var(--font-jacquard-24);
+  line-height: 100%;
+  margin: 8px 0;
 }
+
+p {
+  font-size: 18px;
+  line-height: 115%;
+}
+
+img + blockquote {
+  margin: 16px 0;
+  padding: 0 8px 0;
+  font-size: 12px;
+  border-left: 4px solid white;
+}
+
+blockquote:before {
+  color: white;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.1em;
+  vertical-align: 0.1em;
+}
+
+ul, ol {
+  margin: 16px 0;
+}
+
 
 body {
   background-color: var(--background-color); /* Standard-Hintergrundfarbe */
