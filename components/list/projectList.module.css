@@ -6,6 +6,7 @@
   min-height: 100vh;
   margin: auto;
   position: relative;
+  padding-bottom: 2rem;
 }
 
 .navigationButtons {
@@ -124,8 +125,19 @@
   bottom: 2rem; 
   left: 50%; 
   transform: translateX(-50%);
-  color: var(--text-color); 
   font-size: 1rem; 
   text-align: center;
+  opacity: 0.5;
+}
+
+.title a {
+  color: var(--text-color);
+  opacity: 0.4;
+  text-decoration: none;
+}
+
+.title a:hover {
+  color: var(--link-hover-color);
+  opacity: 0.8;
 }
 
