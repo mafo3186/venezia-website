@@ -68,18 +68,16 @@
 
 .hotSpot {
   cursor: pointer;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: black;
+  margin: 0.75em 0;
 }
 
 .navMenu ul {
+  font-weight: var(--font-weight-semibold);
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-.hotSpot {
-  margin: 0.75em 0;
 }
 
 .hotSpot ul {
@@ -149,7 +147,7 @@
 }
 
 .staticLinks a {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   padding: 10px;
   text-decoration: none;
   border-bottom: 1px solid #ddd;
