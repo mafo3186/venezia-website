@@ -136,7 +136,8 @@ h6 {
 
 p {
   font-size: 1.25em;
-  margin-bottom: 1.5rem; /* Abstand unterhalb von Absätzen */
+  margin-bottom: 1.5rem;
+  margin-top: 0.25rem;
   font-weight: var(--font-weight-light);
 }
 
