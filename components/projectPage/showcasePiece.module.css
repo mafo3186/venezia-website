@@ -46,7 +46,7 @@
   font-size: 1.1rem;
   padding: 1rem;
   white-space: pre-wrap;
-  background-color: rgba(0, 0, 0, 0.95);
+  background-color: rgba(0, 0, 0, 0.8);
   color: white;
   border-radius: var(--border-radius-content);
   max-width: 100%;
