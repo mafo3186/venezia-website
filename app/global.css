@@ -1,11 +1,26 @@
+/*Fonts*/
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 /* Variables */
 :root {
   --border-radius-container: 1.5rem;
   --border-radius-content: calc(var(--border-radius-container) / 2);
-  --link-color: #4a90e2;
-  --link-hover-color: #82cfff; 
+  --link-color:#0E45B4 ; 
+  --link-hover-color:#82cfff ; 
   --background-color: #f0f0f0; 
-  --text-color: #000000; 
+  --text-color: #000000;
+  --primary-font: "Noto Sans Mono", "Fragment Mono", "Anonymous Pro", "B612 Mono", system-ui, sans-serif;
+  --font-weight-thin: 100;
+  --font-weight-extralight: 200;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
 }
 
 
@@ -35,6 +50,7 @@ https://www.joshwcomeau.com/css/custom-css-reset/#eight-root-stacking-context-9
   4. Improve text rendering
 */
 body {
+  font-family: var(--primary-font);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
@@ -74,6 +90,15 @@ h6 {
   overflow-wrap: break-word;
 }
 
+blockquote {
+  font-style: italic; 
+  font-weight: var(--font-weight-light); 
+  margin: 2rem; 
+  padding: 1rem; 
+  border-left: 0.1rem solid #ccc;
+  background-color: rgba(255,255,255, 0.1);
+}
+
 /*
   8. Create a root stacking context
 */
@@ -86,41 +111,50 @@ h6 {
    Customizations
    ==================== */
 :root {
-  font-family: system-ui, sans-serif;
-  font-weight: normal;
+  font-family: var(--primary-font);
 }
 
 h1 {
   font-size: 4em;
+  font-weight: var(--font-weight-bold);
 }
 
 h2 {
   font-size: 3em;
+  font-weight: var(--font-weight-semibold);
 }
 
 h3 {
   font-size: 2em;
+  font-weight: var(--font-weight-semibold);
 }
 
 h4 {
-  font-size: 1.5em;
+  font-size: 1.75em;
+  font-weight: var(--font-weight-semibold);
 }
 
 h5 {
-  font-size: 1.25em;
+  font-size: 1.5em;
+  font-weight: var(--font-weight-medium);
 }
 
 h6 {
-  font-size: 1em;
+  font-size: 1.25em;
+  font-weight: var(--font-weight-medium);
+  font-style: italic;
 }
 
 p {
-  margin-bottom: 1.5rem; /* Abstand unterhalb von Absätzen */
+  font-size: 1.25em;
+  margin-bottom: 1.5rem;
+  margin-top: 0.25rem;
+  font-weight: var(--font-weight-light);
 }
 
 body {
-  background-color: var(--background-color); /* Standard-Hintergrundfarbe */
-  color: var(--text-color); /* Standard-Textfarbe */
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 /* Links */
@@ -137,7 +171,7 @@ a:hover {
   :root {
     --background-color: #121212;
     --text-color: #ffffff;
-    --link-color: #1a73e8; /* darker blue for links */
+    --link-color: #5CA3FF; /* darker blue for links 9BC3F8 */
     --border-color: #333333;
   }
 
@@ -149,5 +183,43 @@ a:hover {
   a {
     color: var(--link-color);
   }
+  
+  a:hover {
+    color:  #82cfff ;
+  }
 
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.25em; 
+  }
+
+  h2 {
+    font-size: 1.75em; 
+  }
+
+  h3 {
+    font-size: 1.5em; 
+  }
+
+  h4 {
+    font-size: 1.25em; 
+  }
+
+  h5 {
+    font-size: 1.1em; 
+  }
+
+  h6 {
+    font-size: 1em; 
+  }
+
+  p {
+    font-size: 1em; 
+  }
+
+  blockquote {
+    font-size: 1em; 
+  }
 }
