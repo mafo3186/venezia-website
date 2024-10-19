@@ -42,9 +42,11 @@
 }
 
 .text {
-  font-family: var(--font-jacquard-24);
-  font-size: 1.1rem;
-  padding: 1rem;
+  font-family: var(--secondary-font);
+  line-height: 1.5;
+  font-size: 1.25em;
+  padding: 2rem;
+  margin: 2rem;
   white-space: pre-wrap;
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
