@@ -9,6 +9,7 @@ import { PiEye, PiEyeClosed } from "react-icons/pi";
 import {HotspotsWithProjects, PreDefinedView} from "@/components/types";
 import { useHotspot, useVisited } from '@/components/contexts';
 import { generateAnagram } from "./anagram";
+import { generateRandomAnagram} from "./randomAnagram"
 
 interface MenuProps {
   projects: HotspotsWithProjects;
@@ -127,13 +128,13 @@ const Menu = ({ projects }: MenuProps) => {
                           >
                             {shouldShowAsVisited
                               ? project.title
-                              : generateAnagram(project.title)}
+                              : generateRandomAnagram(project.title)}
                             {project.author && (
                               <>
                                 {" – "}
                                 {shouldShowAsVisited
                                   ? project.author
-                                  : generateAnagram(project.author)}
+                                  : generateRandomAnagram(project.author)}
                               </>
                             )}
                           </Link>
