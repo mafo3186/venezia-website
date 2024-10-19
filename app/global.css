@@ -90,6 +90,15 @@ h6 {
   overflow-wrap: break-word;
 }
 
+blockquote {
+  font-style: italic; 
+  font-weight: var(--font-weight-light); 
+  margin: 2rem; 
+  padding: 1rem; 
+  border-left: 0.1rem solid #ccc;
+  background-color: rgba(255,255,255, 0.1);
+}
+
 /*
   8. Create a root stacking context
 */
@@ -132,6 +141,8 @@ h5 {
 
 h6 {
   font-size: 1.25em;
+  font-weight: var(--font-weight-medium);
+  font-style: italic;
 }
 
 p {
@@ -142,8 +153,8 @@ p {
 }
 
 body {
-  background-color: var(--background-color); /* Standard-Hintergrundfarbe */
-  color: var(--text-color); /* Standard-Textfarbe */
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 /* Links */
