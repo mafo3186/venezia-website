@@ -1,3 +1,9 @@
+/*Fonts*/
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 /* Variables */
 :root {
   --border-radius-container: 1.5rem;
@@ -5,7 +11,7 @@
   --link-color: #4a90e2;
   --link-hover-color: #82cfff; 
   --background-color: #f0f0f0; 
-  --text-color: #000000; 
+  --text-color: #000000;
 }
 
 
@@ -104,15 +110,15 @@ h3 {
 }
 
 h4 {
-  font-size: 1.5em;
+  font-size: 1.75em;
 }
 
 h5 {
-  font-size: 1.25em;
+  font-size: 1.5em;
 }
 
 h6 {
-  font-size: 1em;
+  font-size: 1.25em;
 }
 
 h1, h2, h3, h4, h5, h6, b, strong, i, em {
