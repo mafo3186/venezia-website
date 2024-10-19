@@ -49,8 +49,8 @@
   background-color: rgba(255, 255, 255, 0.8); /* Hintergrund der Buttons */
   color: rgba(0, 0, 0, 0.9);
   border-radius: 50%;
-  width: 2rem; /* Button-Breite */
-  height: 2rem; /* Button-Höhe */
+  width: 2rem; 
+  height: 2rem; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,7 +62,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: 0.5rem;
 }
 
 .embla__dot {

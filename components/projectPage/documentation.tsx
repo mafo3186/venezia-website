@@ -13,7 +13,7 @@ import {
   type PortableTextComponents,
   type PortableTextBlock,
 } from "next-sanity";
-import Image from "next/image";
+
 import { urlFor } from '@/sanity/lib/image'
 import styles from "./documentation.module.css";
 
