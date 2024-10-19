@@ -12,7 +12,6 @@ export default function ProjectListLayout({ children }: PropsWithChildren<{}>) {
         <div className={listStyles.backgroundImage}>
           <div className={listStyles.title}>Fremde überall - Exkursion zur Kunst-Biennale Venedig 2024</div>
         </div>
-        <div className={listStyles.backgroundImage}></div>
         {children}
       </div>
     </main>

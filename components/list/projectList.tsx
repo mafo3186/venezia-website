@@ -32,7 +32,9 @@ export default async function ProjectList() {
           </div>
         ))}
       </div>
-      <div className={listStyles.wave}></div>
+      <div className={listStyles.waveContainer}>
+        <div className={listStyles.wave}></div>
+      </div>
     </>
   );
 }

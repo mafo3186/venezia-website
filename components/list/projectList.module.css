@@ -28,7 +28,6 @@
   max-width: 80vw;
   text-align: justify;
   border-radius: var(--border-radius-container);
-  color: var(--text-color);
   /*background-color: rgba(101, 133, 169, 0.1);
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);*/
 }
@@ -72,6 +71,16 @@
   margin-top: 0.5rem;
 }
 
+.waveContainer {
+  position: fixed; /* Fixiert das Wellenelement */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  pointer-events: none; /* Macht es nicht interaktiv */
+}
+
 .wave {
   position: absolute;
   bottom: 0;
@@ -80,7 +89,7 @@
   height:100%;
   background: url('/icons/wave.svg');
   animation: wave 30s linear infinite;
-  opacity: 0.03;
+  opacity: 0.05;
   pointer-events: none;
 }
 
@@ -103,8 +112,8 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.2; 
-  z-index: -1; 
+  opacity: 0.4; 
+  z-index: -1;
 }
 
 .title {
