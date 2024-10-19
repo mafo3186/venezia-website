@@ -8,8 +8,8 @@
 :root {
   --border-radius-container: 1.5rem;
   --border-radius-content: calc(var(--border-radius-container) / 2);
-  --link-color: #4a90e2;
-  --link-hover-color: #82cfff; 
+  --link-color:#0E45B4 ; 
+  --link-hover-color:#82cfff ; 
   --background-color: #f0f0f0; 
   --text-color: #000000;
   --primary-font: "Noto Sans Mono", "Fragment Mono", "Anonymous Pro", "B612 Mono", system-ui, sans-serif;
@@ -171,7 +171,7 @@ a:hover {
   :root {
     --background-color: #121212;
     --text-color: #ffffff;
-    --link-color: #1a73e8; /* darker blue for links */
+    --link-color: #5CA3FF; /* darker blue for links 9BC3F8 */
     --border-color: #333333;
   }
 
@@ -182,6 +182,10 @@ a:hover {
 
   a {
     color: var(--link-color);
+  }
+  
+  a:hover {
+    color:  #82cfff ;
   }
 
 }
