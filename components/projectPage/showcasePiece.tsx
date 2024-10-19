@@ -4,7 +4,7 @@ import { blurhashToBase64 } from "blurhash-base64";
 import styles from "./showcasePiece.module.css";
 import { FaExpandArrowsAlt } from 'react-icons/fa';
 import { SanityImagePalette } from "@/sanity.types";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Kaleidoscope from "../kaleidoscope/kaleidoscope";
 
 interface ShowcasePieceProps {
