@@ -24,12 +24,12 @@ export function Model(props) {
       <instancedMesh args={[nodes.LampMount.geometry, nodes.LampMount.material, 5]} castShadow receiveShadow instanceMatrix={nodes.LampMount.instanceMatrix} />
       <instancedMesh args={[nodes.LampShade.geometry, nodes.LampShade.material, 5]} castShadow receiveShadow instanceMatrix={nodes.LampShade.instanceMatrix} />
       <instancedMesh args={[nodes.LampDecoratedRod.geometry, nodes.LampDecoratedRod.material, 5]} castShadow receiveShadow instanceMatrix={nodes.LampDecoratedRod.instanceMatrix} />
-      <instancedMesh args={[nodes.Frame4.geometry, nodes.Frame4.material, 49]} castShadow receiveShadow instanceMatrix={nodes.Frame4.instanceMatrix} />
-      <instancedMesh args={[nodes.Hinge.geometry, nodes.Hinge.material, 692]} castShadow receiveShadow instanceMatrix={nodes.Hinge.instanceMatrix} />
-      <instancedMesh args={[nodes.Shutter4.geometry, nodes.Shutter4.material, 98]} castShadow receiveShadow instanceMatrix={nodes.Shutter4.instanceMatrix} />
-      <instancedMesh args={[nodes.Frame6.geometry, nodes.Frame6.material, 25]} castShadow receiveShadow instanceMatrix={nodes.Frame6.instanceMatrix} />
-      <instancedMesh args={[nodes.Building_4002.geometry, nodes.Building_4002.material, 50]} castShadow receiveShadow instanceMatrix={nodes.Building_4002.instanceMatrix} />
-      <instancedMesh args={[nodes.BalconyColumn.geometry, nodes.BalconyColumn.material, 24]} castShadow receiveShadow instanceMatrix={nodes.BalconyColumn.instanceMatrix} />
+      <instancedMesh args={[nodes.Frame4.geometry, nodes.Frame4.material, 597]} castShadow receiveShadow instanceMatrix={nodes.Frame4.instanceMatrix} />
+      <instancedMesh args={[nodes.Hinge.geometry, nodes.Hinge.material, 7356]} castShadow receiveShadow instanceMatrix={nodes.Hinge.instanceMatrix} />
+      <instancedMesh args={[nodes.Shutter4.geometry, nodes.Shutter4.material, 1194]} castShadow receiveShadow instanceMatrix={nodes.Shutter4.instanceMatrix} />
+      <instancedMesh args={[nodes.Frame6.geometry, nodes.Frame6.material, 215]} castShadow receiveShadow instanceMatrix={nodes.Frame6.instanceMatrix} />
+      <instancedMesh args={[nodes.Building_4002.geometry, nodes.Building_4002.material, 430]} castShadow receiveShadow instanceMatrix={nodes.Building_4002.instanceMatrix} />
+      <instancedMesh args={[nodes.BalconyColumn.geometry, nodes.BalconyColumn.material, 12]} castShadow receiveShadow instanceMatrix={nodes.BalconyColumn.instanceMatrix} />
       <instancedMesh args={[nodes.BaseSpeaker.geometry, nodes.BaseSpeaker.material, 12]} castShadow receiveShadow instanceMatrix={nodes.BaseSpeaker.instanceMatrix} />
     </group>
   )
