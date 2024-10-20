@@ -27,8 +27,8 @@
 
 .navMenu {
   position: fixed;
-  top: 4.25rem;
-  right: 10px;
+  top: 5rem;
+  right: 1rem;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
