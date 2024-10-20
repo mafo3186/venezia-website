@@ -8,7 +8,7 @@
   --background-color: #f0f0f0; 
   --text-color: #000000;
   --primary-font: var(--font-kotta-one), system-ui, sans-serif;
-  --secondary-font: var(--font-jacquard-24), fantasy, sans-serif;
+  --secondary-font: var(--font-noto-sans-mono), "Noto Sans Mono", monospace;
   --font-weight-thin: 100;
   --font-weight-extralight: 200;
   --font-weight-light: 300;
@@ -147,6 +147,10 @@ h1, h2, h3, h4, h5, h6, b, strong, i, em {
   font-family: var(--secondary-font);
   line-height: 100%;
   margin: 8px 0;
+}
+
+b, strong, i, em {
+  font-size: 0.9em;
 }
 
 p {

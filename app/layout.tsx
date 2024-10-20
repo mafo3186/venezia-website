@@ -8,7 +8,7 @@ import { toPlainText, VisualEditing } from "next-sanity";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
-import { jacquard, kotta } from './fonts';
+import { notoMono, kotta } from './fonts';
 
 import {
   HotspotProvider,
@@ -113,7 +113,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   );
   const emptySpots = spots.slice(projects.length);
   return (
-    <html lang="de" className={`${kotta.variable} ${jacquard.variable}`}>
+    <html lang="de" className={`${kotta.variable} ${notoMono.variable}`}>
       <body>
         {draftMode().isEnabled && <AlertBanner />}
         <SettingsProvider settings={settings}>

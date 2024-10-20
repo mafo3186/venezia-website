@@ -1,4 +1,4 @@
-import { Kotta_One, Jacquard_24 } from 'next/font/google'
+import { Kotta_One, Noto_Sans_Mono } from 'next/font/google'
 
 
 export const kotta = Kotta_One({
@@ -7,8 +7,8 @@ export const kotta = Kotta_One({
   weight: '400'
 });
 
-export const jacquard = Jacquard_24({
-  variable: "--font-jacquard-24",
+export const notoMono = Noto_Sans_Mono({
+  variable: "--font-noto-sans-mono",
   subsets: ["latin"],
   weight: '400'
 });
