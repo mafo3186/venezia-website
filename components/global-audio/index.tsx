@@ -5,16 +5,15 @@ import {
   DetailedHTMLProps,
   forwardRef,
   PropsWithChildren,
-  SourceHTMLAttributes,
   useContext,
   useMemo,
   useRef,
   useState,
 } from "react";
-import styles from "./styles.module.css";
 import { cls } from "../utilities";
 import { AudioPlayer } from "./player";
 import { PiX } from "react-icons/pi";
+import styles from "./styles.module.css";
 
 type GlobalAudioPlayerProps = {
   className?: string;
