@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useCallback, useState } from "react";
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import styles from './menu.module.css';
@@ -8,10 +8,19 @@ import { CiGlobe, CiRedo, CiViewList } from "react-icons/ci";
 import { PiEye, PiEyeClosed } from "react-icons/pi";
 import {HotspotsWithProjects, PreDefinedView} from "@/components/types";
 import { useHotspot, useVisited } from '@/components/contexts';
+import { generateAnagram } from "./anagram";
+import { generateRandomAnagram} from "./randomAnagram"
 
 interface MenuProps {
   projects: HotspotsWithProjects;
 }
+
+const getFullPath = (pathname: string, subpath: string | null) => {
+  if (pathname.includes("/projectlist")) {
+    return `/projectlist/${subpath}`;
+  }
+  return `/${subpath}`;
+};
 
 const Menu = ({ projects }: MenuProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,63 +31,52 @@ const Menu = ({ projects }: MenuProps) => {
   const [visitedProjects, setVisitedProjects] = useVisited();
   const listView = pathname.includes('/projectlist');
 
-  const toggleMenu = () => {
+  const toggleMenu = useCallback(() => {
     setMenuOpen(!menuOpen);
-  };
+  }, [menuOpen]);
 
-  const closeMenu = () => {
+  const closeMenu = useCallback(() => {
     setMenuOpen(false);
-  };
+  }, []);
 
-  const isVisited = (slug: string | null) => {
+  const isVisited = useCallback((slug: string | null) => {
     if (!slug) return false;
     return visitedProjects.includes(slug);
-  };
+  }, [visitedProjects]);
 
-  const toggleShowAllAsVisited = () => {
+  const toggleShowAllAsVisited = useCallback(() => {
     setShowAllAsVisited(!showAllAsVisited);
-  };
+  }, [showAllAsVisited]);
 
-  const clearVisitedProjects = () => {
+  const clearVisitedProjects = useCallback(() => {
     setVisitedProjects([]);
     localStorage.removeItem('visitedProjects');
     setShowAllAsVisited(false);
-  };
+  }, [setVisitedProjects]);
 
-  const generateAnagram = (string: string) => {
-    return string.split('').sort(() => Math.random() - 0.5).join('');
-  };
-
-  const getFullPath = (pathname: string, subpath: string | null) => {
-    if (pathname.includes('/projectlist')) {
-      return `/projectlist/${subpath}`;
-    }
-    return `/${subpath}`;
-  };
-
-  const handleNavigationAndView = (
+  const handleNavigationAndView = useCallback((
     event: React.MouseEvent,
     hotspotLocation: PreDefinedView,
     projectSlug: string | null = null
   ) => {
     event.preventDefault();
     closeMenu();
-    router.push("/");
-    showView(hotspotLocation, (success) => {
-      if (success && projectSlug) {
-        router.push(getFullPath(pathname, projectSlug));
-      }
-    });
-  };
+    if (projectSlug) {
+      router.push(getFullPath(pathname, projectSlug));
+    } else {
+      router.push("/");
+    }
+    showView(hotspotLocation);
+  }, [closeMenu, pathname, router, showView]);
 
-  const handleProjectClick = (event: React.MouseEvent, projectSlug: string | null, hotspotLocation: PreDefinedView) => {
+  const handleProjectClick = useCallback((event: React.MouseEvent, projectSlug: string | null, hotspotLocation: PreDefinedView) => {
     closeMenu();
     if (listView) {
       router.push(getFullPath(pathname, projectSlug));
     } else {
       handleNavigationAndView(event, hotspotLocation, projectSlug);
     }
-  };
+  }, [closeMenu, handleNavigationAndView, listView, pathname, router]);
 
   return (
     <header className={styles.header}>
@@ -130,13 +128,13 @@ const Menu = ({ projects }: MenuProps) => {
                           >
                             {shouldShowAsVisited
                               ? project.title
-                              : generateAnagram(project.title)}
+                              : generateRandomAnagram(project.title)}
                             {project.author && (
                               <>
                                 {" – "}
                                 {shouldShowAsVisited
                                   ? project.author
-                                  : generateAnagram(project.author)}
+                                  : generateRandomAnagram(project.author)}
                               </>
                             )}
                           </Link>

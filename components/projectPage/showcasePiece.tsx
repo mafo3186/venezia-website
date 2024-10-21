@@ -6,8 +6,12 @@ import { FaExpandArrowsAlt } from 'react-icons/fa';
 import { SanityImagePalette } from "@/sanity.types";
 import { useMemo, useState } from "react";
 import Kaleidoscope from "../kaleidoscope/kaleidoscope";
+import { useAudioPlayer } from "../global-audio";
+import { PiPauseLight, PiPlayLight } from "react-icons/pi";
+import { cls } from "../utilities";
 
 interface ShowcasePieceProps {
+  author: string | null;
   showcase: {
     type: "image" | "video" | "audio" | "text" | "website" | null;
     description: string | null;
@@ -19,7 +23,7 @@ interface ShowcasePieceProps {
 }
 
 export default function ShowcasePiece(props: ShowcasePieceProps) {
-  const { showcase } = props;
+  const { author, showcase } = props;
 
   const hexToRgba = (hex: string, alpha: number) => {
     // Hex-Farbwert in RGB umwandeln
@@ -32,7 +36,7 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
   const getDominantColor = (palette: SanityImagePalette | undefined): string => {
     const dominantBackground = palette?.dominant?.background;
     if (!dominantBackground) return "rgba(0, 0, 0, 0.4)";
-    return hexToRgba(dominantBackground, 0.4);
+    return hexToRgba(dominantBackground, 0.2);
   };
 
 
@@ -44,7 +48,12 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
     }
   }
 
-  const [isPlaying, setIsPlaying] = useState(false);
+  const { playing: isPlaying, play, pause } = useAudioPlayer(useMemo(() => ({
+    url: showcase.content,
+    mimeType: showcase.mimeType ?? undefined,
+    title: showcase.description ?? undefined,
+    author: author ?? undefined,
+  }), [author, showcase.content, showcase.description, showcase.mimeType]));
 
   return (
     <figure className={styles.figure}>
@@ -68,11 +77,11 @@ export default function ShowcasePiece(props: ShowcasePieceProps) {
           </video>
         )}
         {showcase.type === "audio" && (
-          <div className={styles.audio}>
+          <div className={styles.audio} onClick={() => isPlaying ? pause() : play()}>
             <Kaleidoscope speed={isPlaying ? .33 : 0.02} />
-            <audio onPlay={() => setIsPlaying(true)} onPause={() => setIsPlaying(false)} controls>
-              <source src={showcase.content} type={showcase.mimeType!} />
-            </audio>
+            <div className={cls(styles.playButton, !isPlaying && styles.playButtonPaused)}>
+              {isPlaying ? <PiPauseLight size={32} /> : <PiPlayLight size={32} />}
+            </div>
           </div>
         )}
         {showcase.type === "text" && (

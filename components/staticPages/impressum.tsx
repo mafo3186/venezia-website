@@ -1,13 +1,7 @@
 import styles from "./staticPages.module.css";
-import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
 
 export default function Impressum() {
-  return (
-    <div className={styles.pageContainer}>
-      <div className={styles.navigationButtons}>
-        <HomeButtonSwitcher/>
-      </div>
-      <div className={styles.textContainer}>
+  return (<>
         <h1>Impressum</h1>
         <div className={styles.bold}>
           <p>
@@ -31,7 +25,5 @@ export default function Impressum() {
           Die Hochschule Düsseldorf ist eine Körperschaft des Öffentlichen Rechtes. Sie wird durch die Präsidentin,
           Prof. Dr. Edeltraud Vomberg, gesetzlich vertreten.
         </p>
-      </div>
-    </div>
-  );
+  </>);
 }

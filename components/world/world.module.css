@@ -16,8 +16,9 @@
   position: relative;
   z-index: 1;
   height: 100vh;
-  transition: all 200ms ease;
+  transition: transform 200ms ease, opacity 200ms ease;
   box-sizing: border-box;
+  will-change: transform, opacity;
 }
 
 .mainHidden {
