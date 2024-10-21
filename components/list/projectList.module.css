@@ -130,18 +130,3 @@
   color: var(--link-hover-color);
   opacity: 0.8;
 }
-
-
-.listFooter {
-  position: relative; /* Damit es im Flow bleibt */
-  width: 100%;
-  text-align: center;
-  padding: 1rem;
-  z-index: 0; /* Bleibt hinter dem Hintergrundbild */
-  margin-top: auto; /* Stellt sicher, dass es am unteren Ende bleibt */
-}
-
-.listFooter p {
-  margin: 0;
-  font-size: 0.9rem;
-}
