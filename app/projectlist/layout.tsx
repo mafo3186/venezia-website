@@ -3,7 +3,6 @@ import '@/app/global.css';
 
 import { PropsWithChildren } from "react";
 import listStyles from "@/components/list/projectList.module.css";
-import Link from "next/link"; 
 
 
 export default function ProjectListLayout({ children }: PropsWithChildren<{}>) {
