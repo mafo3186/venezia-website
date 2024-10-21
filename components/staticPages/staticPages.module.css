@@ -6,20 +6,11 @@
   align-items: center;
   min-height: 100vh;
   width: 100%;
-  padding: 10px;
+  box-sizing: border-box;
+  padding: var(--page-margin);
   margin: auto;
   background-color: rgba(0,0,0,0.4);
   backdrop-filter: blur(4px);
-}
-
-.navigationButtons {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  position: sticky;
-  top: 1.25rem;
-  width: 100%;
-  padding: 0 3rem 1.25rem 0;
 }
 
 /* Container für die Textformatierung */

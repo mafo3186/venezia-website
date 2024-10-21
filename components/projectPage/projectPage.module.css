@@ -4,24 +4,11 @@
   justify-content: flex-start;
   height: 100vh;
   width: 100vw;
-  padding: 1rem;
+  padding: var(--page-margin);
   margin: auto;
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(4px);
-  overflow: hidden;
-  gap: 1rem;
-}
-
-.navigationButtons {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  position: sticky;
-  width: 100%;
-  height: 3rem;
-  padding: 0 3rem 0;
-  flex: 0 0 auto;
-  align-items: center;
+  gap: var(--navigation-page-gap);
 }
 
 .article {

@@ -7,7 +7,7 @@
 /* Variables */
 :root {
   --border-radius-content: 0.75rem;
-  --border-radius-container: var(--border-radius-container);
+  --border-radius-container: var(--border-radius-content);
   --link-color: #4a90e2;
   --link-hover-color: #82cfff; 
   --background-color: #f0f0f0; 
@@ -22,6 +22,9 @@
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
     color-scheme: dark;
+  --page-margin: 1rem;
+  --navigation-height: 3rem;
+  --navigation-page-gap: var(--page-margin);
 }
 
 
