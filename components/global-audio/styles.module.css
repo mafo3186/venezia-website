@@ -1,5 +1,5 @@
 .parent {
-  --background: white;
+  --background: var(--interactive-color);
   --foreground: black;
   position: fixed;
   top: var(--page-margin);
@@ -19,10 +19,15 @@
   gap: 0.5em;
   transition:
     opacity 200ms ease-out,
-    transform 200ms ease-out;
+    transform 200ms ease-out,
+    var(--interactive-transition);
   opacity: 1;
   transform: translateY(0);
   overflow: hidden;
+}
+
+.parent:hover {
+  --background: var(--interactive-color-hover);
 }
 
 .hidden {
@@ -34,7 +39,7 @@
   flex: 1 1 auto;
   width: 100%;
   height: 100%;
-  background-color: var(--background);
+  background-color: transparent;
   color: var(--foreground);
 }
 

@@ -25,6 +25,9 @@
   --page-margin: 1rem;
   --navigation-height: 3rem;
   --navigation-page-gap: var(--page-margin);
+  --interactive-color: rgba(255, 255, 255, 0.8);
+  --interactive-color-hover: white;
+  --interactive-transition: background-color 100ms ease;
 }
 
 

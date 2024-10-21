@@ -75,7 +75,7 @@
 }
 
 .playButton {
-  background: white;
+  background-color: var(--interactive-color);
   color: black;
   width: 80px;
   height: 80px;
@@ -84,14 +84,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 200ms 1s ease-out, scale 200ms ease-out;
+  transition: opacity 200ms 1s ease-out, scale 100ms ease-out, var(--interactive-transition);
   opacity: 0;
   scale: 1;
 }
 
+.playButton:hover {
+  background-color: var(--interactive-color-hover);
+}
+
 .audio:hover .playButton,
 .playButtonPaused {
-  transition: opacity 200ms ease-out, scale 200ms ease-out;
+  transition: opacity 200ms ease-out, scale 100ms ease-out, var(--interactive-transition);
   opacity: 1;
 }
 
