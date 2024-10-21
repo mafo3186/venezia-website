@@ -8,7 +8,6 @@ import { toPlainText, VisualEditing } from "next-sanity";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
-import { notoMono, kotta } from './fonts';
 
 import {
   HotspotProvider,
