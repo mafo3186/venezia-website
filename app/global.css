@@ -54,7 +54,7 @@ https://www.joshwcomeau.com/css/custom-css-reset/#eight-root-stacking-context-9
 */
 body {
   font-family: var(--primary-font);
-  line-height: 1.5;
+  line-height: 1.4;
   -webkit-font-smoothing: antialiased;
 }
 
