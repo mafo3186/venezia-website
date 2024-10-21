@@ -116,7 +116,6 @@ blockquote {
 :root {
   font-family: var(--primary-font), system-ui, sans-serif;
   font-weight: normal;
-  line-height: 100%;
 }
 
 h1 {
@@ -152,8 +151,7 @@ h6 {
 
 h1, h2, h3, h4, h5, h6, b, strong, i, em {
   font-family: var(--secondary-font);
-  line-height: 100%;
-  margin: 8px 0;
+  margin: 0.25em 0;
 }
 
 b, strong, i, em {
@@ -161,8 +159,9 @@ b, strong, i, em {
 }
 
 p {
-  font-size: 18px;
-  line-height: 115%;
+  font-size: 1.25em;
+  font-weight: var(--font-weight-light);
+  margin-bottom: 0.5em;
 }
 
 img + blockquote {
@@ -220,40 +219,6 @@ a:hover {
   
   a:hover {
     color:  #82cfff ;
-  }
-}
-
-@media (max-width: 768px) {
-  h1 {
-    font-size: 2.25em; 
-  }
-
-  h2 {
-    font-size: 1.75em; 
-  }
-
-  h3 {
-    font-size: 1.5em; 
-  }
-
-  h4 {
-    font-size: 1.25em; 
-  }
-
-  h5 {
-    font-size: 1.1em; 
-  }
-
-  h6 {
-    font-size: 1em; 
-  }
-
-  p {
-    font-size: 1em; 
-  }
-
-  blockquote {
-    font-size: 1em; 
   }
 }
 
