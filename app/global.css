@@ -1,10 +1,10 @@
 
 /* Variables */
 :root {
-  --border-radius-container: 1.5rem;
-  --border-radius-content: calc(var(--border-radius-container) / 2);
-  --link-color:#0E45B4 ; 
-  --link-hover-color:#82cfff ; 
+  --border-radius-content: 0.75rem;
+  --border-radius-container: var(--border-radius-content);
+  --link-color: #4a90e2;
+  --link-hover-color: #82cfff; 
   --background-color: #f0f0f0; 
   --text-color: #000000;
   --primary-font: var(--font-kotta-one), system-ui, sans-serif;
@@ -17,6 +17,13 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
+    color-scheme: dark;
+  --page-margin: 1rem;
+  --navigation-height: 3rem;
+  --navigation-page-gap: var(--page-margin);
+  --interactive-color: rgba(255, 255, 255, 0.8);
+  --interactive-color-hover: white;
+  --interactive-transition: background-color 100ms ease;
 }
 
 

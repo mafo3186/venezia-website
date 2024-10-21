@@ -2,7 +2,7 @@
 
 ## Updating the environment model
 
-Export the _Scene_ collection from Blender to _public/assets/venice.glb_, then run `npm run updatemodel` to transform the file and generate the associated JavaScript file.
+Export the _Scene_ collection from Blender (4.4.0 and up) to _public/assets/venice.glb_, then run `npm run updatemodel` to transform the file and generate the associated JavaScript file.
 
 ## Debug Keys
 
