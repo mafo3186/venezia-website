@@ -12,7 +12,7 @@ import ShowcasePiece from "@/components/projectPage/showcasePiece";
 import PortableText from "@/components/projectPage/documentation";
 import Loading from "@/components/loading";
 import VisitedProjectWrapper from "@/components/projectPage/visitedProjectWrapper";
-import HomeButtonSwitcher from "@/components/hooks/buttonSwitcher";
+import { NavigationButtons } from "../page/navigation-buttons";
 
 export type Props = {
   params: { slug: string };
@@ -63,9 +63,7 @@ export default async function ProjectPage({ params }: Props) {
     <>
       <VisitedProjectWrapper slug={params.slug} />
       <div className={styles.pageContainer}>
-        <div className={styles.navigationButtons}>
-          {<HomeButtonSwitcher />}
-        </div>
+        <NavigationButtons />
         <article className={styles.article}>
           <Suspense fallback={<Loading />}>
             <div className={styles.content}>
@@ -90,7 +88,7 @@ export default async function ProjectPage({ params }: Props) {
                     {project.showcases && project.showcases.map((showcase, index) => {
                       return (
                         <Suspense key={index} fallback={<Loading />}>
-                          <ShowcasePiece showcase={showcase as any} />
+                          <ShowcasePiece showcase={showcase as any} author={project.author} />
                         </Suspense>
                       );
                     })}

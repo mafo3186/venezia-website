@@ -13,7 +13,7 @@ import { LookTutorial } from "./tutorial";
 import { PreDefinedView } from "@/components/types";
 import { PerspectiveCamera as PerspectiveCameraImpl } from "three";
 import step from "./step-concrete-1.wav";
-import { PositionalAudio } from "../positional-audio";
+import { PositionalAudio } from "../audio/positional-audio";
 import { PerspectiveCamera } from "../perspective-camera";
 
 const metadataPath = "/assets/metadata.glb";

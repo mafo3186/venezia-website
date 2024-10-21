@@ -9,9 +9,16 @@ import {
 } from "three";
 import { useThree, useLoader } from "@react-three/fiber";
 import { ForwardRefComponent } from "@react-three/drei/helpers/ts-utils";
-import { useDebug } from "./debug";
+import { useDebug } from "../debug";
 import { Edges } from "@react-three/drei";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
+import { useAudioListener } from "./audio";
 
 type Props = JSX.IntrinsicElements["positionalAudio"] & {
   url: string;
@@ -23,16 +30,14 @@ type Props = JSX.IntrinsicElements["positionalAudio"] & {
 const geo = new SphereGeometry(1.0, 16, 8);
 
 export const PositionalAudio: ForwardRefComponent<Props, PositionalAudioImpl> =
-  // eslint-disable-next-line react/display-name
-  /* @__PURE__ */ forwardRef(
-  (
+  /* @__PURE__ */ forwardRef(function PositionalAudio(
     { url, distance = 1, loop = true, autoplay, position, volume }: Props,
     ref,
-  ) => {
+  ) {
     const sound = useRef<PositionalAudioImpl>(null!);
     useImperativeHandle(ref, () => sound.current, []);
     const camera = useThree(({ camera }) => camera);
-    const [listener] = useState(() => new AudioListener());
+    const listener = useAudioListener();
     const buffer = useLoader(AudioLoader, url);
     const debug = useDebug();
 
@@ -58,13 +63,6 @@ export const PositionalAudio: ForwardRefComponent<Props, PositionalAudioImpl> =
       };
     }, []);
     useEffect(() => {
-      camera.add(listener);
-      return () => {
-        camera.remove(listener);
-      };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [camera]);
-    useEffect(() => {
       if (volume !== undefined) {
         sound.current.setVolume(volume);
       }
@@ -86,5 +84,4 @@ export const PositionalAudio: ForwardRefComponent<Props, PositionalAudioImpl> =
         </mesh>
       </group>
     );
-  },
-);
+  });

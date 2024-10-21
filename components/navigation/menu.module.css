@@ -1,13 +1,13 @@
 .header {
   position: fixed;
-  top: 10px;
-  right: 10px;
+  top: var(--page-margin);
+  right: var(--page-margin);
   z-index: 1000;
 }
 
 .menu {
-  width: 3rem;
-  height: 3rem;
+  width: var(--navigation-height);
+  height: var(--navigation-height);
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.8);
   display: flex;
@@ -27,8 +27,8 @@
 
 .navMenu {
   position: fixed;
-  top: 4.25rem;
-  right: 10px;
+  top: calc(var(--page-margin) + var(--navigation-height) + var(--navigation-page-gap));
+  right: var(--page-margin);
   background-color: rgba(255, 255, 255, 1);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

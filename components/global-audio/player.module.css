@@ -1,0 +1,106 @@
+.playerContainer {
+  container-type: inline-size;
+  min-height: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  border-radius: 1rem;
+  user-select: none;
+  -webkit-user-select: none;
+  background-color: black;
+  color: white;
+  gap: 1rem;
+}
+
+.playerContainer:focus {
+  outline: none;
+}
+
+.playerTime {
+  display: flex;
+  cursor: default;
+  gap: 0.5ch;
+}
+
+.playerTotalTime,
+.playerCurrentTime {
+  font-variant-numeric: tabular-nums;
+}
+
+.playerTotalTime {
+  opacity: 0.5;
+}
+
+.playerTimeSeparator::before {
+  content: "/";
+  opacity: 0.5;
+}
+
+.playerPlayPauseButton {
+  cursor: pointer;
+}
+
+.playerSpinner {
+  animation: rapSpin 5s linear infinite;
+}
+
+.playerSliderInteraction {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  height: 100%;
+}
+
+.playerSlider {
+  flex-grow: 1;
+  background-color: color-mix(in srgb, currentColor 20%, transparent);
+  position: relative;
+  border-radius: 0.125rem;
+  height: 0.25rem;
+}
+
+.playerSliderProgress {
+  background-color: color-mix(in srgb, currentColor 50%, transparent);
+  border-radius: inherit;
+  position: absolute;
+  width: 0;
+  height: 100%;
+}
+
+.playerSliderPin {
+  height: 1rem;
+  width: 1rem;
+  border-radius: 0.5rem;
+  background-color: currentColor;
+  position: absolute;
+  right: -0.5rem;
+  top: -0.375rem;
+  scale: 0;
+  transition: scale 200ms ease-out;
+}
+
+.playerSliderInteraction:hover .playerSliderPin {
+  scale: 1;
+}
+
+.playerVolumeButton {
+  cursor: pointer;
+}
+
+@keyframes rapSpin {
+  from {
+    transform: rotateZ(0);
+  }
+
+  to {
+    transform: rotateZ(1turn);
+  }
+}
+
+@container (max-width: 250px) {
+  .playerTime {
+    display: none;
+  }
+}

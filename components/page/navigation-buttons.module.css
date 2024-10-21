@@ -1,0 +1,12 @@
+.navigationButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  position: sticky;
+  width: 100%;
+  height: var(--navigation-height);
+  padding: 0 var(--navigation-height) 0;
+  top: var(--page-margin);
+  flex: 0 0 auto;
+  align-items: center;
+}
