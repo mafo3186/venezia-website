@@ -42,10 +42,9 @@
 }
 
 .text {
+  font-family: var(--secondary-font);
   line-height: 1.5;
   font-size: 1.25em;
-  font-weight: var(--font-weight-light);
-  font-family: var(--primary-font);
   padding: 2rem;
   margin: 2rem;
   white-space: pre-wrap;
