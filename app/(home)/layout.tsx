@@ -1,11 +1,8 @@
 import '@/app/global.css';
-import { draftMode } from "next/headers";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { settingsQuery, projectsQuery } from "@/sanity/lib/queries";
-import AlertBanner from "@/components/alert-banner";
 import type { Metadata } from "next";
-import { toPlainText, VisualEditing } from "next-sanity";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { toPlainText } from "next-sanity";
 import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 
@@ -116,7 +113,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="de" className={`${kotta.variable} ${notoMono.variable}`}>
       <body>
-        {draftMode().isEnabled && <AlertBanner />}
         <SettingsProvider settings={settings}>
           <ProjectsProvider
             projects={projectsAtHotspots}
@@ -132,8 +128,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </HotspotProvider>
           </ProjectsProvider>
         </SettingsProvider>
-        {draftMode().isEnabled && <VisualEditing />}
-        <SpeedInsights />
       </body>
     </html>
   );
