@@ -14,6 +14,7 @@ import { CascadedShadowMap } from "./csm/cascaded-shadow-map";
 import { HotspotsWithProjects, PreDefinedView, Spot } from "@/components/types";
 import { ProjectBox } from "./project-box";
 import { Water } from "./water";
+import { Gondola } from "./gondola";
 import { DebugProvider } from "./debug";
 import { PositionalAudio } from "./audio/positional-audio";
 import wind from "./ambience/527281__dlgebert__monologue-wind.wav";
@@ -197,6 +198,9 @@ function Scene({
       view={view}
       onViewReached={onViewReached}
     />
+
+    <Gondola></Gondola>
+
     {nodes.map((node) => (
       <ProjectBox
         key={node.spot.name}
