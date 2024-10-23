@@ -1,5 +1,5 @@
 export const dynamic = 'error'
 
-export default async function Page() {
-    return <></>;
+export default function Page() {
+    return <div></div>;
 }
