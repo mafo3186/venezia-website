@@ -46,7 +46,10 @@ Exportiere die _Scene_ collection von Blender (4.4.0 and up) nach _public/assets
 
 ## Credits
 - Verwendetes Webseiten-Template: https://vercel.com/templates/next.js/blog-next-sanity
-- Lizenzen verwendeter 3D-Modelle: [Venedig](https://github.com/mafo3186/venezia-website/blob/main/public/assets/license.txt), Kreuzfahrtschiff, Gondel
+- Lizenzen verwendeter 3D-Modelle:
+  - "Venice Canal Scene" (https://skfb.ly/GUun) by cebraVFX is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+  - "Disney Wish Cruise Ship" (https://skfb.ly/oDp7s) by Gman The Cruise Dude is licensed under Creative Commons Attribution-NoDerivs (http://creativecommons.org/licenses/by-nd/4.0/).
+  - "Venetian City Scene Gondola Prop" (https://skfb.ly/6Y8qZ) by Nick Van Bouwel is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
 Diese Website wurde im Rahmen des Kurses mit Exkursion "La Biennale di Venezia 2024 – “Foreigners Everywhere” – Ein interdisziplinärer und anthropologischer Diskurs mit Exkursion & Projektarbeit gemeinsam mit Studierenden des FB Design" von [benthillerkus](https://github.com/benthillerkus), [exploids](https://github.com/exploids) und [mafo3186](https://github.com/mafo3186) entwickelt.
 
