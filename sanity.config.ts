@@ -2,9 +2,7 @@
 /**
  * This config is used to set up Sanity Studio that's mounted on the `app/(sanity)/studio/[[...tool]]/page.tsx` route
  */
-import { visionTool } from "@sanity/vision";
 import { PluginOptions, defineConfig } from "sanity";
-import { unsplashImageAsset } from "sanity-plugin-asset-source-unsplash";
 import {
   presentationTool,
   defineDocuments,
@@ -19,8 +17,6 @@ import project from "@/sanity/schemas/project";
 import settings from "@/sanity/schemas/settings";
 import showcase from "@/sanity/schemas/showcase";
 import { resolveHref } from "@/sanity/lib/utils";
-import {deDELocale} from '@sanity/locale-de-de'
-import {media} from 'sanity-plugin-media'
 
 
 const homeLocation = {
@@ -46,7 +42,6 @@ export default defineConfig({
     enabled: false,
   },
   plugins: [
-    deDELocale(),
     presentationTool({
       resolve: {
         mainDocuments: defineDocuments([
@@ -84,11 +79,7 @@ export default defineConfig({
     // Configures the global "new document" button, and document actions, to suit the Settings document singleton
     singletonPlugin([settings.name]),
     // Add an image asset source for Unsplash
-    unsplashImageAsset(),
-    media(),
     // Vision lets you query your content with GROQ in the studio
     // https://www.sanity.io/docs/the-vision-plugin
-    process.env.NODE_ENV === "development" &&
-      visionTool({ defaultApiVersion: apiVersion }),
   ].filter(Boolean) as PluginOptions[],
 });

@@ -8,7 +8,6 @@ import { CiGlobe, CiRedo, CiViewList } from "react-icons/ci";
 import { PiEye, PiEyeClosed } from "react-icons/pi";
 import {HotspotsWithProjects, PreDefinedView} from "@/components/types";
 import { useHotspot, useVisited } from '@/components/contexts';
-import { generateAnagram } from "./anagram";
 import { generateRandomAnagram} from "./randomAnagram"
 
 interface MenuProps {

@@ -1,4 +1,8 @@
 import Impressum from "@/components/staticPages/impressum";
-export default async function ImpressumPage() {
+
+export const dynamic = 'force-static';
+export const dynamicParams = false;
+
+export default function ImpressumPage() {
     return <Impressum />;
 }
