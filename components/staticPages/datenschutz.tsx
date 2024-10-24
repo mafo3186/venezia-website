@@ -1,9 +1,7 @@
-import styles from "./staticPages.module.css";
-
 export default function Datenschutz() {
   return (<>
-        <h1 className={styles.title}>Datenschutz</h1>
-        <p className={styles.bold}>
+        <h1>Datenschutz</h1>
+        <p>
           Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst und möchten, dass Sie wissen, wann wir welche
           Daten speichern und wie wir sie verwenden. Diese Datenschutzerklärung gilt für die Webseite
           <a href="https://venezia-website.vercel.app/" target="_blank"
@@ -51,7 +49,9 @@ export default function Datenschutz() {
         </p>
         <p>
           Die Webseite verwendet Sanity als Content-Management-System. Falls Sie sich im CMS anmelden, wird lokal ein
-          Authentifizierungs-Token gespeichert, um die Benutzeranmeldung und -sitzung zu verwalten.<br/>
+          Authentifizierungs-Token gespeichert, um die Benutzeranmeldung und -sitzung zu verwalten.
+        </p>
+        <p>
           Die Webseite enthält ggf. Links zu fremden Internetseiten.
         </p>
         <h3>Haftungshinweis</h3>
