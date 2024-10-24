@@ -42,24 +42,12 @@ const environments = [
     fogFrom: new Color("#748ea9"),
     fogTo: new Color("#375673"),
   },
-  // {
-  //   file: "/assets/kloppenheim_06_puresky_1k.hdr",
-  //   intensity: 0.5,
-  //   fogFrom: new Color("#718bae"),
-  //   fogTo: new Color("#485a72"),
-  // },
   {
     file: "/assets/drackenstein_quarry_puresky_1k.hdr",
     intensity: 0.4,
     fogFrom: new Color("#beb8ae"),
     fogTo: new Color("#7f7b74"),
   },
-  // {
-  //   file: "/assets/belfast_sunset_puresky_1k.hdr",
-  //   intensity: 0.4,
-  //   fogFrom: new Color("#c4c7ed"),
-  //   fogTo: new Color("#8688a4"),
-  // },
   {
     file: "/assets/snow_field_puresky_1k.hdr",
     intensity: 0.6,

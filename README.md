@@ -50,6 +50,20 @@ Exportiere die _Scene_ collection von Blender (4.4.0 and up) nach _public/assets
   - "Venice Canal Scene" (https://skfb.ly/GUun) by cebraVFX is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
   - "Disney Wish Cruise Ship" (https://skfb.ly/oDp7s) by Gman The Cruise Dude is licensed under Creative Commons Attribution-NoDerivs (http://creativecommons.org/licenses/by-nd/4.0/).
   - "Venetian City Scene Gondola Prop" (https://skfb.ly/6Y8qZ) by Nick Van Bouwel is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- Lizenzen verwendeter Audiodateien:
+  - "ESE - Foot Step - Concrete 1.wav" (https://freesound.org/s/475854/) by EpicSoundEffects is licensed under Creative Commons 0 (https://creativecommons.org/publicdomain/zero/1.0/).
+  - "shore1001.wav" (https://freesound.org/s/58408/) by sinatra314 is licensed under Creative Commons Attribution 3.0 (https://creativecommons.org/licenses/by/3.0/).
+  - "Spring Birds Loop with Low-Cut (New Jersey)" (https://freesound.org/s/345852/) by hargissssound is licensed under Creative Commons 0 (https://creativecommons.org/publicdomain/zero/1.0/).
+  - "cat meow short" (https://freesound.org/s/412017/) by skymary is licensed under Creative Commons Attribution 0 (https://creativecommons.org/publicdomain/zero/1.0/).
+  - "Monologue Wind.wav" (https://freesound.org/s/527281/) by dlgebert is licensed under Creative Commons 0 (https://creativecommons.org/publicdomain/zero/1.0/).
+- Lizenzen verwendeter Bilddateien:
+  - "Drackenstein Quarry (Pure Sky)" (https://polyhaven.com/a/drackenstein_quarry_puresky) by Andreas Mischok and Jarod Guest is licensed under Creative Commons 0 (https://creativecommons.org/publicdomain/zero/1.0/).
+  - "Industrial Sunset 02 (Pure Sky)" (https://polyhaven.com/a/industrial_sunset_02_puresky) by Jarod Guest and Sergej Majboroda is licensed under Creative Commons 0 (https://creativecommons.org/publicdomain/zero/1.0/).
+  - "Overcast Soil (Pure Sky)" (https://polyhaven.com/a/overcast_soil_puresky) by Jarod Guest and Sergej Majboroda is licensed under Creative Commons 0 (https://creativecommons.org/publicdomain/zero/1.0/).
+  - "Snow Field (Pure Sky)" (https://polyhaven.com/a/snow_field_puresky) by Jarod Guest and Sergej Majboroda is licensed under Creative Commons 0 (https://creativecommons.org/publicdomain/zero/1.0/).
+  - "Scratches 003" (https://ambientCG.com/a/Scratches003) by ambientCG.com is licensed under Creative Commons 0 (https://creativecommons.org/publicdomain/zero/1.0/).
+- Lizenzen verwendeter Schriftarten:
+  - "Tilt Neon" (https://fonts.withgoogle.com/tilt#neon) by The Tilt Project Authors is licensed under SIL Open Font License 1.1 (https://github.com/googlefonts/Tilt-Fonts/blob/1c26966d33270e2cd38b2b5ed7e9b576c1458eab/OFL.txt).
 
 Diese Website wurde im Rahmen des Kurses mit Exkursion "La Biennale di Venezia 2024 – “Foreigners Everywhere” – Ein interdisziplinärer und anthropologischer Diskurs mit Exkursion & Projektarbeit gemeinsam mit Studierenden des FB Design" von [benthillerkus](https://github.com/benthillerkus), [exploids](https://github.com/exploids) und [mafo3186](https://github.com/mafo3186) entwickelt.
 
