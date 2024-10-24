@@ -16,7 +16,7 @@ export function Model(props) {
       <instancedMesh args={[nodes.PowerLineReceiver.geometry, nodes.PowerLineReceiver.material, 21]} castShadow receiveShadow instanceMatrix={nodes.PowerLineReceiver.instanceMatrix} />
       <instancedMesh args={[nodes.Mesh035.geometry, nodes.Mesh035.material, 21]} castShadow receiveShadow instanceMatrix={nodes.Mesh035.instanceMatrix} />
       <instancedMesh args={[nodes.Mesh004.geometry, nodes.Mesh004.material, 397]} castShadow receiveShadow instanceMatrix={nodes.Mesh004.instanceMatrix} />
-      <instancedMesh args={[nodes.Window3.geometry, nodes.Window3.material, 5]} castShadow receiveShadow instanceMatrix={nodes.Window3.instanceMatrix} />
+      <instancedMesh args={[nodes.Window3.geometry, nodes.Window3.material, 8]} castShadow receiveShadow instanceMatrix={nodes.Window3.instanceMatrix} />
       <instancedMesh args={[nodes.Rock.geometry, nodes.Rock.material, 208]} castShadow receiveShadow instanceMatrix={nodes.Rock.instanceMatrix} />
       <instancedMesh args={[nodes.WoodenRod.geometry, nodes.WoodenRod.material, 77]} castShadow receiveShadow instanceMatrix={nodes.WoodenRod.instanceMatrix} />
       <instancedMesh args={[nodes.WoodenPlank1.geometry, nodes.WoodenPlank1.material, 100]} castShadow receiveShadow instanceMatrix={nodes.WoodenPlank1.instanceMatrix} />
