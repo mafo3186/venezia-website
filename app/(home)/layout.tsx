@@ -8,7 +8,6 @@ import { toPlainText, VisualEditing } from "next-sanity";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { ProjectsQueryResult, SettingsQueryResult } from "@/sanity.types";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
-import { notoMono, kotta } from './fonts';
 
 import {
   HotspotProvider,
@@ -20,6 +19,7 @@ import Menu from "@/components/navigation/menu";
 import { Hotspot, Spot } from "@/components/types";
 import hotspotsRaw from "@/data/hotspots.json";
 import { GlobalAudioProvider } from '@/components/global-audio';
+import { kotta, notoMono } from '../fonts';
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await sanityFetch<SettingsQueryResult>({
@@ -114,26 +114,26 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const emptySpots = spots.slice(projects.length);
   return (
     <html lang="de" className={`${kotta.variable} ${notoMono.variable}`}>
-    <body>
-    {draftMode().isEnabled && <AlertBanner />}
-    <SettingsProvider settings={settings}>
-      <ProjectsProvider
-        projects={projectsAtHotspots}
-        emptySpots={emptySpots}
-      >
-        <HotspotProvider>
-          <VisitedProvider>
-            <GlobalAudioProvider>
-              <Menu projects={projectsAtHotspots} />
-              <section>{children}</section>
-            </GlobalAudioProvider>
-          </VisitedProvider>
-        </HotspotProvider>
-      </ProjectsProvider>
-    </SettingsProvider>
-    {draftMode().isEnabled && <VisualEditing />}
-    <SpeedInsights />
-    </body>
+      <body>
+        {draftMode().isEnabled && <AlertBanner />}
+        <SettingsProvider settings={settings}>
+          <ProjectsProvider
+            projects={projectsAtHotspots}
+            emptySpots={emptySpots}
+          >
+            <HotspotProvider>
+              <VisitedProvider>
+                <GlobalAudioProvider>
+                  <Menu projects={projectsAtHotspots} />
+                  <section>{children}</section>
+                </GlobalAudioProvider>
+              </VisitedProvider>
+            </HotspotProvider>
+          </ProjectsProvider>
+        </SettingsProvider>
+        {draftMode().isEnabled && <VisualEditing />}
+        <SpeedInsights />
+      </body>
     </html>
   );
 }
