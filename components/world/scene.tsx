@@ -154,29 +154,29 @@ function Scene({
   }, [foreignness]);
   return (<><DebugProvider debug={iAmGod}>
     <Suspense fallback={null}>
-    <Environment
-      files={environment.file}
-      environmentIntensity={
-        MathUtils.lerp(
+      <Environment
+        files={environment.file}
+        environmentIntensity={
+          MathUtils.lerp(
+            1.0,
+            0.5,
+            foreignness,
+          ) * environment.intensity
+        }
+        environmentRotation={new Euler(0, -0.5, 0)}
+        backgroundRotation={new Euler(0, -0.5, 0)}
+        backgroundIntensity={MathUtils.lerp(
           1.0,
           0.5,
           foreignness,
-        ) * environment.intensity
-      }
-      environmentRotation={new Euler(0, -0.5, 0)}
-      backgroundRotation={new Euler(0, -0.5, 0)}
-      backgroundIntensity={MathUtils.lerp(
-        1.0,
-        0.5,
-        foreignness,
-      ) * 0.8 * environment.intensity}
-      background
-    />
+        ) * 0.8 * environment.intensity}
+        background
+      />
     </Suspense>
     {quality > 0 && <CascadedShadowMap lightIntensity={0} shadowMapSize={4096} lightDirection={[-0.2, MathUtils.lerp(-0.4, -2.5, foreignness ** 2), -0.5]} lightMargin={10} maxFar={25} />}
     <fogExp2 ref={fog} attach="fog" density={iAmGod ? 0 : MathUtils.lerp(0.03, 0.1, foreignness ** 2)} />
     <EffectComposer enabled={quality > 0}>
-      <N8AO aoRadius={2} intensity={5} distanceFalloff={.4} depthAwareUpsampling quality="performance" />
+      <N8AO aoRadius={2} intensity={5} distanceFalloff={.4} depthAwareUpsampling quality={quality > 0 ? quality > 1 ? "ultra" : "low" : "performance"} />
       <DepthOfField
         focusDistance={0}
         focalLength={(inBackground ? 0.01 : MathUtils.lerp(0.1, 0.05, foreignness))}
@@ -323,7 +323,7 @@ export function SceneCanvas(props: BaseProps) {
       id="canvas-instance"
       style={{ width: "100%", height: "100vh" }}
       shadows="soft"
-      className={`${styles.scene } ` + (show ? styles.sceneLoading : styles.sceneLoaded)}
+      className={`${styles.scene} ` + (show ? styles.sceneLoading : styles.sceneLoaded)}
       dpr={dpr}
       frameloop={inBackground ? "demand" : "always"}
     >
