@@ -3,7 +3,7 @@
   width: 100vw;
   top: 0;
   left: 0;
-  background: #b2b0c6;
+  background: #5b5a59;
 }
 
 .content {
@@ -41,8 +41,8 @@
   pointer-events: none;
   filter: blur(2vh);
   background:
-    url(wide.jpg) no-repeat center center,
-    #b2b0c6;
+    url(wide.webp) no-repeat center center,
+      #5b5a59;
   background-size:
     auto 100%,
     100%;
