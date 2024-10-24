@@ -32,7 +32,7 @@ Für die Webseitenentwicklung:
 * Production-Build erstellen: `npm run build`
 * Anleitung für die Anbindung vom CMS Sanity und Deployment via Vercel befindet sich in der originalen README.md des verwendeten Blog-Templates: [TEMPLATE.md](TEMPLATE.md)
 
-### Aktualisieren des Umgebungsmodells
+### Updating the environment model
 
 Exportiere die _Scene_ Collection aus Blender (4.4.0 and up) nach _public/assets/venice.glb_, dann führe `npm run updatemodel` aus, um die Datei zu transformieren und das assoziierte Javascript-File zu generieren.
 
@@ -62,6 +62,8 @@ Exportiere die _Scene_ Collection aus Blender (4.4.0 and up) nach _public/assets
   - "Overcast Soil (Pure Sky)" (https://polyhaven.com/a/overcast_soil_puresky) by Jarod Guest and Sergej Majboroda is licensed under Creative Commons 0 (https://creativecommons.org/publicdomain/zero/1.0/).
   - "Snow Field (Pure Sky)" (https://polyhaven.com/a/snow_field_puresky) by Jarod Guest and Sergej Majboroda is licensed under Creative Commons 0 (https://creativecommons.org/publicdomain/zero/1.0/).
   - "Scratches 003" (https://ambientCG.com/a/Scratches003) by ambientCG.com is licensed under Creative Commons 0 (https://creativecommons.org/publicdomain/zero/1.0/).
+  - "compass-north-south-east-west-160863" (https://pixabay.com/vectors/compass-north-south-east-west-160863/) licensed under Pixabay Content License (https://pixabay.com/service/license-summary/)
+
 - Lizenzen verwendeter Schriftarten:
   - "Tilt Neon" (https://fonts.withgoogle.com/tilt#neon) by The Tilt Project Authors is licensed under SIL Open Font License 1.1 (https://github.com/googlefonts/Tilt-Fonts/blob/1c26966d33270e2cd38b2b5ed7e9b576c1458eab/OFL.txt).
 
