@@ -167,14 +167,18 @@ const Menu = ({ projects }: MenuProps) => {
               </button>
             </div>
           </div>
-          {/* Abschnitt für Datenschutz und Impressum */}
+          {/* Abschnitt für Datenschutz Impressum und Lizenzen */}
           <div className={styles.legals}>
             <Link href={getFullPath(pathname, "impressum")} onClick={closeMenu}>
               Impressum
             </Link>
-            <div className={styles.separator} />
+            <div className={styles.separator}/>
             <Link href={getFullPath(pathname, "datenschutz")} onClick={closeMenu}>
               Datenschutz
+            </Link>
+            <div className={styles.separator}/>
+            <Link href={getFullPath(pathname, "lizenzen")} onClick={closeMenu}>
+              Lizenzen
             </Link>
           </div>
         </nav>
