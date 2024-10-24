@@ -22,6 +22,7 @@ import birds from "./ambience/345852__hargissssound__spring-birds-loop-with-low-
 import meow from "./ambience/412017__skymary__cat-meow-short.wav";
 import { AudioListenerProvider } from "./audio/audio";
 import { useRouter } from "next/navigation";
+import { useLocalStorage } from "../hooks/local-storage";
 
 type BaseProps = {
   projects: HotspotsWithProjects,
@@ -70,9 +71,10 @@ function Scene({
   projects,
   inBackground,
   view,
+  quality,
   onViewReached,
   foreignness: originalForeignness,
-}: BaseProps) {
+}: BaseProps & { quality: number }) {
   const router = useRouter();
   const cat1Ref = useRef<PositionalAudioImpl | null>(null);
   const cat2Ref = useRef<PositionalAudioImpl | null>(null);
@@ -171,9 +173,9 @@ function Scene({
       background
     />
     </Suspense>
-    <CascadedShadowMap lightIntensity={0} shadowMapSize={4096} lightDirection={[-0.2, MathUtils.lerp(-0.4, -2.5, foreignness ** 2), -0.5]} lightMargin={10} maxFar={25} />
+    {quality > 0 && <CascadedShadowMap lightIntensity={0} shadowMapSize={4096} lightDirection={[-0.2, MathUtils.lerp(-0.4, -2.5, foreignness ** 2), -0.5]} lightMargin={10} maxFar={25} />}
     <fogExp2 ref={fog} attach="fog" density={iAmGod ? 0 : MathUtils.lerp(0.03, 0.1, foreignness ** 2)} />
-    <EffectComposer>
+    <EffectComposer enabled={quality > 0}>
       <N8AO aoRadius={2} intensity={5} distanceFalloff={.4} depthAwareUpsampling quality="performance" />
       <DepthOfField
         focusDistance={0}
@@ -291,18 +293,22 @@ function Scene({
 
 export function SceneCanvas(props: BaseProps) {
   const [showStats, setShowStats] = useState(false);
+  const [quality, setQuality] = useLocalStorage("quality", 1);
   useEffect(() => {
     const listener = (event: KeyboardEvent) => {
       if (event.key === "f") {
         setShowStats(!showStats);
+      } else if (event.key === "q") {
+        setQuality((quality + 2) % 3);
+        window.location.reload();
       }
     };
     window.addEventListener("keydown", listener);
     return () => window.removeEventListener("keydown", listener);
-  }, [showStats]);
+  }, [quality, setQuality, showStats]);
   const [initialLoad, setInitialLoad] = useState(true);
   const { inBackground } = props;
-  const dpr = .78;
+  const dpr = quality === 2 ? 1 : .78;
   const active = useProgress((state) => state.active);
   const progress = useProgress((state) => state.progress);
   useEffect(() => {
@@ -323,7 +329,7 @@ export function SceneCanvas(props: BaseProps) {
     >
       <AudioListenerProvider volume={inBackground ? 0 : 1}>
         <Suspense fallback={null}>
-          <Scene {...props} />
+          <Scene quality={quality} {...props} />
         </Suspense>
       </AudioListenerProvider>
       <Stats showPanel={showStats ? 0 : -1}>

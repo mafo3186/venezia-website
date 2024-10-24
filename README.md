@@ -39,6 +39,7 @@ Exportiere die _Scene_ Collection aus Blender (4.4.0 and up) nach _public/assets
 ### Debug-Tasten
 
 * `F`: Schaltet FPS-Anzeige und andere Statistiken um.
+* `Q`: Ändert die Render-Qualität (gering -> normal -> hoch).
 * `G`: Schaltet den Gott-Modus (Debug-Modus) ein und aus.
 * `P`: Aktuelle Position und Drehung in die Zwischenablage kopieren (nützlich für die Erstellung von Hotspots).
 * `1` - `9`: Überschreiben des Wertes für _Fremdheit_ (1.0 - 0.0).
