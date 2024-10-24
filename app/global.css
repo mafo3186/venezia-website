@@ -1,11 +1,10 @@
-
 /* Variables */
 :root {
   --border-radius-content: 0.75rem;
   --border-radius-container: var(--border-radius-content);
   --link-color: #4a90e2;
-  --link-hover-color: #82cfff; 
-  --background-color: #f0f0f0; 
+  --link-hover-color: #82cfff;
+  --background-color: #f0f0f0;
   --text-color: #000000;
   --primary-font: var(--font-kotta-one), system-ui, sans-serif;
   --secondary-font: var(--font-noto-sans-mono), "Noto Sans Mono", monospace;
@@ -17,7 +16,7 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
-    color-scheme: dark;
+  color-scheme: dark;
   --page-margin: 1rem;
   --navigation-height: 3rem;
   --navigation-page-gap: var(--page-margin);
@@ -94,12 +93,12 @@ h6 {
 }
 
 blockquote {
-  font-style: italic; 
-  font-weight: var(--font-weight-light); 
-  margin: 2rem; 
-  padding: 1rem; 
+  font-style: italic;
+  font-weight: var(--font-weight-light);
+  margin: 2rem;
+  padding: 1rem;
   border-left: 0.1rem solid #ccc;
-  background-color: rgba(255,255,255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /*
@@ -149,12 +148,24 @@ h6 {
   font-style: italic;
 }
 
-h1, h2, h3, h4, h5, h6, b, strong, i, em {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+strong,
+i,
+em {
   font-family: var(--secondary-font);
   margin: 0.25em 0;
 }
 
-b, strong, i, em {
+b,
+strong,
+i,
+em {
   font-size: 0.9em;
 }
 
@@ -164,7 +175,7 @@ p {
   margin-bottom: 0.5em;
 }
 
-img + blockquote {
+img+blockquote {
   margin: 16px 0;
   padding: 0 8px 0;
   font-size: 12px;
@@ -180,7 +191,8 @@ blockquote:before {
   vertical-align: 0.1em;
 }
 
-ul, ol {
+ul,
+ol {
   margin: 16px 0;
 }
 
@@ -200,58 +212,58 @@ a:hover {
 }
 
 /* Set dark mode as the preferred color scheme */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background-color: #121212;
-    --text-color: #ffffff;
-    --link-color: #5CA3FF; /* darker blue for links 9BC3F8 */
-    --border-color: #333333;
-  }
-
-  body {
-    background-color: var(--background-color);
-    color: var(--text-color);
-  }
-
-  a {
-    color: var(--link-color);
-  }
-  
-  a:hover {
-    color:  #82cfff ;
-  }
+:root {
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --link-color: #5CA3FF;
+  /* darker blue for links 9BC3F8 */
+  --border-color: #333333;
 }
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+a {
+  color: var(--link-color);
+}
+
+a:hover {
+  color: #82cfff;
+}
+
 
 @media (max-width: 768px) {
   h1 {
-    font-size: 2.25em; 
+    font-size: 2.25em;
   }
 
   h2 {
-    font-size: 1.75em; 
+    font-size: 1.75em;
   }
 
   h3 {
-    font-size: 1.5em; 
+    font-size: 1.5em;
   }
 
   h4 {
-    font-size: 1.25em; 
+    font-size: 1.25em;
   }
 
   h5 {
-    font-size: 1.1em; 
+    font-size: 1.1em;
   }
 
   h6 {
-    font-size: 1em; 
+    font-size: 1em;
   }
 
   p {
-    font-size: 1em; 
+    font-size: 1em;
   }
 
   blockquote {
-    font-size: 1em; 
+    font-size: 1em;
   }
 }
