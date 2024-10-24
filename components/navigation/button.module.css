@@ -2,9 +2,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 2rem;
+  width: 4rem;
   height: 2rem;
-  border-radius: 50%;
+  border-radius: 1rem;
   background-color: rgba(255, 255, 255, 0.9);
   color: black;
   cursor: pointer;

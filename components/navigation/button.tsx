@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import styles from './button.module.css';
 import React from "react";
-import {CiGlobe, CiViewList} from "react-icons/ci";
+import {CiGlobe, CiMinimize1, CiViewList} from "react-icons/ci";
 import {IoArrowBackOutline} from "react-icons/io5";
 import {usePathname} from "next/navigation";
 
@@ -15,6 +15,7 @@ export function HomeButton3D() {
       aria-label="Zurück zur 3D-Weltansicht"
       title="Zurück zur 3D-Weltansicht"
     >
+      <CiMinimize1 aria-hidden="true" />
       <CiGlobe aria-hidden="true" />
     </Link>
   );
@@ -28,6 +29,7 @@ export function HomeButtonList() {
       aria-label="Zurück zur Listenansicht"
       title="Zurück zur Listenansicht"
     >
+      <CiMinimize1 aria-hidden="true" />
       <CiViewList aria-hidden="true" />
     </Link>
   );
