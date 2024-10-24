@@ -1,7 +1,7 @@
 [
   {
     "id": "Bridge",
-    "title": "Brücke",
+    "title": "Ponte",
     "spots": ["Sheet", "TouristGoHome", "Cat", "FiguresBridge"],
     "location": {
       "position": [
@@ -15,7 +15,7 @@
   },
   {
     "id": "Stairs",
-    "title": "Plaza West",
+    "title": "Piazza Ovest",
     "spots": ["Attenzione", "Figures", "KithAndKin"],
     "location": {
       "position": [-13.258768989004553, 0.73, 6.009551775270598],
@@ -27,7 +27,7 @@
   },
   {
     "id": "Plaza",
-    "title": "Plaza Church",
+    "title": "Piazza Della Chiesa",
     "spots": ["BlueBoat", "RedBoat", "FlowerBox"],
     "location": {
       "position": [-5.666323055536443, 2.36, 12.460014246617753],
@@ -51,7 +51,7 @@
   },
   {
     "id": "Canal",
-    "title": "Kanal",
+    "title": "Canale",
     "spots": ["Pole", "ILive", "Guy", "FiguresCanal"],
     "location": {
       "position": [10.348773429190802, 0.73, -5.252596106016234],
@@ -63,7 +63,7 @@
   },
   {
     "id": "Gondola",
-    "title": "Gondel",
+    "title": "Gondola",
     "spots": ["FremdeUeberall", "IDreamt"],
     "location": {
       "position": [0.15186151806335763, 0.3, -11.860156114290666],
