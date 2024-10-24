@@ -6,16 +6,13 @@ export type PreDefinedView = {
   rotation: QuaternionTuple;
 };
 
+export type Spot = string;
+
 export type Hotspot = {
   id: string;
   title: string;
+  spots: Spot[];
   location: PreDefinedView;
-};
-
-export type Spot = {
-  name: string;
-  translation: [number, number, number];
-  rotation: [number, number, number, number];
 };
 
 export type Project = ProjectsQueryResult[number];

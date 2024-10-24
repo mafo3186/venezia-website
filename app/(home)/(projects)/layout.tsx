@@ -5,9 +5,9 @@ import { CanvasContainer } from "@/components/world";
 import { PropsWithChildren } from "react";
 
 export default function ProjectLayout({ children }: PropsWithChildren) {
-  const { projects, emptySpots } = useProjects();
+  const { projects } = useProjects();
   return (
-    <CanvasContainer projects={projects} emptySpots={emptySpots}>
+    <CanvasContainer projects={projects}>
       {children}
     </CanvasContainer>
   );

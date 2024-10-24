@@ -1,18 +1,18 @@
 "use client";
 
 import { Canvas, useLoader, useThree } from "@react-three/fiber";
-import { startTransition, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { startTransition, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DepthOfField, EffectComposer, N8AO, Vignette } from "@react-three/postprocessing";
 import { Environment, OrbitControls, useProgress } from "@react-three/drei";
 import styles from "./world.module.css";
-import { AudioContext, Color, Euler, FogExp2, MathUtils, PositionalAudio as PositionalAudioImpl } from "three";
+import { Color, Euler, FogExp2, MathUtils, PositionalAudio as PositionalAudioImpl } from "three";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 import { Player } from "./player";
 import { Model as EnvironmentModel } from "./model";
+import { Model as PiecesModel } from "./pieces-model";
 import Stats, { Panel } from "./stats";
 import { CascadedShadowMap } from "./csm/cascaded-shadow-map";
-import { HotspotsWithProjects, PreDefinedView, Spot } from "@/components/types";
-import { ProjectBox } from "./project-box";
+import { HotspotsWithProjects, PreDefinedView, Project, Spot } from "@/components/types";
 import { Water } from "./water";
 import { DebugProvider } from "./debug";
 import { PositionalAudio } from "./audio/positional-audio";
@@ -21,10 +21,10 @@ import shore from "./ambience/58408__sinatra314__shore1001.wav";
 import birds from "./ambience/345852__hargissssound__spring-birds-loop-with-low-cut-new-jersey.wav";
 import meow from "./ambience/412017__skymary__cat-meow-short.wav";
 import { AudioListenerProvider } from "./audio/audio";
+import { useRouter } from "next/navigation";
 
 type BaseProps = {
   projects: HotspotsWithProjects,
-  emptySpots: Spot[],
   inBackground: boolean,
   view?: PreDefinedView,
   onViewReached?: (success: boolean) => void,
@@ -42,24 +42,12 @@ const environments = [
     fogFrom: new Color("#748ea9"),
     fogTo: new Color("#375673"),
   },
-  // {
-  //   file: "/assets/kloppenheim_06_puresky_1k.hdr",
-  //   intensity: 0.5,
-  //   fogFrom: new Color("#718bae"),
-  //   fogTo: new Color("#485a72"),
-  // },
   {
     file: "/assets/drackenstein_quarry_puresky_1k.hdr",
     intensity: 0.4,
     fogFrom: new Color("#beb8ae"),
     fogTo: new Color("#7f7b74"),
   },
-  // {
-  //   file: "/assets/belfast_sunset_puresky_1k.hdr",
-  //   intensity: 0.4,
-  //   fogFrom: new Color("#c4c7ed"),
-  //   fogTo: new Color("#8688a4"),
-  // },
   {
     file: "/assets/snow_field_puresky_1k.hdr",
     intensity: 0.6,
@@ -80,18 +68,24 @@ for (const environment of environments) {
 
 function Scene({
   projects,
-  emptySpots,
   inBackground,
   view,
   onViewReached,
   foreignness: originalForeignness,
 }: BaseProps) {
+  const router = useRouter();
   const cat1Ref = useRef<PositionalAudioImpl | null>(null);
   const cat2Ref = useRef<PositionalAudioImpl | null>(null);
-  const nodes = useMemo(
-    () => projects.flatMap((hotspot) => hotspot.projects),
-    [projects],
-  );
+  const projectBySpot = useMemo(() => {
+    const map = new Map<string, Project>();
+    for (const hotspot of projects) {
+      for (const project of hotspot.projects) {
+        map.set(project.spot, project.project);
+      }
+    }
+    return map;
+  }, [projects]);
+  const usedSpots = useMemo(() => projectBySpot.keys().toArray(), [projectBySpot]);
   const [iAmGod, setGod] = useState(false);
   const dpr = useThree(({ viewport }) => viewport.dpr);
   const [overrideForeignness, setOverrideForeignness] = useState<number | undefined>(undefined);
@@ -191,27 +185,18 @@ function Scene({
     <OrbitControls enabled={iAmGod} />
 
     <EnvironmentModel />
+    <PiecesModel show={iAmGod ? undefined : usedSpots} onActivate={useCallback((spot: Spot) => {
+      const slug = projectBySpot.get(spot)?.slug;
+      if (slug) {
+        router.push(`/${slug}`);
+      }
+    }, [projectBySpot, router])} />
 
     <Player
       debug={iAmGod}
       view={view}
       onViewReached={onViewReached}
     />
-    {nodes.map((node) => (
-      <ProjectBox
-        key={node.spot.name}
-        href={`/${node.project.slug}`}
-        position={node.spot.translation}
-        quaternion={node.spot.rotation}
-      />
-    ))}
-    {emptySpots.map((node) => (
-      <ProjectBox
-        key={node.name}
-        position={node.translation}
-        quaternion={node.rotation}
-      />
-    ))}
     <Water />
     {/* middle wind */}
     <PositionalAudio
