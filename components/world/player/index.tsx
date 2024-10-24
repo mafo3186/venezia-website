@@ -340,6 +340,7 @@ export function Player({
         onClick={(event) => {
           rayTargetDiff.subVectors(event.point, playerRef.current.position);
           if (rayTargetDiff.length() <= maxTeleportDistance) {
+            event.stopPropagation();
             const path = findPath(event.point);
             setTargetPath(path);
             if (path.length <= maxTeleportDistance) {
