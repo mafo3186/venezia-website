@@ -7,7 +7,7 @@ import { Object3D, Vector3, Quaternion, Mesh, PositionalAudio as PositionalAudio
 import { Node, Pathfinding } from "three-pathfinding";
 import { animated, config, useSpring } from "@react-spring/three";
 import { FirstPersonDragControls } from "./controls";
-import { Path3D } from "./path";
+import { Path3D, simplify } from "./path";
 import { easeInOut } from "framer-motion";
 import { LookTutorial } from "./tutorial";
 import { PreDefinedView } from "@/components/types";
@@ -62,7 +62,7 @@ export function Player({
   const [lookedAround, setLookedAround] = useState(false);
   const [enableLookTutorial, setEnableLookTutorial] = useState(false);
   useEffect(() => {
-    const timeout = setTimeout(() => setEnableLookTutorial(true), 5000);
+    const timeout = setTimeout(() => setEnableLookTutorial(true), 8000);
     return () => {
       clearTimeout(timeout);
     };
@@ -90,7 +90,8 @@ export function Player({
     if (!pathNodes || pathNodes.length === 0) {
       pathNodes = [target];
     }
-    const path = new Path3D([start, ...pathNodes], smooth);
+    const simplified = simplify([start, ...pathNodes], 0.5);
+    const path = new Path3D(simplified, smooth);
     return path;
   }, [pathFinding]);
   const beginNavigationWithPath = useCallback(
@@ -109,7 +110,7 @@ export function Player({
       const rotationDistance = sourceRotation.angleTo(targetRotation);
       const duration = Math.min(
         Math.max(path.length / 8, rotationDistance / Math.PI),
-        4,
+        6,
       );
       motionDurationRef.current = duration;
       node.current = undefined;

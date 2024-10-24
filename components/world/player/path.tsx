@@ -39,6 +39,39 @@ function sampleCatmullRom(points: Vector3[], steps: number): Vector3[] {
   return destination;
 }
 
+/**
+ * Simplifies a path by removing points that are too close together.
+ * Start and end points are always preserved, collapsed points are averaged.
+ * @param points the path to simplify
+ * @param tolerance the minimum distance between points to keep
+ * @returns the simplified path
+ */
+export function simplify(points: Vector3[], tolerance: number): Vector3[] {
+  if (points.length <= 2) return points;
+  let lastPoint = points[0];
+  const simplified: Vector3[] = [];
+  let sum = lastPoint.clone();
+  let count = 1;
+  for (let i = 1; i < points.length; i++) {
+    const currentPoint = points[i];
+    const distance = lastPoint.distanceTo(currentPoint);
+    if (distance >= tolerance) {
+      simplified.push(simplified.length === 0 ? lastPoint : sum.divideScalar(count));
+      lastPoint = currentPoint;
+      sum = currentPoint.clone();
+      count = 1;
+    } else {
+      sum.add(currentPoint);
+      count++;
+    }
+  }
+  if (simplified.length === 0) {
+    simplified.push(lastPoint);
+  }
+  simplified.push(points[points.length - 1]);
+  return simplified;
+}
+
 export class Path3D {
   public length: number;
   private segmentLengths: number[];
