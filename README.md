@@ -32,17 +32,17 @@ Für die Webseitenentwicklung:
 * Production-Build erstellen: `npm run build`
 * Anleitung für die Anbindung vom CMS Sanity und Deployment via Vercel befindet sich in der originalen README.md des verwendeten Blog-Templates: [TEMPLATE.md](TEMPLATE.md)
 
-### Updating the environment model
+### Aktualisieren des Umgebungsmodells
 
-Exportiere die _Scene_ collection von Blender (4.4.0 and up) nach _public/assets/venice.glb_, dann führe `npm run updatemodel` aus, um die Datei zu transformieren und das assoziierte Javascript-File zu generieren.
+Exportiere die _Scene_ Collection aus Blender (4.4.0 and up) nach _public/assets/venice.glb_, dann führe `npm run updatemodel` aus, um die Datei zu transformieren und das assoziierte Javascript-File zu generieren.
 
-### Debug Keys
+### Debug-Tasten
 
-* `F`: Toggle FPS display und andere Stats.
-* `G`: Toggle God Mode (Debug Modus)
-* `P`: Aktuelle Position und Drehung in die Zwischenablage kopieren (nützlich für die Erstellung von Hotspots)
-* `1` -- `9`: Überschreiben des Wertes für _Fremdheit_ (1.0 -- 0.0)
-* `0`: Zurücksetzen des Wertes für _Fremdheit_ auf den berechneten Wert
+* `F`: Schaltet FPS-Anzeige und andere Statistiken um.
+* `G`: Schaltet den Gott-Modus (Debug-Modus) ein und aus.
+* `P`: Aktuelle Position und Drehung in die Zwischenablage kopieren (nützlich für die Erstellung von Hotspots).
+* `1` - `9`: Überschreiben des Wertes für _Fremdheit_ (1.0 - 0.0).
+* `0`: Zurücksetzen des Wertes für _Fremdheit_ auf den berechneten Wert.
 
 ## Credits
 - Verwendetes Webseiten-Template: https://vercel.com/templates/next.js/blog-next-sanity
