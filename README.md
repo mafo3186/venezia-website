@@ -65,6 +65,7 @@ Exportiere die _Scene_ collection von Blender (4.4.0 and up) nach _public/assets
   - "Snow Field (Pure Sky)" (https://polyhaven.com/a/snow_field_puresky) by Jarod Guest and Sergej Majboroda is licensed under Creative Commons 0 (https://creativecommons.org/publicdomain/zero/1.0/).
   - "Scratches 003" (https://ambientCG.com/a/Scratches003) by ambi-entCG.com is licensed under Creative Commons 0 (https://creativecommons.org/publicdomain/zero/1.0/).
   - "compass-north-south-east-west-160863" (https://pixabay.com/vectors/compass-north-south-east-west-160863/) licensed under Pixabay Content License (https://pixabay.com/service/license-summary/)
+
 - Lizenzen verwendeter Schriftarten:
   - "Tilt Neon" (https://fonts.withgoogle.com/tilt#neon) by The Tilt Project Authors is licensed under SIL Open Font License 1.1 (https://github.com/googlefonts/Tilt-Fonts/blob/1c26966d33270e2cd38b2b5ed7e9b576c1458eab/OFL.txt).
 
