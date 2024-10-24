@@ -20,7 +20,7 @@ export default function AlertBanner() {
   if (!shouldShow) return null;
 
   return (
-    <div>
+    <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 9001 }}>
       {pending ? (
         "Disabling draft mode..."
       ) : (
