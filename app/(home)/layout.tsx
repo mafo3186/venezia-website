@@ -17,7 +17,6 @@ import {
 } from "@/components/contexts";
 import Menu from "@/components/navigation/menu";
 import { Hotspot, Spot } from "@/components/types";
-import spotsGltf from "@/data/spots.gltf";
 import hotspotsRaw from "@/data/hotspots.json";
 import { GlobalAudioProvider } from '@/components/global-audio';
 import { kotta, notoMono } from '../fonts';
@@ -64,15 +63,13 @@ const hotspotOrder = hotspots
     {} as Record<string, number>,
   );
 
-const spotsRaw: Spot[] = spotsGltf.nodes;
-const spots = spotsRaw
-  .map((node) => {
-    const [hotspotId, numeric] = node.name.split(".");
-    return {
-      ...node,
-      hotspotId,
-      index: parseInt(numeric) - 1,
-    };
+const spots = hotspots
+  .flatMap((hotspot) => {
+    return hotspot.spots.map((id, index) => ({
+      id,
+      index,
+      hotspotId: hotspot.id,
+    }));
   })
   .sort((a, b) => {
     if (a.index !== b.index) {
@@ -80,7 +77,8 @@ const spots = spotsRaw
     } else {
       return hotspotOrder[a.hotspotId] - hotspotOrder[b.hotspotId];
     }
-  });
+  })
+  .map(spot => spot.id);
 
 function groupBy<T>(elements: T[], key: (value: T) => string) {
   return elements.reduce(
@@ -97,21 +95,22 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     sanityFetch<SettingsQueryResult>({ query: settingsQuery }),
     sanityFetch<ProjectsQueryResult>({ query: projectsQuery }),
   ]);
+  if (projects.length > spots.length) {
+    console.error("More projects than spots!", projects.length, "projects and", spots.length, "spots");
+  }
   const projectsAtSpots = projects.map((project, index) => ({
     project,
     spot: spots[index],
   }));
-  const projectsByHotspot = groupBy(
+  const projectsBySpot = groupBy(
     projectsAtSpots,
-    (projectAtSpot) => projectAtSpot.spot.hotspotId,
+    (projectAtSpot) => projectAtSpot.spot,
   );
-  const projectsAtHotspots = Object.entries(projectsByHotspot).map(
-    ([id, projects]) => ({
-      hotspotId: id,
-      hotspot: hotspots.find((hotspot) => hotspot.id === id)!,
-      projects: projects ?? [],
-    }),
-  );
+  const projectsAtHotspots = hotspots.map((hotspot) => ({
+    hotspotId: hotspot.id,
+    hotspot,
+    projects: hotspot.spots.flatMap(spot => projectsBySpot[spot] ?? []),
+  }));
   const emptySpots = spots.slice(projects.length);
   return (
     <html lang="de" className={`${kotta.variable} ${notoMono.variable}`}>
