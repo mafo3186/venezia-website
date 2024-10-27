@@ -18,7 +18,6 @@ export default async function Impressum() {
   
   return (<>
     <h1>Impressum</h1>
-    {projects.title}
     <div className={styles.bold}>
       <p>
         Hochschule Düsseldorf<br/>
