@@ -37,7 +37,7 @@ export default async function Impressum() {
       Gabriele Schwab-Trapp</Link><br/>
       <ul>
         <li><strong>Individuelle Projekte:</strong> {uniqueAuthors.join(", ")}</li>
-        <li><strong>Website: </strong><Link href="https://github.com/benthillerkus">Bent Hillerkus</Link>, <Link
+        <li><strong>Venezia Website: </strong><Link href="https://github.com/benthillerkus">Bent Hillerkus</Link>, <Link
           href="https://github.com/exploids">Luca Selinski</Link>, <Link href="https://github.com/mafo3186">Mareike
           Focken</Link></li>
       </ul>
